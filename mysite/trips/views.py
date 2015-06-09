@@ -11,11 +11,11 @@ test = ["OH~","suck","your","dick"]
 def hello_world(request):
 	account = request.POST['account']
 	password = request.POST['password']
-	test = login(account, password)
+	x, y = login(account, password)
 	
 	return render(request,
 		'hello_world.html',
-		{'test': test},
+		{'test': y},
 		context_instance = RequestContext(request)
 		)
 #{'current_time': datetime.now()}

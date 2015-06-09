@@ -54,8 +54,8 @@ def login(account, password):
 	card_no = account
 	card_encrypt = password
 	user = User(api_key, app_id, card_type, card_no, card_encrypt)
-	clustering(user)
-	
+	(x, y) = clustering(user)
+	return x, y
 	#for inv in user.invoice_list:
 	#	inv._print()
 	#	print()
