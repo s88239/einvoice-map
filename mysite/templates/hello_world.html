@@ -18,7 +18,9 @@
     <body>
         <h1>2 X 18cm!</h1>
         <em>
-			<div>{{test}}</div>
+			{%for x in test%}
+			<div>{{x}}</div>
+			{%endfor%}
         </em>
     </body>
 </html>
