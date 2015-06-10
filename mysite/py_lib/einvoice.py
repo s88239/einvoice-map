@@ -75,40 +75,42 @@ def carrier_query(api_key, app_id, card_type, card_no, card_encrypt):
 def invoice_header_query(api_key, app_id, card_type, card_no, card_encrypt):
 	invoice_list = []
 	now = datetime.datetime.now()
-	for year in range(now.year-5, now.year+1):
-		for month in range(1, 13):
-			if year >= now.year and month > now.month:
-				break
-			start_date = "{0:0=4d}".format(year) + "/" + "{0:0=2d}".format(month) + "/" + "01"
-			end_date = "{0:0=4d}".format(year) + "/" + "{0:0=2d}".format(month) + "/" + "{0:0=2d}".format(calendar.monthrange(year, month)[1])
+	year = now.year
+	#for year in range(now.year, now.year+1):
+	for month in range(4, 13):
+		#if year >= now.year and month > now.month:
+		if month > now.month:
+			break
+		start_date = "{0:0=4d}".format(year) + "/" + "{0:0=2d}".format(month) + "/" + "01"
+		end_date = "{0:0=4d}".format(year) + "/" + "{0:0=2d}".format(month) + "/" + "{0:0=2d}".format(calendar.monthrange(year, month)[1])
+		
+		data = {}
+		while "code" not in data or data["code"] != 200:
+			param_dict = {}
+			param_dict["version"] = "0.2"
+			param_dict["action"] = "carrierInvChk"
+			param_dict["cardType"] = card_type
+			param_dict["cardNo"] = card_no
+			param_dict["cardEncrypt"] = card_encrypt
+			param_dict["appID"] = app_id
+			param_dict["timeStamp"] = str(int(time.time())+10)
+			param_dict["expTimeStamp"] = str(int(time.time())+1000)
+			param_dict["startDate"] = start_date
+			param_dict["endDate"] =  end_date				
+			param_dict["onlyWinningInv"] = "N"
+			param_dict["uuid"] = uniqid()
 			
-			data = {}
-			while "code" not in data or data["code"] != 200:
-				param_dict = {}
-				param_dict["version"] = "0.2"
-				param_dict["action"] = "carrierInvChk"
-				param_dict["cardType"] = card_type
-				param_dict["cardNo"] = card_no
-				param_dict["cardEncrypt"] = card_encrypt
-				param_dict["appID"] = app_id
-				param_dict["timeStamp"] = str(int(time.time())+10)
-				param_dict["expTimeStamp"] = str(int(time.time())+1000)
-				param_dict["startDate"] = start_date
-				param_dict["endDate"] =  end_date				
-				param_dict["onlyWinningInv"] = "N"
-				param_dict["uuid"] = uniqid()
-				
-				(param_list, signature) = url_parameter(api_key, param_dict)
-				invoice_header_url = 'https://www.einvoice.nat.gov.tw/PB2CAPIVAN/invServ/InvServ?' + param_list + '&signature=' + signature.decode()
-				with urllib.request.urlopen(invoice_header_url) as url:
-					data = json.loads(url.read().decode())
+			(param_list, signature) = url_parameter(api_key, param_dict)
+			invoice_header_url = 'https://www.einvoice.nat.gov.tw/PB2CAPIVAN/invServ/InvServ?' + param_list + '&signature=' + signature.decode()
+			with urllib.request.urlopen(invoice_header_url) as url:
+				data = json.loads(url.read().decode())
 
-				if data["code"] == 903:
-					break
+			if data["code"] == 903:
+				break
 
-				for inv in data["details"]:
-					if "sellerName" in inv:
-						invoice_list.append(Invoice(inv))
+			for inv in data["details"]:
+				if "sellerName" in inv:
+					invoice_list.append(Invoice(inv))
 	return invoice_list
 
 def invoice_item_query(api_key, app_id, card_type, card_no, card_encrypt, invoice_list):
