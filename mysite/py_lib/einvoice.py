@@ -77,7 +77,7 @@ def invoice_header_query(api_key, app_id, card_type, card_no, card_encrypt):
 	now = datetime.datetime.now()
 	year = now.year
 	#for year in range(now.year, now.year+1):
-	for month in range(4, 13):
+	for month in range(6, 13):
 		#if year >= now.year and month > now.month:
 		if month > now.month:
 			break
