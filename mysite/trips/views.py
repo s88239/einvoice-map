@@ -1,3 +1,4 @@
+import traceback
 from django.shortcuts import render
 from django.template import RequestContext
 from django.core.context_processors import csrf
@@ -13,12 +14,20 @@ def index(request):
 def hello_world(request):
 	account = request.POST['account']
 	password = request.POST['password']
-	(x,y) = login(account, password)
-	tmp = []
-	for key, value in y.items():
-		tmp.append([key,value.longitude,value.latitude])
-		#X.append([value.longitude,value.latitude])
-		#numbers.append(value.id)
+	try:
+		(x,y) = login(account, password)
+		tmp = []
+		for key, value in y.items():
+			tmp.append([key,value.longitude,value.latitude])
+			#X.append([value.longitude,value.latitude])
+			#numbers.append(value.id)
+	except:
+		string = traceback.format_exc()
+		return render(request,
+		'hello_world.html',
+		{'test': string},
+		context_instance = RequestContext(request)
+		)
 	return render(request,
 		'hello_world.html',
 		{'test': tmp},
