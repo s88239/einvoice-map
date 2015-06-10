@@ -13,6 +13,7 @@ class Seller(object):
 		self.visit_frequency = 0
 		self.consumption = 0.0
 		self.top_item = ''
+		self.cluster = 0
 
 	def set_branch_name(self, n):
 		self.branch_name = n

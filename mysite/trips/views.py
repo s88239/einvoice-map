@@ -13,11 +13,10 @@ def index(request):
 def hello_world(request):
 	account = request.POST['account']
 	password = request.POST['password']
-	y = login(account, password)
+	(x,y) = login(account, password)
 	tmp = []
 	for key, value in y.items():
-		temp = [key,value]
-		tmp.append(temp)
+		tmp.append([key,value])
 	return render(request,
 		'hello_world.html',
 		{'test': tmp},
