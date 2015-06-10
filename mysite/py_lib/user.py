@@ -119,8 +119,9 @@ def login(account, password):
 	card_no = account
 	card_encrypt = password
 	user = User(api_key, app_id, card_type, card_no, card_encrypt)
-	csv = '../static/Taipei_shops_with_einvoice.csv'#os.path.join(os.path.dirname(os.path.dirname(__file__)),'static','Taipei_shops_with_einvoice.csv')
+	csv = os.path.join(os.path.dirname(os.path.dirname(__file__)),'static','Taipei_shops_with_einvoice.csv')
 	all_sellers1 = list_sellers(csv)
+	user.statistics(csv)
 	(x, y) = clustering(user)
 	#return all_sellers1
 	return x, y
