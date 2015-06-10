@@ -13,9 +13,9 @@ except:
 	from seller import list_sellers
 	from seller import Seller
 
-if sys.version_info >= (2, 7, 9):
+'''if sys.version_info >= (2, 7, 9):
 	import ssl
-	ssl._create_default_https_context = ssl._create_unverified_context
+	ssl._create_default_https_context = ssl._create_unverified_context'''
 
 class User(object):
 	def __init__(self, api_key, app_id, card_type, card_no, card_encrypt):
