@@ -83,15 +83,15 @@ class User(object):
 					#self.sellers[s.id] = Seller(s.id, s.store_name, s.branch_name, s.address, s.longitude, s.latitude)
 					#print(i, self.visit_frequency[i], self.consumption[i], self.top_item[i][0].description, sellers[j].address)
 
-def clustering(user):
+def clustering(sellers):
 	import numpy as np
 	from sklearn.cluster import MeanShift, estimate_bandwidth
 	from sklearn.datasets.samples_generator import make_blobs
 
 	X = []
 	numbers = []
-	for number in user:
-		X.append([user.longitude, user.latitde])
+	for value in sellers.items():
+		X.append([value.longitude,value.latitude])
 		numbers.append(number)
 
 	# Compute clustering with MeanShift
@@ -100,7 +100,7 @@ def clustering(user):
 	labels = ms.labels_
 	# fill in the predict labels
 	for i in range(len(labels)):
-		user[ numbers[i] ].cluster = labels[i]
+		sellers[ numbers[i] ].cluster = labels[i]
 
 	cluster_centers = ms.cluster_centers_
 
@@ -109,7 +109,7 @@ def clustering(user):
 
 	print("Number of Clusters : %d" % n_clusters_)
 
-	return user, sorted(user, key=lambda x:user[x].cluster)
+	return sellers, sorted(sellers, key=lambda x:sellers[x].cluster)
 
 def login(account, password):
 	#TEST
@@ -122,6 +122,7 @@ def login(account, password):
 	csv = os.path.join(os.path.dirname(os.path.dirname(__file__)),'static','Taipei_shops_with_einvoice.csv')
 	all_sellers1 = list_sellers(csv)
 	user.statistics(csv)
+	return user
 	(x, y) = clustering(user.sellers)
 	#return all_sellers1
 	return x, y
