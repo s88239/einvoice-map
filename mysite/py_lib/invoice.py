@@ -35,7 +35,10 @@ class InvDate(object):
 		self.seconds = inv_date["seconds"]
 		self.time = inv_date["time"]
 		self.timezoneOffset = inv_date["timezoneOffset"]
-
+	
+	def getDate(self):
+		return "{0}/{1:0=2d}/{2:0=2d}".format(self.year, self.month, self.day)
+		
 	def _print(self):
 		print("invoice date:", "{0}/{1:0=2d}/{2:0=2d}".format(self.year, self.month, self.day), end=" ")
 		

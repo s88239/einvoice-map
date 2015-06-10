@@ -162,7 +162,7 @@ if __name__ == '__main__':
 			items = []
 			for item in invoice.item:
 				items.append([item.number,item.description,item.quantity,item.unitPrice,item.amount])
-				invoice_list.append([invoice.inv_num,invoice.seller_name,invoice.amount, items])
+				invoice_list.append([invoice.inv_date.getDate(),invoice.inv_num,invoice.amount, items])
 		seller_list.append([key, x[key].longitude, x[key].latitude, x[key].store_name, x[key].branch_name, x[key].address,
 		x[key].visit_frequency, x[key].consumption, x[key].top_item, x[key].cluster, invoice_list])
 	print(seller_list)
