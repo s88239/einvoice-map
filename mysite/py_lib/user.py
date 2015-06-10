@@ -122,7 +122,7 @@ def login(account, password):
 	csv = os.path.join(os.path.dirname(os.path.dirname(__file__)),'static','Taipei_shops_with_einvoice.csv')
 	all_sellers1 = list_sellers(csv)
 	user.statistics(csv)
-	(x, y) = clustering(user)
+	(x, y) = clustering(user.sellers)
 	#return all_sellers1
 	return x, y
 
