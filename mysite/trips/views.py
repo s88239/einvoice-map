@@ -48,17 +48,17 @@ def hello_world(request):
 		'hello_world.html',
 		{'test': string},
 		context_instance = RequestContext(request)
-		)'''
+		)
 	return render(request,
 		'hello_world.html',
 		{'test': user},
 		context_instance = RequestContext(request)
-		)
-	'''return render(request,
+		)'''
+	return render(request,
 		'TGOS.html',
 		{'sellers': seller_list},
 		context_instance = RequestContext(request)
-		)'''
+		)
 #{'current_time': datetime.now()}
 def TGOS(request):
 	account = request.POST['account']
