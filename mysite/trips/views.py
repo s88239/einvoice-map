@@ -16,21 +16,21 @@ def hello_world(request):
 	password = request.POST['password']
 	try:
 		(x,y) = login(account, password)
-		tmp = []
+		'''tmp = []
 		for key, value in y.items():
-			tmp.append([key,value.longitude,value.latitude])
+			tmp.append([key,value.longitude,value.latitude])'''
 			#X.append([value.longitude,value.latitude])
 			#numbers.append(value.id)
+		return render(request,
+			'hello_world.html',
+			{'test': x, 'test2':y},
+			context_instance = RequestContext(request)
+			)
 	except:
 		string = traceback.format_exc()
 		return render(request,
 		'hello_world.html',
 		{'test': string},
-		context_instance = RequestContext(request)
-		)
-	return render(request,
-		'hello_world.html',
-		{'test': tmp},
 		context_instance = RequestContext(request)
 		)
 #{'current_time': datetime.now()}

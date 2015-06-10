@@ -13,9 +13,9 @@ except:
 	from seller import list_sellers
 	from seller import Seller
 
-#if sys.version_info >= (2, 7, 9):
-	#import ssl
-	#ssl._create_default_https_context = ssl._create_unverified_context
+'''if sys.version_info >= (2, 7, 9):
+	import ssl
+	ssl._create_default_https_context = ssl._create_unverified_context'''
 
 class User(object):
 	def __init__(self, api_key, app_id, card_type, card_no, card_encrypt):
@@ -73,21 +73,18 @@ class User(object):
 
 		#for i in self.visit_frequency:
 		#	print(i, self.visit_frequency[i], self.consumption[i], self.top_item[i][0].description)
-
 		sellers = list_sellers(shop)
 		for i in self.visit_frequency:
 			for j in sellers:
 				if i == sellers[j].branch_name:
 					self.add_seller(sellers[j])
-					#s = sellers[j]
-					#self.sellers[s.id] = Seller(s.id, s.store_name, s.branch_name, s.address, s.longitude, s.latitude)
 					#print(i, self.visit_frequency[i], self.consumption[i], self.top_item[i][0].description, sellers[j].address)
 
 def clustering(user):
 	import numpy as np
 	from sklearn.cluster import MeanShift, estimate_bandwidth
 	from sklearn.datasets.samples_generator import make_blobs
-
+	#print(user)
 	X = []
 	numbers = []
 	'''for number in user:
@@ -98,6 +95,9 @@ def clustering(user):
 		X.append([float(value.longitude),float(value.latitude)])
 		numbers.append(key)
 	# Compute clustering with MeanShift
+	#print(X)
+	#print(numbers)
+	#return X,numbers
 	ms = MeanShift()
 	ms.fit(X)
 	labels = ms.labels_
@@ -113,7 +113,6 @@ def clustering(user):
 	print("Number of Clusters : %d" % n_clusters_)
 
 	return user, sorted(user, key=lambda x:user[x].cluster)
-	#return X,numbers
 
 def login(account, password):
 	#TEST
@@ -123,7 +122,7 @@ def login(account, password):
 	card_no = account
 	card_encrypt = password
 	user = User(api_key, app_id, card_type, card_no, card_encrypt)
-	csv = os.path.join(os.path.dirname(os.path.dirname(__file__)),'static','Taipei_shops_with_einvoice.csv')
+	csv = os.path.join(os.path.dirname(__file__),'static','Taipei_shops_with_einvoice.csv')
 	all_sellers1 = list_sellers(csv)
 	user.statistics(csv)
 	(x, y) = clustering(user.sellers)
@@ -138,10 +137,18 @@ if __name__ == '__main__':
 	card_no = '/SMV1EFQ'
 	card_encrypt = '1212'
 	user = User(api_key, app_id, card_type, card_no, card_encrypt)
-	all_sellers1 = list_sellers("Taipei_shops_with_einvoice.csv")	
+	#csv = os.path.join('..','static','Taipei_shops_with_einvoice.csv')
+	csv = os.path.join(os.path.dirname(os.path.dirname(__file__)),'static','Taipei_shops_with_einvoice.csv')
+	print('csv',csv)
+	all_sellers1 = list_sellers(csv)	
 	#all_sellers1 = list_sellers("Taipei_shops_with_einvoice.csv")	
 
 	#for inv in user.invoice_list:
 	#	inv._print()
-
-	user.statistics('../Taipei_shops_with_einvoice.csv')
+	#print(user.api_key,user.invoice_list)
+	user.statistics(csv)
+	(x, y) = clustering(user.sellers)
+	#for i in x:
+	#	x[i]._print()
+	for i in y:
+		x[i]._print()
