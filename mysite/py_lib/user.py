@@ -78,22 +78,19 @@ class User(object):
 
 		#for i in self.visit_frequency:
 		#	print(i, self.visit_frequency[i], self.consumption[i], self.top_item[i][0].description)
-
 		sellers = list_sellers(shop)
 		for i in self.visit_frequency:
 			for j in sellers:
 				if i == sellers[j].branch_name:
 					self.add_seller(sellers[j])
 					self.sellers[sellers[j].id].invoice_list = tmp_invoice_list[i]
-					#s = sellers[j]
-					#self.sellers[s.id] = Seller(s.id, s.store_name, s.branch_name, s.address, s.longitude, s.latitude)
 					#print(i, self.visit_frequency[i], self.consumption[i], self.top_item[i][0].description, sellers[j].address)
 
 def clustering(user):
 	import numpy as np
 	from sklearn.cluster import MeanShift, estimate_bandwidth
 	from sklearn.datasets.samples_generator import make_blobs
-
+	#print(user)
 	X = []
 	numbers = []
 	'''for number in user:
@@ -104,6 +101,9 @@ def clustering(user):
 		X.append([float(value.longitude),float(value.latitude)])
 		numbers.append(key)
 	# Compute clustering with MeanShift
+	#print(X)
+	#print(numbers)
+	#return X,numbers
 	ms = MeanShift()
 	ms.fit(X)
 	labels = ms.labels_
@@ -119,14 +119,8 @@ def clustering(user):
 	#print("Number of Clusters : %d" % n_clusters_)
 
 	return user, sorted(user, key=lambda x:user[x].cluster)
-	#return X,numbers
 
 def login(account, password):
-	return [[3680, '121.541', '25.022097', '統一超商', '敦親', '台北市大安區辛亥路二段171巷8號', 1, 39.0, '39元超值組合20150527~0609*8605', 0, [['VS09635683', '敦親', 39, [[1, 'Sunkist芭樂柳橙綜合果汁飲料', '1', '25', 25], [2, '鮪魚飯糰', '1', '25', 25], [3, '39元超值組合20150527~0609*8605', '1', '-11', -11]]]]],
-[1032, '121.526836', '25.041557', '全家便利商店', '齊東分公司', '臺北市中正區濟南路２段３之７號１樓', 1, 40.0, '草莓麵包', 0, [['VW56130612', '齊東分公司', 40, [[1, '草莓麵包', '1', '18', 18], [2, '綠茶拿鐵', '1', '25', 25], [3, '低溫促', '1', '0', -3]]]]],
-[3877, '121.5226', '25.042659', '統一超商', '中航', '台北市中正區林森南路12號', 1, 39.0, 'Sunkist芭樂柳橙綜合果汁飲料', 0, [['VT09822392', '中航', 39, [[1, '鮪魚飯糰', '1', '25', 25], [2, 'Sunkist芭樂柳橙綜合果汁飲料', '1', '25', 25], [3, '39元超值組合20150527~0609*8605', '1', '-11', -11]]]]],
-[3878, '121.5229', '25.043782', '統一超商', '千成', '台北市中正區林森南路4號之3', 1, 39.0, '39元超值組合20150527~0609*8605', 0, [['VR53664190', '千成', 39, [[1, '飲冰室茶集烏龍奶茶400ml(盒)', '1', '25', 25], [2, '鮪魚飯糰', '1', '25', 25], [3, '39元超值組合20150527~0609*8605', '1', '-11', -11]]]]]
-]
 	#TEST
 	api_key = "QWQ4dU9WMzRXa2xoYUdsZA=="
 	app_id = "EINV0201505042102"
@@ -137,9 +131,8 @@ def login(account, password):
 	csv = os.path.join(os.path.dirname(os.path.dirname(__file__)),'static','Taipei_shops_with_einvoice.csv')
 	#all_sellers1 = list_sellers(csv)
 	user.statistics(csv)
-	#(x, y) = clustering(user.sellers)
-	#return all_sellers1
-	return user
+	(x, y) = clustering(user.sellers)
+	return x,y
 
 if __name__ == '__main__':
 	TEST = True
@@ -149,10 +142,29 @@ if __name__ == '__main__':
 	card_no = '/SMV1EFQ'
 	card_encrypt = '1212'
 	user = User(api_key, app_id, card_type, card_no, card_encrypt)
-	all_sellers1 = list_sellers("Taipei_shops_with_einvoice.csv")	
+	#csv = os.path.join('..','static','Taipei_shops_with_einvoice.csv')
+	csv = os.path.join(os.path.dirname(os.path.dirname(__file__)),'static','Taipei_shops_with_einvoice.csv')
+	print('csv',csv)
+	all_sellers1 = list_sellers(csv)	
 	#all_sellers1 = list_sellers("Taipei_shops_with_einvoice.csv")	
 
 	#for inv in user.invoice_list:
 	#	inv._print()
-
-	user.statistics('../Taipei_shops_with_einvoice.csv')
+	#print(user.api_key,user.invoice_list)
+	user.statistics(csv)
+	(x, y) = clustering(user.sellers)
+	#for i in x:
+	#	x[i]._print()
+	seller_list = []
+	for key in y:
+		invoice_list = []
+		for invoice in x[key].invoice_list:
+			items = []
+			for item in invoice.item:
+				items.append([item.number,item.description,item.quantity,item.unitPrice,item.amount])
+				invoice_list.append([invoice.inv_num,invoice.seller_name,invoice.amount, items])
+		seller_list.append([key, x[key].longitude, x[key].latitude, x[key].store_name, x[key].branch_name, x[key].address,
+		x[key].visit_frequency, x[key].consumption, x[key].top_item, x[key].cluster, invoice_list])
+	print(seller_list)
+	#for i in y:
+		#x[i]._print()

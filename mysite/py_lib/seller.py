@@ -2,7 +2,7 @@ import csv
 
 class Seller(object):
 	def __init__(self, _id, store_name, address, longitude, latitude):
-		self.id = int(_id)
+		self.id = _id
 		self.store_name = store_name if store_name.find("-") == -1 else store_name[:store_name.find("-")]
 		self.branch_name = "" if store_name.find("-") == -1 else store_name[store_name.find("-")+1:]
 		self.address = address
@@ -29,15 +29,15 @@ class Seller(object):
 		self.top_item = i
 
 	def _print(self):
-		print(self.id, self.store_name, self.branch_name, self.address, self.longitude, self.latitude, self.visit_frequency, self.consumption, self.top_item)
+		print(self.id, self.store_name, self.branch_name, self.address, self.longitude, self.latitude, self.visit_frequency, self.consumption, self.top_item, self.cluster)
 
 def list_sellers(csv_file):
 	#key is the ID
 	sellers = {}
 	with open(csv_file, 'r', errors='ignore') as f:
-		for row in csv.reader(f):
+		for i, row in enumerate(csv.reader(f)):
 			row = [s.replace("\n", "") for s in row]
-			sellers[int(row[0])] = Seller(*row)
+			sellers[i] = Seller(i, row[1], row[2], row[3], row[4])
 	return sellers
 		
 if __name__ == '__main__':
