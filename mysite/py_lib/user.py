@@ -84,9 +84,9 @@ class User(object):
 					#print(i, self.visit_frequency[i], self.consumption[i], self.top_item[i][0].description, sellers[j].address)
 
 def clustering(user):
-	import numpy as np
+	'''import numpy as np
 	from sklearn.cluster import MeanShift, estimate_bandwidth
-	from sklearn.datasets.samples_generator import make_blobs
+	from sklearn.datasets.samples_generator import make_blobs'''
 
 	X = []
 	numbers = []
@@ -97,9 +97,8 @@ def clustering(user):
 	for key, value in user.items():
 		X.append([value.longitude,value.latitude])
 		numbers.append(key)
-		
 	# Compute clustering with MeanShift
-	ms = MeanShift()
+	'''ms = MeanShift()
 	ms.fit(X)
 	labels = ms.labels_
 	# fill in the predict labels
@@ -111,10 +110,10 @@ def clustering(user):
 	labels_unique = np.unique(labels)
 	n_clusters_ = len(labels_unique)
 
-	#print("Number of Clusters : %d" % n_clusters_)
+	print("Number of Clusters : %d" % n_clusters_)
 
-	return user, sorted(user, key=lambda x:user[x].cluster)
-	#return X,numbers
+	return user, sorted(user, key=lambda x:user[x].cluster)'''
+	return X,numbers
 
 def login(account, password):
 	#TEST

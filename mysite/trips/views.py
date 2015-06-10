@@ -14,12 +14,13 @@ def hello_world(request):
 	account = request.POST['account']
 	password = request.POST['password']
 	(x,y) = login(account, password)
-	tmp = []
+	'''tmp = []
 	for key, value in y.items():
-		tmp.append(value)
+		X.append([value.longitude,value.latitude])
+		numbers.append(value.id)'''
 	return render(request,
 		'hello_world.html',
-		{'test': tmp},
+		{'X': x, 'numbers':y},
 		context_instance = RequestContext(request)
 		)
 #{'current_time': datetime.now()}
