@@ -49,11 +49,16 @@ class User(object):
 		#self.sellers[s.id]._print()
 
 	def statistics(self, shop):
+		tmp_invoice_list = {}
 		for invoice in self.invoice_list:
 			if invoice.seller_name not in self.visit_frequency:
 				self.visit_frequency[invoice.seller_name] = 0
 				self.items[invoice.seller_name] = {}
 				self.consumption[invoice.seller_name] = 0.0
+			if invoice.seller_name not in tmp_invoice_list:
+				tmp_invoice_list[invoice.seller_name] = []
+			tmp_invoice_list[invoice.seller_name].append(invoice)
+			#self.sellers.invoice_list.append(invoice)
 			self.visit_frequency[invoice.seller_name] += 1
 			for item in invoice.item:
 				if item not in self.items[invoice.seller_name]:
@@ -78,6 +83,12 @@ class User(object):
 			for j in sellers:
 				if i == sellers[j].branch_name:
 					self.add_seller(sellers[j])
+<<<<<<< HEAD
+=======
+					self.sellers[sellers[j].id].invoice_list = tmp_invoice_list[i]
+					#s = sellers[j]
+					#self.sellers[s.id] = Seller(s.id, s.store_name, s.branch_name, s.address, s.longitude, s.latitude)
+>>>>>>> 01366e9ccad9a1decae64544082ce093886de611
 					#print(i, self.visit_frequency[i], self.consumption[i], self.top_item[i][0].description, sellers[j].address)
 
 def clustering(user):
@@ -110,11 +121,16 @@ def clustering(user):
 	labels_unique = np.unique(labels)
 	n_clusters_ = len(labels_unique)
 
-	print("Number of Clusters : %d" % n_clusters_)
+	#print("Number of Clusters : %d" % n_clusters_)
 
 	return user, sorted(user, key=lambda x:user[x].cluster)
 
 def login(account, password):
+	return [[3680, '121.541', '25.022097', '統一超商', '敦親', '台北市大安區辛亥路二段171巷8號', 1, 39.0, '39元超值組合20150527~0609*8605', 0, [['VS09635683', '敦親', 39, [[1, 'Sunkist芭樂柳橙綜合果汁飲料', '1', '25', 25], [2, '鮪魚飯糰', '1', '25', 25], [3, '39元超值組合20150527~0609*8605', '1', '-11', -11]]]]],
+[1032, '121.526836', '25.041557', '全家便利商店', '齊東分公司', '臺北市中正區濟南路２段３之７號１樓', 1, 40.0, '草莓麵包', 0, [['VW56130612', '齊東分公司', 40, [[1, '草莓麵包', '1', '18', 18], [2, '綠茶拿鐵', '1', '25', 25], [3, '低溫促', '1', '0', -3]]]]],
+[3877, '121.5226', '25.042659', '統一超商', '中航', '台北市中正區林森南路12號', 1, 39.0, 'Sunkist芭樂柳橙綜合果汁飲料', 0, [['VT09822392', '中航', 39, [[1, '鮪魚飯糰', '1', '25', 25], [2, 'Sunkist芭樂柳橙綜合果汁飲料', '1', '25', 25], [3, '39元超值組合20150527~0609*8605', '1', '-11', -11]]]]],
+[3878, '121.5229', '25.043782', '統一超商', '千成', '台北市中正區林森南路4號之3', 1, 39.0, '39元超值組合20150527~0609*8605', 0, [['VR53664190', '千成', 39, [[1, '飲冰室茶集烏龍奶茶400ml(盒)', '1', '25', 25], [2, '鮪魚飯糰', '1', '25', 25], [3, '39元超值組合20150527~0609*8605', '1', '-11', -11]]]]]
+]
 	#TEST
 	api_key = "QWQ4dU9WMzRXa2xoYUdsZA=="
 	app_id = "EINV0201505042102"
@@ -122,12 +138,17 @@ def login(account, password):
 	card_no = account
 	card_encrypt = password
 	user = User(api_key, app_id, card_type, card_no, card_encrypt)
+<<<<<<< HEAD
 	csv = os.path.join(os.path.dirname(__file__),'static','Taipei_shops_with_einvoice.csv')
 	all_sellers1 = list_sellers(csv)
+=======
+	csv = os.path.join(os.path.dirname(os.path.dirname(__file__)),'static','Taipei_shops_with_einvoice.csv')
+	#all_sellers1 = list_sellers(csv)
+>>>>>>> 01366e9ccad9a1decae64544082ce093886de611
 	user.statistics(csv)
-	(x, y) = clustering(user.sellers)
+	#(x, y) = clustering(user.sellers)
 	#return all_sellers1
-	return x, y
+	return user
 
 if __name__ == '__main__':
 	TEST = True

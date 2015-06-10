@@ -10,6 +10,7 @@ class Seller(object):
 		self.latitude = latitude
 
 		#for user
+		self.invoice_list = []
 		self.visit_frequency = 0
 		self.consumption = 0.0
 		self.top_item = ''
