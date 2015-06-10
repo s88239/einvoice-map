@@ -7,8 +7,9 @@
 <!--<script type="text/javascript" src="/static/test_data.js"></script>-->
 <div id="sellers" style="display:none;">{{sellers}}</div>
 <script type="text/javascript">
-document.write('<div>');
-data = eval(document.getElementById('sellers').innerHTML);
+//data = eval(document.getElementById('sellers').innerHTML);
+data = my_data;
+invoice_idx = data[0].length-1;
 /*document.write(data);
 document.write('<p>fuck your mom</p>');
 for(i=0;i<data.length;++i){
@@ -96,7 +97,7 @@ function addPosition(data){
 		var point = new TGOS.TGPoint(parseFloat(data[i][1]),parseFloat(data[i][2])); // create its position
 		var pTGMarker = new TGOS.TGMarker(pMap,point,data[i][3]+'-'+data[i][4], symbol, {flat:false}); // establish the point on map
 
-		if(current_cluster==data[i][data[i].length-1]) multi_point.push(pTGMarker);
+		if(current_cluster==data[i][data[i].length-2]) multi_point.push(pTGMarker);
 		else{
 			addMarkerClusters(multi_point);
 			multi_point = [pTGMarker];
@@ -126,7 +127,7 @@ function addPosition(data){
 				showBlock(true);
 				document.getElementById('detail').innerHTML = get_invoice_list_string(invoice_array);
 				}
-			}(data[i][5]) );
+			}(data[i][invoice_idx]) );
 	}
 	addMarkerClusters(multi_point); // add these point to the same cluster
 }
