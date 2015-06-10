@@ -84,7 +84,7 @@ class User(object):
 			for j in sellers:
 				if i == sellers[j].branch_name:
 					self.add_seller(sellers[j])
-					self.sellers[sellers[j].id].invoice_list = tmp_invoice_list[invoice.seller_name]
+					self.sellers[sellers[j].id].invoice_list = tmp_invoice_list[i]
 					#s = sellers[j]
 					#self.sellers[s.id] = Seller(s.id, s.store_name, s.branch_name, s.address, s.longitude, s.latitude)
 					#print(i, self.visit_frequency[i], self.consumption[i], self.top_item[i][0].description, sellers[j].address)
