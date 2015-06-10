@@ -13,7 +13,7 @@ def index(request):
 def hello_world(request):
 	account = request.POST['account']
 	password = request.POST['password']
-	(x, y) = login(account, password)
+	y = login(account, password)
 	
 	return render(request,
 		'hello_world.html',

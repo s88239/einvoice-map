@@ -118,8 +118,9 @@ def login(account, password):
 	user = User(api_key, app_id, card_type, card_no, card_encrypt)
 	csv = os.path.join(os.path.dirname(os.path.dirname(__file__)),'static','Taipei_shops_with_einvoice.csv')
 	all_sellers1 = list_sellers(csv)
-	(x, y) = clustering(all_sellers1)
-	return x, y
+	#(x, y) = clustering(all_sellers1)
+	return all_sellers1
+	#return x, y
 
 if __name__ == '__main__':
 	TEST = True
