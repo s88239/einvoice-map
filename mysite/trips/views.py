@@ -8,10 +8,12 @@ from datetime import datetime
 from django.http import HttpResponse
 test = ["OH~","suck","your","dick"]
 
+def index(request):
+	return render(request,'index.html')
 def hello_world(request):
 	account = request.POST['account']
 	password = request.POST['password']
-	x, y = login(account, password)
+	y = login(account, password)
 	
 	return render(request,
 		'hello_world.html',
@@ -20,10 +22,12 @@ def hello_world(request):
 		)
 #{'current_time': datetime.now()}
 def TGOS(request):
-	return render(request,
-		'TGOS.html',
-		)
+	account = request.POST['account']
+	password = request.POST['password']
+	x, y = login(account, password)
+	
+	return render(request,'TGOS.html',
+	{'test': y},
+	context_instance = RequestContext(request))
 def home(request):
-	return render(request,
-		'home.html'
-		)
+	return render(request,'home.html')

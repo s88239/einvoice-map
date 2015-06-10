@@ -1,10 +1,11 @@
 import sys
-import einvoice
-from seller import list_sellers
-from seller import Seller
+import os
+import py_lib.einvoice as einvoice
+from py_lib.seller import list_sellers
+from py_lib.seller import Seller
 
 try:
-	from trips.invoice import Invoice
+	from py_lib.invoice import Invoice
 except:
 	from invoice import Invoice 
 	import pickle
@@ -20,11 +21,11 @@ class User(object):
 		self.card_type = card_type
 		self.card_no = card_no
 		self.card_encrypt = card_encrypt
-		if not TEST:
-			self.invoice_list = einvoice.get_einvoice(api_key, app_id, card_type, card_no, card_encrypt)
-		else:
-			with open('invoice_list_tmp.pkl', 'rb') as f:
-				self.invoice_list = pickle.load(f)
+		#if not TEST:
+		self.invoice_list = einvoice.get_einvoice(api_key, app_id, card_type, card_no, card_encrypt)
+		#else:
+		#	with open('invoice_list_tmp.pkl', 'rb') as f:
+		#		self.invoice_list = pickle.load(f)
 
 
 		#key is the id of seller
@@ -115,7 +116,8 @@ def login(account, password):
 	card_no = account
 	card_encrypt = password
 	user = User(api_key, app_id, card_type, card_no, card_encrypt)
-	all_sellers1 = list_sellers("/static/Taipei_shops_with_einvoice.csv")
+	csv = os.path.join(os.path.dirname(os.path.dirname(__file__)),'static','Taipei_shops_with_einvoice.csv')
+	all_sellers1 = list_sellers(csv)
 	(x, y) = clustering(user)
 	return x, y
 
@@ -127,8 +129,8 @@ if __name__ == '__main__':
 	card_no = '/SMV1EFQ'
 	card_encrypt = '1212'
 	user = User(api_key, app_id, card_type, card_no, card_encrypt)
-	all_sellers1 = list_sellers("/static/Taipei_shops_with_einvoice.csv")	
-	all_sellers1 = list_sellers("/static/Taipei_shops_with_einvoice.csv")	
+	all_sellers1 = list_sellers("Taipei_shops_with_einvoice.csv")	
+	#all_sellers1 = list_sellers("Taipei_shops_with_einvoice.csv")	
 
 	#for inv in user.invoice_list:
 	#	inv._print()

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>電子發票地圖 Login</title>
+<style>
+html { 
+	background: url("/static/einvoice_background.jpg") no-repeat center top fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+body {
+  margin-top: 10px;
+  font-family:"微軟正黑體";
+}
+table {
+    margin-left: auto;
+    margin-right: auto;
+}
+input[type="text"],
+input[type="password"] {
+  margin: 0;
+  width: 100%;
+  font-family: sans-serif;
+  font-size: 18px;
+  appearance: none;
+  box-shadow: none;
+  border-radius: none;
+  padding: 5px;
+  border: solid 5px #c9c9c9;
+  transition: border 0.3s;
+}
+input[type="text"]:focus,
+input[type="password"]:focus {
+  border: solid 5px #969696;
+}
+input[type="submit"] {
+ 	margin-top: 8px;
+	padding:5px 25px;
+	background: #d59112;
+	border:0 none;
+    cursor:pointer;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+input[type="submit"]:hover {
+  color: #FFF;
+  background: #900;
+}
+#container { 
+  padding-top:15px; 
+  padding-left:100px;
+  padding-bottom:40px; 
+}
+</style>
+<body>
+	<table>
+		<tr>
+			<td>
+				<img src="/static/title.png" height="200px"/>
+			</td>
+			<td id="container">
+				<form name="User" method="post" action="../TGOS/" >
+					{% csrf_token %}
+					<label class="control-label" for="focusedInput">手機條碼</label>
+					<input name="account" type="text" placeholder="請輸入手機條碼，開頭為/" value="/SMV1EFQ">
+        			<br />
+					<label class="control-label" for="inputWarning">驗證碼</label>
+					<input name="password" type="password" value="1212">
+					<input type="submit" value="登入">
+				</form>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>
