@@ -16,7 +16,7 @@ def hello_world(request):
 	(x,y) = login(account, password)
 	tmp = []
 	for key, value in y.items():
-		tmp.append([key,value])
+		tmp.append(value)
 	return render(request,
 		'hello_world.html',
 		{'test': tmp},

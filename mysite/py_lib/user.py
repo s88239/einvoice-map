@@ -96,7 +96,7 @@ def clustering(user):
 
 	for key, value in user.items():
 		X.append([value.longitude,value.latitude])
-		numbers.append(value.id)
+		numbers.append(key)
 		
 	# Compute clustering with MeanShift
 	ms = MeanShift()
@@ -111,7 +111,7 @@ def clustering(user):
 	labels_unique = np.unique(labels)
 	n_clusters_ = len(labels_unique)
 
-	print("Number of Clusters : %d" % n_clusters_)
+	#print("Number of Clusters : %d" % n_clusters_)
 
 	return user, sorted(user, key=lambda x:user[x].cluster)
 	#return X,numbers
