@@ -10,9 +10,9 @@ except:
 	from invoice import Invoice 
 	import pickle
 
-if sys.version_info >= (2, 7, 9):
-	import ssl
-	ssl._create_default_https_context = ssl._create_unverified_context
+#if sys.version_info >= (2, 7, 9):
+	#import ssl
+	#ssl._create_default_https_context = ssl._create_unverified_context
 
 class User(object):
 	def __init__(self, api_key, app_id, card_type, card_no, card_encrypt):
@@ -118,7 +118,7 @@ def login(account, password):
 	user = User(api_key, app_id, card_type, card_no, card_encrypt)
 	csv = os.path.join(os.path.dirname(os.path.dirname(__file__)),'static','Taipei_shops_with_einvoice.csv')
 	all_sellers1 = list_sellers(csv)
-	(x, y) = clustering(user)
+	(x, y) = clustering(all_sellers1)
 	return x, y
 
 if __name__ == '__main__':
