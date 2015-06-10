@@ -56,7 +56,7 @@ def hello_world(request):
 		)'''
 	return render(request,
 		'TGOS.html',
-		{'sellers': seller_list},
+		{'sellers': user},
 		context_instance = RequestContext(request)
 		)
 #{'current_time': datetime.now()}
