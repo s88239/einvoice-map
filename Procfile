@@ -1,1 +1,1 @@
-web: gunicorn --pythonpath mysite mysite.wsgi --timeout 300
+web: gunicorn --pythonpath mysite mysite.wsgi

@@ -6,7 +6,7 @@
 <script type="text/javascript" src="http://api.tgos.nat.gov.tw/TGOS_API/tgos?ver=2&AppID=Tw7cFZt2kGy6wTmw3sIekPBqrEIY0lreYgSFa4bcfVYojDkig/xlBA==&APIKey=cGEErDNy5yN/1fQ0vyTOZrghjE+jIU6u5ipI0qIhBu7EFQSTnV2gxTwzUff8quRx097rfBNjje7sHbyWWbX99SCpMT9K1S+ijwN5Jrs+jJzZFUp+9EVKc+Md9vHCphSN77s9oYXRwyC2rr0kKonjqe6z9cQZFV2nm4W8FdZX1hqhUr2C2OqLMw51SmZS8VElWODFnEIZ+Gv5OHSFgdKaYXj1thYkXX5/QsYr1cV+dFURFu/uMAmqkw+J9ZJf+tkbVKPCDe5+Q9iZxD5kbKi//lTMHsHnk6cMx/eqxNYBnyq6Aid3I/8Rh1wBTb9gpG83/ZOYOLZdgaBoeG5sy4EZR4ovs2V4LEljHuQFw77myV/ml5fWAsq1a0jsU6UTDVgPtscZAe5nC6lymREelkwoCw==" charset="utf-8"></script>
 <script type="text/javascript" src="/static/test_data.js"></script>
 <script type="text/javascript">
-data = test_data;
+data = {{seller}};
 var pMap = null;
 function InitWnd() {
 	var pOMap = document.getElementById("TGMap");
@@ -94,7 +94,7 @@ function addPosition(data){
 		      maxWidth:4000, // 訊息視窗的最大寬度
 		      pixelOffset: new TGOS.TGSize(5, -30) //InfoWindow起始位置的偏移量, 使用TGSize設定, 向右X為正, 向上Y為負
 		};
-		var invoice_message = data[i][2]+'：'+data[i][3]+'<br />頻率：'+data[i][4]+'<br />最常購買商品：';
+		var invoice_message = data[i][3]+'-'+data[i][4]+'：'+data[i][5]+'<br />頻率：'+data[i][6]+'<br />總消費金額：'+data[i][7]+'<br />最常購買商品：'+data[i][8];
 		messageBox = new TGOS.TGInfoWindow(invoice_message, point, InfoWindowOptions); // the content in message box
 
 		TGOS.TGEvent.addListener(pTGMarker, "mouseover", function (pTGMarker, messageBox) { // when mouse over the point
