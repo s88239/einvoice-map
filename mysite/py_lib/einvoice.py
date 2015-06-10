@@ -110,10 +110,13 @@ def invoice_header_query(api_key, app_id, card_type, card_no, card_encrypt):
 				for inv in data["details"]:
 					if "sellerName" in inv:
 						new_invoice = Invoice(inv)
+						check = True
 						for invoice in invoice_list:
 							if new_invoice.inv_num == invoice.inv_num:
-								continue
-						invoice_list.append(new_invoice)
+								check = False
+								break
+						if check:
+							invoice_list.append(new_invoice)
 	return invoice_list
 
 def invoice_item_query(api_key, app_id, card_type, card_no, card_encrypt, invoice_list):
