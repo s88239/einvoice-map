@@ -16,6 +16,12 @@ def hello_world(request):
 	password = request.POST['password']
 	#try:
 	user = login(account, password)
+	
+	return render(request,
+		'TGOS.html',
+		{'sellers': user},
+		context_instance = RequestContext(request)
+		)
 	'''seller_list = []
 	for key in user.sellers.keys():
 		invoice_list = []
@@ -54,11 +60,6 @@ def hello_world(request):
 		{'test': user},
 		context_instance = RequestContext(request)
 		)'''
-	return render(request,
-		'TGOS.html',
-		{'sellers': user},
-		context_instance = RequestContext(request)
-		)
 #{'current_time': datetime.now()}
 def TGOS(request):
 	account = request.POST['account']
