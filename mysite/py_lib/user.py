@@ -1,14 +1,17 @@
 import sys
 import os
-import py_lib.einvoice as einvoice
-from py_lib.seller import list_sellers
-from py_lib.seller import Seller
 
 try:
+	import py_lib.einvoice as einvoice
+	from py_lib.seller import list_sellers
+	from py_lib.seller import Seller
 	from py_lib.invoice import Invoice
 except:
 	from invoice import Invoice 
 	import pickle
+	import einvoice
+	from seller import list_sellers
+	from seller import Seller
 
 #if sys.version_info >= (2, 7, 9):
 	#import ssl
@@ -116,11 +119,11 @@ def login(account, password):
 	card_no = account
 	card_encrypt = password
 	user = User(api_key, app_id, card_type, card_no, card_encrypt)
-	csv = os.path.join(os.path.dirname(os.path.dirname(__file__)),'static','Taipei_shops_with_einvoice.csv')
+	csv = '../static/Taipei_shops_with_einvoice.csv'#os.path.join(os.path.dirname(os.path.dirname(__file__)),'static','Taipei_shops_with_einvoice.csv')
 	all_sellers1 = list_sellers(csv)
-	#(x, y) = clustering(all_sellers1)
-	return all_sellers1
-	#return x, y
+	(x, y) = clustering(user)
+	#return all_sellers1
+	return x, y
 
 if __name__ == '__main__':
 	TEST = True
