@@ -16,7 +16,7 @@ def hello_world(request):
 	password = request.POST['password']
 	#try:
 	user = login(account, password)
-	seller_list = []
+	'''seller_list = []
 	for key in user.sellers.keys():
 		invoice_list = []
 		for invoice in user.sellers[key].invoice_list:
@@ -37,7 +37,7 @@ def hello_world(request):
 		user.sellers[key].cluster,
 		invoice_list])
 		#(x,y) = login(account, password)
-		'''tmp = []
+		tmp = []
 		for key, value in y.items():
 			tmp.append([key,value.longitude,value.latitude])'''
 			#X.append([value.longitude,value.latitude])
@@ -51,7 +51,7 @@ def hello_world(request):
 		)'''
 	return render(request,
 		'hello_world.html',
-		{'test': seller_list},
+		{'test': user},
 		context_instance = RequestContext(request)
 		)
 	'''return render(request,
