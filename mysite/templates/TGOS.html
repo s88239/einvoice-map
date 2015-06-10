@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <title>電子發票地圖 | Powered by TGOS MAP</title>
 <script type="text/javascript" src="http://api.tgos.nat.gov.tw/TGOS_API/tgos?ver=2&AppID=Tw7cFZt2kGy6wTmw3sIekPBqrEIY0lreYgSFa4bcfVYojDkig/xlBA==&APIKey=cGEErDNy5yN/1fQ0vyTOZrghjE+jIU6u5ipI0qIhBu7EFQSTnV2gxTwzUff8quRx097rfBNjje7sHbyWWbX99SCpMT9K1S+ijwN5Jrs+jJzZFUp+9EVKc+Md9vHCphSN77s9oYXRwyC2rr0kKonjqe6z9cQZFV2nm4W8FdZX1hqhUr2C2OqLMw51SmZS8VElWODFnEIZ+Gv5OHSFgdKaYXj1thYkXX5/QsYr1cV+dFURFu/uMAmqkw+J9ZJf+tkbVKPCDe5+Q9iZxD5kbKi//lTMHsHnk6cMx/eqxNYBnyq6Aid3I/8Rh1wBTb9gpG83/ZOYOLZdgaBoeG5sy4EZR4ovs2V4LEljHuQFw77myV/ml5fWAsq1a0jsU6UTDVgPtscZAe5nC6lymREelkwoCw==" charset="utf-8"></script>
-<script type="text/javascript" src="/static/test_data.js"></script>
+<!--<script type="text/javascript" src="/static/test_data.js"></script>-->
 <div id="sellers" style="display:none;">{{sellers}}</div>
 <script type="text/javascript">
 document.write('<div>');
@@ -25,7 +25,7 @@ function InitWnd() {
 	pMap = new TGOS.TGOnlineMap(pOMap, TGOS.TGCoordSys.EPSG3857); // set coordinate to WGS84
 	pMap.setCenter(new TGOS.TGPoint(121.516946, 25.047941) );  // set the center of the initial map
 	pMap.setZoom(13); // Zooming scale
-	addPosition(test_data);
+	addPosition(data);
 }
 function show_detail(items_array){
 	item_list = '<table align="center"><tr><th>商品名稱</th><th>數量</th><th>單價</th><th>總價</th></tr>';
