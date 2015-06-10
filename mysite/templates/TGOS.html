@@ -5,7 +5,100 @@
 <title>電子發票地圖 | Powered by TGOS MAP</title>
 <script type="text/javascript" src="http://api.tgos.nat.gov.tw/TGOS_API/tgos?ver=2&AppID=Tw7cFZt2kGy6wTmw3sIekPBqrEIY0lreYgSFa4bcfVYojDkig/xlBA==&APIKey=cGEErDNy5yN/1fQ0vyTOZrghjE+jIU6u5ipI0qIhBu7EFQSTnV2gxTwzUff8quRx097rfBNjje7sHbyWWbX99SCpMT9K1S+ijwN5Jrs+jJzZFUp+9EVKc+Md9vHCphSN77s9oYXRwyC2rr0kKonjqe6z9cQZFV2nm4W8FdZX1hqhUr2C2OqLMw51SmZS8VElWODFnEIZ+Gv5OHSFgdKaYXj1thYkXX5/QsYr1cV+dFURFu/uMAmqkw+J9ZJf+tkbVKPCDe5+Q9iZxD5kbKi//lTMHsHnk6cMx/eqxNYBnyq6Aid3I/8Rh1wBTb9gpG83/ZOYOLZdgaBoeG5sy4EZR4ovs2V4LEljHuQFw77myV/ml5fWAsq1a0jsU6UTDVgPtscZAe5nC6lymREelkwoCw==" charset="utf-8"></script>
 <script type="text/javascript" src="../static/test_data.js"></script>
-<div id="sellers" style="display:none;">{{sellers}}</div>
+<!--<div id="sellers" style="display:none;">{{sellers}}</div>-->
+<style>
+.CSSTableGenerator {
+		margin:0px;padding:0px;
+		box-shadow: 10px 10px 5px #888888;
+		border:1px solid #000000;
+		
+		-moz-border-radius-bottomleft:0px;
+		-webkit-border-bottom-left-radius:0px;
+		border-bottom-left-radius:0px;
+		
+		-moz-border-radius-bottomright:0px;
+		-webkit-border-bottom-right-radius:0px;
+		border-bottom-right-radius:0px;
+		
+		-moz-border-radius-topright:0px;
+		-webkit-border-top-right-radius:0px;
+		border-top-right-radius:0px;
+		
+		-moz-border-radius-topleft:0px;
+		-webkit-border-top-left-radius:0px;
+		border-top-left-radius:0px;
+	}.CSSTableGenerator table{
+	width:100%;
+		margin-left:auto; 
+		margin-right:auto;
+	    border-collapse: collapse;
+	    border-spacing: 0;
+		margin:0px;padding:0px;
+	}.CSSTableGenerator tr:last-child td:last-child {
+		-moz-border-radius-bottomright:0px;
+		-webkit-border-bottom-right-radius:0px;
+		border-bottom-right-radius:0px;
+	}
+	.CSSTableGenerator table tr:first-child td:first-child {
+		-moz-border-radius-topleft:0px;
+		-webkit-border-top-left-radius:0px;
+		border-top-left-radius:0px;
+	}
+	.CSSTableGenerator table tr:first-child td:last-child {
+		-moz-border-radius-topright:0px;
+		-webkit-border-top-right-radius:0px;
+		border-top-right-radius:0px;
+	}.CSSTableGenerator tr:last-child td:first-child{
+		-moz-border-radius-bottomleft:0px;
+		-webkit-border-bottom-left-radius:0px;
+		border-bottom-left-radius:0px;
+	}.CSSTableGenerator tr:hover td{
+		
+	}
+	.CSSTableGenerator tr:nth-child(odd){ background-color:#aad4ff; }
+	.CSSTableGenerator tr:nth-child(even)    { background-color:#ffffff; }.CSSTableGenerator td{
+		border:1px solid #000000;
+		border-width:0px 1px 1px 0px;
+		padding:7px;
+		font-size:10px;
+		font-family:Arial;
+		font-weight:normal;
+		color:#000000;
+	}.CSSTableGenerator tr:last-child td{
+		border-width:0px 1px 0px 0px;
+	}.CSSTableGenerator tr td:last-child{
+		border-width:0px 0px 1px 0px;
+	}.CSSTableGenerator tr:last-child td:last-child{
+		border-width:0px 0px 0px 0px;
+	}
+	.CSSTableGenerator tr:first-child td{
+			background:-o-linear-gradient(bottom, #005fbf 5%, #003f7f 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #005fbf), color-stop(1, #003f7f) );
+		background:-moz-linear-gradient( center top, #005fbf 5%, #003f7f 100% );
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#005fbf", endColorstr="#003f7f");	background: -o-linear-gradient(top,#005fbf,003f7f);
+		background-color:#005fbf;
+		border:0px solid #000000;
+		text-align:center;
+		border-width:0px 0px 1px 1px;
+		font-size:14px;
+		font-family:Arial Black;
+		font-weight:bold;
+		color:#ffffff;
+	}
+	.CSSTableGenerator tr:first-child:hover td{
+		background:-o-linear-gradient(bottom, #005fbf 5%, #003f7f 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #005fbf), color-stop(1, #003f7f) );
+		background:-moz-linear-gradient( center top, #005fbf 5%, #003f7f 100% );
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#005fbf", endColorstr="#003f7f");	background: -o-linear-gradient(top,#005fbf,003f7f);
+		background-color:#005fbf;
+	}
+	.CSSTableGenerator tr:first-child td:first-child{
+		border-width:0px 0px 1px 0px;
+	}
+	.CSSTableGenerator tr:first-child td:last-child{
+		border-width:0px 0px 1px 1px;
+	} 
+	html { height: 100% }
+	body { height: 100%; margin: 0; padding: 0; font-family: '微軟正黑體'; }
+</style>
 <script type="text/javascript">
 //data = eval(document.getElementById('sellers').innerHTML);
 data = my_data;
@@ -64,7 +157,7 @@ function getRandomColor() {
     return color;
 }
 function getSymbol(color, freq){
-	size = (freq/10+10)*1.2; // set the size dending on the frequency of shopping times
+	size = (freq+10)*1.2; // set the size dending on the frequency of shopping times
 	pTGSymbo = new TGOS.TGSymbol(); // 建立幾何物件
 	pTGSymbo.symbolStyle = TGOS.TGSymbolStyle.TRIANGLE; // 設定標記的符號
 	pTGSymbo.xPixel = size; // 設定標記寬度
@@ -142,6 +235,6 @@ function addMarkerClusters(markers) {                           //使用群聚�
 </head>
 <body style="margin: 0px" onload="InitWnd();">
 	<div id="TGMap" style="width:100vw;height:100vh;"></div>
-	<div id="detail" style="position: absolute; background-color:orange; text-align:center; color: blue; width: 800px; height: 100vh; top: 0px; left:0; right:0; margin-left:auto; margin-right:auto;display:none;"><font color="white"></font></div>
+	<div id="detail" class="CSSTableGenerator" style="position: absolute; background-color:orange; text-align:center; color: blue; width: 800px; height: 100vh; top: 0px; left:0; right:0; margin-left:auto; margin-right:auto; display:none; overflow-y: auto;"><font color="white"></font></div>
 </body>
 </html>
