@@ -39,7 +39,24 @@ def list_sellers(csv_file):
 			row = [s.replace("\n", "") for s in row]
 			sellers[i] = Seller(i, row[1], row[2], row[3], row[4])
 	return sellers
-		
+
+def split_store_and_branch(shop_name):
+	find_1 = shop_name.find('公司')
+	if find_1 != -1 and shop_name[find_1-1]!='分':
+		company_name = shop_name[:find_1+2]
+		branch_name = shop_name[find_1+2:]
+	else:
+		company_name = ''
+		branch_name = shop_name
+	return company_name, branch_name
+
+no_company_name_list = ['統一','全家','萊爾富']
+def test_store_name(com_name):
+	for store_name in no_company_name_list:
+		if com_name[:len(store_name)] == store_name:
+			return True
+	return False
+
 if __name__ == '__main__':
 	#TEST
 	all_sellers1 = list_sellers("Taipei_shops_with_einvoice.csv")

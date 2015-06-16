@@ -6,12 +6,16 @@ try:
 	from py_lib.seller import list_sellers
 	from py_lib.seller import Seller
 	from py_lib.invoice import Invoice
+	from py_lib.seller import split_store_and_branch
+	from py_lib.seller import test_store_name
 except:
 	from invoice import Invoice 
 	import pickle
 	import einvoice
 	from seller import list_sellers
 	from seller import Seller
+	from seller import split_store_and_branch
+	from seller import test_store_name
 
 '''if sys.version_info >= (2, 7, 9):
 	import ssl
@@ -81,7 +85,10 @@ class User(object):
 		sellers = list_sellers(shop)
 		for i in self.visit_frequency:
 			for j in sellers:
-				if i == sellers[j].branch_name:
+				(cur_store_name, cur_branch_name) = split_store_and_branch(i)
+				if sellers[j].branch_name == cur_branch_name and (cur_store_name=='' and test_store_name(sellers[j].store_name) or cur_store_name[:2]==sellers[j].store_name[:2]):
+					print(sellers[j].store_name, sellers[j].branch_name, sellers[j].address)
+				#if i == sellers[j].branch_name:
 					self.add_seller(sellers[j])
 					self.sellers[sellers[j].id].invoice_list = tmp_invoice_list[i]
 					#print(i, self.visit_frequency[i], self.consumption[i], self.top_item[i][0].description, sellers[j].address)
