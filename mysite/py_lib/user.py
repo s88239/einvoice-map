@@ -43,13 +43,12 @@ class User(object):
 		self.items = {}
 		self.consumption = {}
 
-	def add_seller(self, s):
-		i = s.seller_name
+	def add_seller(self, s, key_name):
 		self.sellers[s.id] = Seller(s.id, s.store_name, s.address, s.longitude, s.latitude)
 		self.sellers[s.id].set_branch_name(s.branch_name)
-		self.sellers[s.id].set_visit_frequency(self.visit_frequency[i])
-		self.sellers[s.id].set_consumption(self.consumption[i])
-		self.sellers[s.id].set_top_item(self.top_item[i][0].description)
+		self.sellers[s.id].set_visit_frequency(self.visit_frequency[key_name])
+		self.sellers[s.id].set_consumption(self.consumption[key_name])
+		self.sellers[s.id].set_top_item(self.top_item[key_name][0].description)
 		#self.sellers[s.id]._print()
 
 	def statistics(self, shop):
@@ -89,7 +88,7 @@ class User(object):
 				if sellers[j].branch_name == cur_branch_name and (cur_store_name=='' and test_store_name(sellers[j].store_name) or cur_store_name[:2]==sellers[j].store_name[:2]):
 					print(sellers[j].store_name, sellers[j].branch_name, sellers[j].address)
 				#if i == sellers[j].branch_name:
-					self.add_seller(sellers[j])
+					self.add_seller(sellers[j],i)
 					self.sellers[sellers[j].id].invoice_list = tmp_invoice_list[i]
 					#print(i, self.visit_frequency[i], self.consumption[i], self.top_item[i][0].description, sellers[j].address)
 
