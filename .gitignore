@@ -3,3 +3,4 @@ VENV
 __pycache__
 staticfiles
 db.sqlite3
+requirement.txt
