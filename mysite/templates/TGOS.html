@@ -4,7 +4,6 @@
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <title>電子發票地圖 | Powered by TGOS MAP</title>
 <script type="text/javascript" src="http://api.tgos.nat.gov.tw/TGOS_API/tgos?ver=2&AppID=Tw7cFZt2kGy6wTmw3sIekPBqrEIY0lreYgSFa4bcfVYojDkig/xlBA==&APIKey=cGEErDNy5yN/1fQ0vyTOZrghjE+jIU6u5ipI0qIhBu7EFQSTnV2gxTwzUff8quRx097rfBNjje7sHbyWWbX99SCpMT9K1S+ijwN5Jrs+jJzZFUp+9EVKc+Md9vHCphSN77s9oYXRwyC2rr0kKonjqe6z9cQZFV2nm4W8FdZX1hqhUr2C2OqLMw51SmZS8VElWODFnEIZ+Gv5OHSFgdKaYXj1thYkXX5/QsYr1cV+dFURFu/uMAmqkw+J9ZJf+tkbVKPCDe5+Q9ivRws/NP4ooCtKtQKPX2zpqw3j9dRC5gwAaH9JiCEPJ5HA3OfShj5YYm+k0K0E7P0fFAXXN9IRtGqvD9MNhVPafgGP11keOjeh47I3ZRiwJrlazOSQg0FO3ojSB62pLjkbeaZVFyDMHm4ETxUIukpeBc83wqIKFr4=" charset="utf-8"></script>
-<script type="text/javascript" src="/static/test_data.js"></script>
 <div id="sellers" style="display:none;">{{sellers}}</div>
 <style>
 .CSSTableGenerator {
@@ -101,18 +100,7 @@
 </style>
 <script type="text/javascript">
 data = eval(document.getElementById('sellers').innerHTML);
-//data = my_data;
 invoice_idx = data[0].length-1;
-/*document.write(data);
-document.write('<p>fuck your mom</p>');
-for(i=0;i<data.length;++i){
-document.write('row '+i+'<br /><br />');
-	for(j=0;j<data[i].length;++j){
-		if(Array.isArray(data[i][j])) document.write('<h1>A</h1>');
-		document.write(data[i][j]+'<br />');
-	}
-}
-document.write('</div>')*/
 var pMap = null;
 function InitWnd() {
 	var pOMap = document.getElementById("TGMap");

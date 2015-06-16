@@ -86,7 +86,7 @@ class User(object):
 			for j in sellers:
 				(cur_store_name, cur_branch_name) = split_store_and_branch(i)
 				if sellers[j].branch_name == cur_branch_name and (cur_store_name=='' and test_store_name(sellers[j].store_name) or cur_store_name[:2]==sellers[j].store_name[:2]):
-					print(sellers[j].store_name, sellers[j].branch_name, sellers[j].address)
+					#print(sellers[j].store_name, sellers[j].branch_name, sellers[j].address)
 				#if i == sellers[j].branch_name:
 					self.add_seller(sellers[j],i)
 					self.sellers[sellers[j].id].invoice_list = tmp_invoice_list[i]

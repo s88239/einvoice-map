@@ -11,7 +11,7 @@ test = ["OH~","suck","your","dick"]
 
 def index(request):
 	return render(request,'index.html')
-def hello_world(request):
+def TGOS(request):
 	account = request.POST['account']
 	password = request.POST['password']
 	#try:
@@ -24,7 +24,7 @@ def hello_world(request):
 			items = []
 			for item in invoice.item:
 				items.append([item.number,item.description,item.quantity,item.unitPrice,item.amount])
-			invoice_list.append([invoice.inv_num,invoice.seller_name,invoice.amount, items])
+			invoice_list.append([invoice.inv_date.getDate(),invoice.inv_num,invoice.amount, items])
 			
 		seller_list.append([key,
 		x[key].longitude,
@@ -50,13 +50,9 @@ def hello_world(request):
 		context_instance = RequestContext(request)
 		)
 #{'current_time': datetime.now()}
-def TGOS(request):
-	account = request.POST['account']
-	password = request.POST['password']
-	x, y = login(account, password)
-	
-	return render(request,'TGOS.html',
-	{'test': y},
+def hello_world(request):
+	return render(request,'output.html',
+	{'test': test},
 	context_instance = RequestContext(request))
 def home(request):
 	return render(request,'home.html')
