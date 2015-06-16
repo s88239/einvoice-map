@@ -5,6 +5,7 @@ class Seller(object):
 		self.id = _id
 		self.store_name = store_name if store_name.find("-") == -1 else store_name[:store_name.find("-")]
 		self.branch_name = "" if store_name.find("-") == -1 else store_name[store_name.find("-")+1:]
+		self.seller_name = store_name  # original name of seller in the einvoice
 		self.address = address
 		self.longitude = longitude
 		self.latitude = latitude

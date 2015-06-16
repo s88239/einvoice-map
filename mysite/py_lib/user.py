@@ -44,7 +44,7 @@ class User(object):
 		self.consumption = {}
 
 	def add_seller(self, s):
-		i = s.branch_name
+		i = s.seller_name
 		self.sellers[s.id] = Seller(s.id, s.store_name, s.address, s.longitude, s.latitude)
 		self.sellers[s.id].set_branch_name(s.branch_name)
 		self.sellers[s.id].set_visit_frequency(self.visit_frequency[i])
@@ -149,9 +149,9 @@ if __name__ == '__main__':
 	card_no = '/SMV1EFQ'
 	card_encrypt = '1212'
 	user = User(api_key, app_id, card_type, card_no, card_encrypt)
-	#csv = os.path.join('..','static','Taipei_shops_with_einvoice.csv')
-	csv = os.path.join(os.path.dirname(os.path.dirname(__file__)),'static','Taipei_shops_with_einvoice.csv')
-	print('csv',csv)
+	csv = os.path.join('..','static','Taipei_shops_with_einvoice.csv')
+	#csv = os.path.join(os.path.dirname(os.path.dirname(__file__)),'static','Taipei_shops_with_einvoice.csv')
+	#print('csv',csv)
 	all_sellers1 = list_sellers(csv)	
 	#all_sellers1 = list_sellers("Taipei_shops_with_einvoice.csv")	
 
