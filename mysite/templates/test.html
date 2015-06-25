@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <title>電子發票地圖 | Powered by TGOS MAP</title>
 <script type="text/javascript" src="http://api.tgos.nat.gov.tw/TGOS_API/tgos?ver=2&AppID=Tw7cFZt2kGy6wTmw3sIekPBqrEIY0lreYgSFa4bcfVYojDkig/xlBA==&APIKey=cGEErDNy5yN/1fQ0vyTOZrghjE+jIU6u5ipI0qIhBu7EFQSTnV2gxTwzUff8quRx097rfBNjje7sHbyWWbX99SCpMT9K1S+ijwN5Jrs+jJzZFUp+9EVKc+Md9vHCphSN77s9oYXRwyC2rr0kKonjqe6z9cQZFV2nm4W8FdZX1hqhUr2C2OqLMw51SmZS8VElWODFnEIZ+Gv5OHSFgdKaYXj1thYkXX5/QsYr1cV+dFURFu/uMAmqkw+J9ZJf+tkbVKPCDe5+Q9ivRws/NP4ooCtKtQKPX2zpqw3j9dRC5gwAaH9JiCEPJ5HA3OfShj5YYm+k0K0E7P0fFAXXN9IRtGqvD9MNhVPafgGP11keOjeh47I3ZRiwJrlazOSQg0FO3ojSB62pLjkbeaZVFyDMHm4ETxUIukpeBc83wqIKFr4=" charset="utf-8"></script>
-<div id="sellers" style="display:none;">{{sellers}}</div>
+<script type="text/javascript" src="/static/test_data.js"></script>
 <style>
 .CSSTableGenerator {
 		margin:0px;padding:0px;
@@ -99,8 +99,21 @@
 	body { height: 100%; margin: 0; padding: 0; font-family: '微軟正黑體'; }
 </style>
 <script type="text/javascript">
-data = eval(document.getElementById('sellers').innerHTML);
+data = my_data;
 invoice_idx = data[0].length-1;
+function showall(){
+	showBlock(true);
+	var invoice_list = '<a href="javascript:showBlock(false)">close</a><h1>List</h1>'
+	+ '<table align="center"><tr><th>順序</th><th>商店名稱</th><th>分店名稱</th><th>商店地址</th><th>頻率</th><th>消費金額</th><th>最常購買品項</th><th>cluster</th>';
+	for(i=0;i<data.length;++i){
+		invoice_list += '<tr><td>'+(i+1)+'</td>';
+		for(j=3;j<data[i].length-1;++j){
+			invoice_list += '<td>' + data[i][j] + '</td>';
+		}
+	}
+	invoice_list += '</table>';
+	document.getElementById('detail').innerHTML = invoice_list;
+}
 var pMap = null;
 function InitWnd() {
 	var pOMap = document.getElementById("TGMap");
@@ -134,19 +147,6 @@ function get_invoice_list_string(invoice_array){
 	}
 	invoice_list += '</table>';
 	return invoice_list;
-}
-function showall(){
-	showBlock(true);
-	var invoice_list = '<a href="javascript:showBlock(false)">close</a><h1>List</h1>'
-	+ '<table align="center"><tr><th>順序</th><th>商店名稱</th><th>分店名稱</th><th>商店地址</th><th>頻率</th><th>消費金額</th><th>最常購買品項</th><th>cluster</th>';
-	for(i=0;i<data.length;++i){
-		invoice_list += '<tr><td>'+(i+1)+'</td>';
-		for(j=3;j<data[i].length-1;++j){
-			invoice_list += '<td>' + data[i][j] + '</td>';
-		}
-	}
-	invoice_list += '</table>';
-	document.getElementById('detail').innerHTML = invoice_list;
 }
 function showBlock(status){
 	document.getElementById('detail').style.display = (status==true)?"block":"none";

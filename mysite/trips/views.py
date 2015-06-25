@@ -54,5 +54,7 @@ def hello_world(request):
 	return render(request,'output.html',
 	{'test': test},
 	context_instance = RequestContext(request))
-def home(request):
-	return render(request,'home.html')
+def demo(request):
+	return render(request,'demo.html')
+def test(request):
+	return render(request,'test.html')
