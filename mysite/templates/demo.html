@@ -61,14 +61,11 @@ html {
 					<img src="/static/title.png" height="200px"/>
 				</td>
 				<td id="container">
-					<form name="User" method="post" action="/test/" >
-						<label class="control-label" for="focusedInput">手機條碼</label>
-						<input name="account" class="form-control" id="focusedInput" type="text" placeholder="請輸入手機條碼" size="50" value="/SMV1EFQ">
-						<label class="control-label" for="inputWarning">驗證碼</label>
-						<input name="password" type="password" class="form-control" id="inputWarning" value="test">
-						<button type="submit" class="btn btn-default">登入</button>
-					</form>
-		
+					<label class="control-label" for="focusedInput">手機條碼</label>
+					<input name="account" class="form-control" id="focusedInput" type="text" placeholder="請輸入手機條碼" size="50" value="/SMV1EFQ">
+					<label class="control-label" for="inputWarning">驗證碼</label>
+					<input name="password" type="password" class="form-control" id="inputWarning" value="test">
+					<button type="button" class="btn btn-default" onclick="window.location.assign('/test/');">登入</button>
 				</td>
 			</tr>
 		</table>
