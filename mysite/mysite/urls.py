@@ -4,9 +4,9 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from trips.views import index
-from trips.views import hello_world
 from trips.views import TGOS
-from trips.views import home
+from trips.views import demo
+from trips.views import test
 
 urlpatterns = patterns('',
     # Examples:
