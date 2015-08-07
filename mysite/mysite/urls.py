@@ -16,6 +16,5 @@ urlpatterns = patterns('',
     url(r'^$', index),
 	url(r'^admin/', include(admin.site.urls)),
     url(r'^demo/$', demo),
-    url(r'^test/$', test),
     url(r'^TGOS/$', TGOS),
 )

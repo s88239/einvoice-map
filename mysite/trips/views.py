@@ -56,5 +56,3 @@ def hello_world(request):
 	context_instance = RequestContext(request))
 def demo(request):
 	return render(request,'demo.html')
-def test(request):
-	return render(request,'test.html')
