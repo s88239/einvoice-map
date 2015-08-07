@@ -172,5 +172,8 @@ if __name__ == '__main__':
 	card_encrypt = "1212"
 
 	invoice_list = get_einvoice(api_key, app_id, card_type, card_no, card_encrypt)
+	# import pickle
+	# with open('invoice_list_tmp.pkl', 'wb') as f:
+	# 	pickle.dump(invoice_list, f)
 	# for i in invoice_list:
 	# 	i._print()

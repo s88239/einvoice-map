@@ -22,7 +22,7 @@ except:
 	ssl._create_default_https_context = ssl._create_unverified_context'''
 
 class User(object):
-	not_item_list = ['折扣', '手續費', '滿額送', '抵用券']
+	not_item_list = ['折扣', '折抵', '手續費', '滿額送', '抵用券']
 
 	def __init__(self, api_key, app_id, card_type, card_no, card_encrypt):
 		self.api_key = api_key
@@ -53,6 +53,10 @@ class User(object):
 		self.sellers[s.id].set_consumption(self.consumption[key_name])
 		self.sellers[s.id].set_top_item(self.top_item[key_name][0].description)
 		#self.sellers[s.id]._print()
+
+	def sort_inv_list(self, by_date=True):
+		if by_date:
+			return sorted(self.invoice_list, key=lambda inv: inv.inv_date.getDate())
 
 	def statistics(self, shop):
 		def is_item(item_description):
@@ -175,8 +179,10 @@ if __name__ == '__main__':
 	# 	for item in user.top_item[key]:
 	# 		print(item)
 	# 	print()
+	for inv in user.sort_inv_list(user.invoice_list):
+		inv._print()
 
-	(x, y) = clustering(user.sellers)
+	# (x, y) = clustering(user.sellers)
 
 	#for i in x:
 	#	x[i]._print()
