@@ -5,11 +5,11 @@ try:
 	import py_lib.einvoice as einvoice
 	from py_lib.seller import list_sellers
 	from py_lib.seller import Seller
-	from py_lib.invoice import Invoice
+	from py_lib.invoice import *
 	from py_lib.seller import split_store_and_branch
 	from py_lib.seller import test_store_name
 except:
-	from invoice import Invoice 
+	from invoice import * 
 	import pickle
 	import einvoice
 	from seller import list_sellers
@@ -22,25 +22,28 @@ except:
 	ssl._create_default_https_context = ssl._create_unverified_context'''
 
 class User(object):
+	not_item_list = ['折扣', '手續費', '滿額送', '抵用券']
+
 	def __init__(self, api_key, app_id, card_type, card_no, card_encrypt):
 		self.api_key = api_key
 		self.app_id = app_id
 		self.card_type = card_type
 		self.card_no = card_no
 		self.card_encrypt = card_encrypt
-		#if not TEST:
-		self.invoice_list = einvoice.get_einvoice(api_key, app_id, card_type, card_no, card_encrypt)
-		#else:
-		#	with open('invoice_list_tmp.pkl', 'rb') as f:
-		#		self.invoice_list = pickle.load(f)
+		if not TEST:
+			self.invoice_list = einvoice.get_einvoice(api_key, app_id, card_type, card_no, card_encrypt)
+		else:
+			with open('invoice_list_tmp.pkl', 'rb') as f:
+				self.invoice_list = pickle.load(f)
 
 
 		#key is the id of seller
 		self.sellers = {}
+
 		#key is the seller_name in invoice
 		self.visit_frequency = {}
-		self.top_item = {}
-		self.items = {}
+		self.top_item = {} #value is(item_description, quantity)
+		self.all_items = {} #for top_item
 		self.consumption = {}
 
 	def add_seller(self, s, key_name):
@@ -52,11 +55,17 @@ class User(object):
 		#self.sellers[s.id]._print()
 
 	def statistics(self, shop):
+		def is_item(item_description):
+			for not_item in User.not_item_list:
+				if item_description.find(not_item) != -1:
+					return False
+			return True
+
 		tmp_invoice_list = {}
 		for invoice in self.invoice_list:
 			if invoice.seller_name not in self.visit_frequency:
 				self.visit_frequency[invoice.seller_name] = 0
-				self.items[invoice.seller_name] = {}
+				self.all_items[invoice.seller_name] = {}
 				self.consumption[invoice.seller_name] = 0.0
 			if invoice.seller_name not in tmp_invoice_list:
 				tmp_invoice_list[invoice.seller_name] = []
@@ -64,20 +73,22 @@ class User(object):
 			#self.sellers.invoice_list.append(invoice)
 			self.visit_frequency[invoice.seller_name] += 1
 			for item in invoice.item:
-				if item not in self.items[invoice.seller_name]:
-					self.items[invoice.seller_name][item] = 0
-				self.items[invoice.seller_name][item] += 1
+				if not is_item(item.description):
+					continue
+				if item.description not in self.all_items[invoice.seller_name]:
+					self.all_items[invoice.seller_name][item.description] = 0
+				self.all_items[invoice.seller_name][item.description] += float(item.quantity)
 			self.consumption[invoice.seller_name] += invoice.amount
 
-		for i in self.items:
+		for i in self.all_items:
 			top = 0  
-			for j in self.items[i]:
-				if top < self.items[i][j]:
-					top = self.items[i][j]
+			for j in self.all_items[i]:
+				if top < self.all_items[i][j]:
+					top = self.all_items[i][j]
 			self.top_item[i] = [] 
-			for j in self.items[i]:
-				if self.items[i][j] >= top:
-					self.top_item[i].append(j)
+			for j in self.all_items[i]:
+				if self.all_items[i][j] >= top:
+					self.top_item[i].append( (j, self.all_items[i][j]) )
 
 		#for i in self.visit_frequency:
 		#	print(i, self.visit_frequency[i], self.consumption[i], self.top_item[i][0].description)
@@ -127,7 +138,7 @@ def clustering(user):
 	return user, sorted(user, key=lambda x:user[x].cluster)
 
 def login(account, password):
-	#TEST
+	TEST = False
 	api_key = "QWQ4dU9WMzRXa2xoYUdsZA=="
 	app_id = "EINV0201505042102"
 	card_type = "3J0002"
@@ -154,23 +165,31 @@ if __name__ == '__main__':
 	all_sellers1 = list_sellers(csv)	
 	#all_sellers1 = list_sellers("Taipei_shops_with_einvoice.csv")	
 
-	#for inv in user.invoice_list:
-	#	inv._print()
-	#print(user.api_key,user.invoice_list)
+	# for inv in user.invoice_list:
+	# 	inv._print()
+	# print(user.api_key,user.invoice_list)
+
 	user.statistics(csv)
+	# for key in user.top_item:
+	# 	print(key)
+	# 	for item in user.top_item[key]:
+	# 		print(item)
+	# 	print()
+
 	(x, y) = clustering(user.sellers)
+
 	#for i in x:
 	#	x[i]._print()
-	seller_list = []
-	for key in y:
-		invoice_list = []
-		for invoice in x[key].invoice_list:
-			items = []
-			for item in invoice.item:
-				items.append([item.number,item.description,item.quantity,item.unitPrice,item.amount])
-				invoice_list.append([invoice.inv_date.getDate(),invoice.inv_num,invoice.amount, items])
-		seller_list.append([key, x[key].longitude, x[key].latitude, x[key].store_name, x[key].branch_name, x[key].address,
-		x[key].visit_frequency, x[key].consumption, x[key].top_item, x[key].cluster, invoice_list])
-	print(seller_list)
+	# seller_list = []
+	# for key in y:
+	# 	invoice_list = []
+	# 	for invoice in x[key].invoice_list:
+	# 		items = []
+	# 		for item in invoice.item:
+	# 			items.append([item.number,item.description,item.quantity,item.unitPrice,item.amount])
+	# 			invoice_list.append([invoice.inv_date.getDate(),invoice.inv_num,invoice.amount, items])
+	# 	seller_list.append([key, x[key].longitude, x[key].latitude, x[key].store_name, x[key].branch_name, x[key].address,
+	# 	x[key].visit_frequency, x[key].consumption, x[key].top_item, x[key].cluster, invoice_list])
+	# print(seller_list)
 	#for i in y:
 		#x[i]._print()
