@@ -22,7 +22,7 @@ except:
 	ssl._create_default_https_context = ssl._create_unverified_context'''
 
 class User(object):
-	not_item_list = ['折扣', '折抵', '手續費', '滿額送', '抵用券']
+	not_item_list = ['折扣', '折抵', '手續費', '滿額送', '抵用券', '紅利贈送', '任選第2件', '39元超值組合']
 
 	def __init__(self, api_key, app_id, card_type, card_no, card_encrypt):
 		self.api_key = api_key
@@ -59,9 +59,11 @@ class User(object):
 			return sorted(self.invoice_list, key=lambda inv: inv.inv_date.getDate())
 
 	def statistics(self, shop):
-		def is_item(item_description):
+		def is_item(item):
 			for not_item in User.not_item_list:
-				if item_description.find(not_item) != -1:
+				if item.description.find(not_item) != -1:
+					return False
+				if float(item.unitPrice) <= 0 and float(item.amount) <= 0:
 					return False
 			return True
 
@@ -77,7 +79,7 @@ class User(object):
 			#self.sellers.invoice_list.append(invoice)
 			self.visit_frequency[invoice.seller_name] += 1
 			for item in invoice.item:
-				if not is_item(item.description):
+				if not is_item(item):
 					continue
 				if item.description not in self.all_items[invoice.seller_name]:
 					self.all_items[invoice.seller_name][item.description] = 0
@@ -174,13 +176,13 @@ if __name__ == '__main__':
 	# print(user.api_key,user.invoice_list)
 
 	user.statistics(csv)
-	# for key in user.top_item:
-	# 	print(key)
-	# 	for item in user.top_item[key]:
-	# 		print(item)
-	# 	print()
-	for inv in user.sort_inv_list(user.invoice_list):
-		inv._print()
+	for key in user.top_item:
+		print(key)
+		for item in user.top_item[key]:
+			print(item)
+		print()
+	# for inv in user.sort_inv_list(user.invoice_list):
+	# 	inv._print()
 
 	# (x, y) = clustering(user.sellers)
 
