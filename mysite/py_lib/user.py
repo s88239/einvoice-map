@@ -20,7 +20,7 @@ except:
 '''if sys.version_info >= (2, 7, 9):
 	import ssl
 	ssl._create_default_https_context = ssl._create_unverified_context'''
-
+TEST =  False
 class User(object):
 	not_item_list = ['折扣', '折抵', '手續費', '滿額送', '抵用券', '紅利贈送', '任選第2件', '39元超值組合']
 
@@ -98,16 +98,22 @@ class User(object):
 
 		#for i in self.visit_frequency:
 		#	print(i, self.visit_frequency[i], self.consumption[i], self.top_item[i][0].description)
-		sellers = list_sellers(shop)
+		all_sellers = list_sellers(shop)
 		for i in self.visit_frequency:
-			for j in sellers:
+			seller_on_csv = False
+			for j in all_sellers:
 				(cur_store_name, cur_branch_name) = split_store_and_branch(i)
-				if sellers[j].branch_name == cur_branch_name and (cur_store_name=='' and test_store_name(sellers[j].store_name) or cur_store_name[:2]==sellers[j].store_name[:2]):
+				if all_sellers[j].branch_name == cur_branch_name and (cur_store_name=='' and test_store_name(all_sellers[j].store_name) or cur_store_name[:2]==all_sellers[j].store_name[:2]):
 					#print(sellers[j].store_name, sellers[j].branch_name, sellers[j].address)
 				#if i == sellers[j].branch_name:
-					self.add_seller(sellers[j],i)
-					self.sellers[sellers[j].id].invoice_list = tmp_invoice_list[i]
+					self.add_seller(all_sellers[j],i)
+					self.sellers[all_sellers[j].id].invoice_list = tmp_invoice_list[i]
 					#print(i, self.visit_frequency[i], self.consumption[i], self.top_item[i][0].description, sellers[j].address)
+					seller_on_csv = True
+			# if not seller_on_csv:
+			# 	self.add_seller(Seller(None, i, None, None, None), i)
+
+
 
 def clustering(user):
 	import numpy as np
@@ -144,7 +150,6 @@ def clustering(user):
 	return user, sorted(user, key=lambda x:user[x].cluster)
 
 def login(account, password):
-	TEST = False
 	api_key = "QWQ4dU9WMzRXa2xoYUdsZA=="
 	app_id = "EINV0201505042102"
 	card_type = "3J0002"
