@@ -51,7 +51,7 @@ class User(object):
 		self.sellers[s.id].set_branch_name(s.branch_name)
 		self.sellers[s.id].set_visit_frequency(self.visit_frequency[key_name])
 		self.sellers[s.id].set_consumption(self.consumption[key_name])
-		self.sellers[s.id].set_top_item(self.top_item[key_name][0].description)
+		self.sellers[s.id].set_top_item(self.top_item[key_name][0])
 		#self.sellers[s.id]._print()
 
 	def sort_inv_list(self, by_date=True):
@@ -181,11 +181,11 @@ if __name__ == '__main__':
 	# print(user.api_key,user.invoice_list)
 
 	user.statistics(csv)
-	for key in user.top_item:
-		print(key)
-		for item in user.top_item[key]:
-			print(item)
-		print()
+	# for key in user.top_item:
+	# 	print(key)
+	# 	for item in user.top_item[key]:
+	# 		print(item)
+	# 	print()
 	# for inv in user.sort_inv_list(user.invoice_list):
 	# 	inv._print()
 
