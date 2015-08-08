@@ -153,7 +153,6 @@ def get_einvoice(api_key, app_id, card_type, card_no, card_encrypt):
 
 	return invoice_list
 
-#if __name__ == '__main__':
 def login(account, password):
 	#TEST
 	api_key = "QWQ4dU9WMzRXa2xoYUdsZA=="
@@ -164,3 +163,17 @@ def login(account, password):
 
 	invoice_list = get_einvoice(api_key, app_id, card_type, card_no, card_encrypt)
 	return invoice_list
+
+if __name__ == '__main__':
+	api_key = "QWQ4dU9WMzRXa2xoYUdsZA=="
+	app_id = "EINV0201505042102"
+	card_type = "3J0002"
+	card_no = "/SMV1EFQ"
+	card_encrypt = "1212"
+
+	invoice_list = get_einvoice(api_key, app_id, card_type, card_no, card_encrypt)
+	# import pickle
+	# with open('invoice_list_tmp.pkl', 'wb') as f:
+	# 	pickle.dump(invoice_list, f)
+	# for i in invoice_list:
+	# 	i._print()
