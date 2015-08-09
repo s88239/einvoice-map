@@ -1,155 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<title>電子發票地圖 | Powered by TGOS MAP</title>
-<script type="text/javascript" src="http://api.tgos.nat.gov.tw/TGOS_API/tgos?ver=2&AppID=Tw7cFZt2kGy6wTmw3sIekPBqrEIY0lreYgSFa4bcfVYojDkig/xlBA==&APIKey=cGEErDNy5yN/1fQ0vyTOZrghjE+jIU6u5ipI0qIhBu7EFQSTnV2gxTwzUff8quRx097rfBNjje7sHbyWWbX99SCpMT9K1S+ijwN5Jrs+jJzZFUp+9EVKc+Md9vHCphSN77s9oYXRwyC2rr0kKonjqe6z9cQZFV2nm4W8FdZX1hqhUr2C2OqLMw51SmZS8VElWODFnEIZ+Gv5OHSFgdKaYXj1thYkXX5/QsYr1cV+dFURFu/uMAmqkw+J9ZJf+tkbVKPCDe5+Q9ivRws/NP4ooCtKtQKPX2zpqw3j9dRC5gwAaH9JiCEPJ5HA3OfShj5YYm+k0K0E7P0fFAXXN9IRtGqvD9MNhVPafgGP11keOjeh47I3ZRiwJrlazOSQg0FO3ojSB62pLjkbeaZVFyDMHm4ETxUIukpeBc83wqIKFr4=" charset="utf-8"></script>
-<div id="sellers" style="display:none;">{{sellers}}</div>
-<style>
-.CSSTableGenerator {
-		margin:0px;padding:0px;
-		box-shadow: 10px 10px 5px #888888;
-		border:1px solid #000000;
-		
-		-moz-border-radius-bottomleft:0px;
-		-webkit-border-bottom-left-radius:0px;
-		border-bottom-left-radius:0px;
-		
-		-moz-border-radius-bottomright:0px;
-		-webkit-border-bottom-right-radius:0px;
-		border-bottom-right-radius:0px;
-		
-		-moz-border-radius-topright:0px;
-		-webkit-border-top-right-radius:0px;
-		border-top-right-radius:0px;
-		
-		-moz-border-radius-topleft:0px;
-		-webkit-border-top-left-radius:0px;
-		border-top-left-radius:0px;
-	}.CSSTableGenerator table{
-	width:100%;
-		margin-left:auto; 
-		margin-right:auto;
-	    border-collapse: collapse;
-	    border-spacing: 0;
-		margin:0px;padding:0px;
-	}.CSSTableGenerator tr:last-child td:last-child {
-		-moz-border-radius-bottomright:0px;
-		-webkit-border-bottom-right-radius:0px;
-		border-bottom-right-radius:0px;
-	}
-	.CSSTableGenerator table tr:first-child td:first-child {
-		-moz-border-radius-topleft:0px;
-		-webkit-border-top-left-radius:0px;
-		border-top-left-radius:0px;
-	}
-	.CSSTableGenerator table tr:first-child td:last-child {
-		-moz-border-radius-topright:0px;
-		-webkit-border-top-right-radius:0px;
-		border-top-right-radius:0px;
-	}.CSSTableGenerator tr:last-child td:first-child{
-		-moz-border-radius-bottomleft:0px;
-		-webkit-border-bottom-left-radius:0px;
-		border-bottom-left-radius:0px;
-	}.CSSTableGenerator tr:hover td{
-		
-	}
-	.CSSTableGenerator tr:nth-child(odd){ background-color:#aad4ff; }
-	.CSSTableGenerator tr:nth-child(even)    { background-color:#ffffff; }.CSSTableGenerator td{
-		border:1px solid #000000;
-		border-width:0px 1px 1px 0px;
-		padding:7px;
-		font-size:10px;
-		font-family:Arial;
-		font-weight:normal;
-		color:#000000;
-	}.CSSTableGenerator tr:last-child td{
-		border-width:0px 1px 0px 0px;
-	}.CSSTableGenerator tr td:last-child{
-		border-width:0px 0px 1px 0px;
-	}.CSSTableGenerator tr:last-child td:last-child{
-		border-width:0px 0px 0px 0px;
-	}
-	.CSSTableGenerator tr:first-child td{
-			background:-o-linear-gradient(bottom, #005fbf 5%, #003f7f 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #005fbf), color-stop(1, #003f7f) );
-		background:-moz-linear-gradient( center top, #005fbf 5%, #003f7f 100% );
-		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#005fbf", endColorstr="#003f7f");	background: -o-linear-gradient(top,#005fbf,003f7f);
-		background-color:#005fbf;
-		border:0px solid #000000;
-		text-align:center;
-		border-width:0px 0px 1px 1px;
-		font-size:14px;
-		font-family:Arial Black;
-		font-weight:bold;
-		color:#ffffff;
-	}
-	.CSSTableGenerator tr:first-child:hover td{
-		background:-o-linear-gradient(bottom, #005fbf 5%, #003f7f 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #005fbf), color-stop(1, #003f7f) );
-		background:-moz-linear-gradient( center top, #005fbf 5%, #003f7f 100% );
-		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#005fbf", endColorstr="#003f7f");	background: -o-linear-gradient(top,#005fbf,003f7f);
-		background-color:#005fbf;
-	}
-	.CSSTableGenerator tr:first-child td:first-child{
-		border-width:0px 0px 1px 0px;
-	}
-	.CSSTableGenerator tr:first-child td:last-child{
-		border-width:0px 0px 1px 1px;
-	} 
-	html { height: 100% }
-	body { height: 100%; margin: 0; padding: 0; font-family: '微軟正黑體'; }
-</style>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>電子發票地圖 | Powered by TGOS MAP</title>
+    <script type="text/javascript" src="http://api.tgos.nat.gov.tw/TGOS_API/tgos?ver=2&AppID=Tw7cFZt2kGy6wTmw3sIekPBqrEIY0lreYgSFa4bcfVYojDkig/xlBA==&APIKey=cGEErDNy5yN/1fQ0vyTOZrghjE+jIU6u5ipI0qIhBu7EFQSTnV2gxTwzUff8quRx097rfBNjje7sHbyWWbX99SCpMT9K1S+ijwN5Jrs+jJzZFUp+9EVKc+Md9vHCphSN77s9oYXRwyC2rr0kKonjqe6z9cQZFV2nm4W8FdZX1hqhUr2C2OqLMw51SmZS8VElWODFnEIZ+Gv5OHSFgdKaYXj1thYkXX5/QsYr1cV+dFURFu/uMAmqkw+J9ZJf+tkbVKPCDe5+Q9ivRws/NP4ooCtKtQKPX2zpqw3j9dRC5gwAaH9JiCEPJ5HA3OfShj5YYm+k0K0E7P0fFAXXN9IRtGqvD9MNhVPafgGP11keOjeh47I3ZRiwJrlazOSQg0FO3ojSB62pLjkbeaZVFyDMHm4ETxUIukpeBc83wqIKFr4=" charset="utf-8"></script>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="/static/css/simple-sidebar.css" rel="stylesheet">
+</head>
+<div id="sellers">{{sellers}}</div>
 <script type="text/javascript">
 data = eval(document.getElementById('sellers').innerHTML);
-invoice_idx = data[0].length-1;
+invoice_idx = my_data[0].length-1;
+item_idx = my_data[0][invoice_idx][0].length-1;
 var pMap = null;
 function InitWnd() {
-	var pOMap = document.getElementById("TGMap");
-	pMap = new TGOS.TGOnlineMap(pOMap, TGOS.TGCoordSys.EPSG3857); // set coordinate to WGS84
-	pMap.setCenter(new TGOS.TGPoint(121.516946, 25.047941) );  // set the center of the initial map
-	pMap.setZoom(13); // Zooming scale
-	addPosition(data);
-}
-function show_detail(items_array){
-	item_list = '<table align="center"><tr><th>商品名稱</th><th>數量</th><th>單價</th><th>總價</th></tr>';
-	for(var i=0;i<items_array.length;++i){
-		item_list += '<tr>';
-		for(var j=1;j<items_array[i].length;++j){
-			item_list += '<td>' + items_array[i][j] + '</td>';
-		}
-		item_list += '</tr>';
-	}
-	item_list += '</table>';
-	return item_list;
-}
-function get_invoice_list_string(invoice_array){
-	var invoice_list = '<a href="javascript:showBlock(false)">close</a><h1>'
-	+ invoice_array[3] + '-' + invoice_array[4]
-	+ '</h1><table align="center"><tr><th>順序</th><th>日期</th><th>發票號碼</th><th>總金額</th><th>購買品項</th></tr>';
-	for(var i=0;i<invoice_array[invoice_idx].length;++i){
-		invoice_list += '<tr><td>'+(i+1)+'</td>';
-		for(var j=0;j<invoice_array[invoice_idx][i].length-1;++j){
-			invoice_list += '<td>' + invoice_array[invoice_idx][i][j] + '</td>';
-		}
-		invoice_list += '<td>' + show_detail(invoice_array[invoice_idx][i][invoice_array[invoice_idx][i].length-1]) + '</td></tr>';
-	}
-	invoice_list += '</table>';
-	return invoice_list;
-}
-function showall(){
-	showBlock(true);
-	var invoice_list = '<a href="javascript:showBlock(false)">close</a><h1>List</h1>'
-	+ '<table align="center"><tr><th>順序</th><th>商店名稱</th><th>分店名稱</th><th>商店地址</th><th>頻率</th><th>消費金額</th><th>最常購買品項</th><th>cluster</th>';
-	for(i=0;i<data.length;++i){
-		invoice_list += '<tr><td>'+(i+1)+'</td>';
-		for(j=3;j<data[i].length-1;++j){
-			invoice_list += '<td>' + data[i][j] + '</td>';
-		}
-	}
-	invoice_list += '</table>';
-	document.getElementById('detail').innerHTML = invoice_list;
-}
-function showBlock(status){
-	document.getElementById('detail').style.display = (status==true)?"block":"none";
+    var pOMap = document.getElementById("TGMap");
+    pMap = new TGOS.TGOnlineMap(pOMap, TGOS.TGCoordSys.EPSG3857); // set coordinate to WGS84
+    pMap.setCenter(new TGOS.TGPoint(121.516946, 25.047941) );  // set the center of the initial map
+    pMap.setZoom(13); // Zooming scale
+    addPosition(data);
 }
 function getRandomColor() {
     var letters = '0123456789ABCDEF'.split('');
@@ -160,72 +38,72 @@ function getRandomColor() {
     return color;
 }
 function getSymbol(color, freq){
-	size = (freq+10)*1.2; // set the size dending on the frequency of shopping times
-	pTGSymbo = new TGOS.TGSymbol(); // 建立幾何物件
-	pTGSymbo.symbolStyle = TGOS.TGSymbolStyle.TRIANGLE; // 設定標記的符號
-	pTGSymbo.xPixel = size; // 設定標記寬度
-	pTGSymbo.yPixel = size; // 設定標記高度
-	pTGSymbo.fillColor = color; // 設定填入顏色
-	pTGSymbo.fillOpacity = 0.7; // 設定透明度
-	pTGSymbo.strokeWeight = 2; // 設定框線寬度
-	pTGSymbo.strokeOpacity = 0.4; // 設定框線透明度
-	pTGSymbo.strokeColor = "#000000"; // 設定框線顏色
-	pTGSymbo.anchor.x = size/2; // 設定錨點x座標
-	pTGSymbo.anchor.y = size/2; // 設定錨點y座標
-	pTGSymbo.rotation = 0; // 設定符號旋轉方向
-	return pTGSymbo;
+    size = (freq+10)*1.2; // set the size dending on the frequency of shopping times
+    pTGSymbo = new TGOS.TGSymbol(); // 建立幾何物件
+    pTGSymbo.symbolStyle = TGOS.TGSymbolStyle.TRIANGLE; // 設定標記的符號
+    pTGSymbo.xPixel = size; // 設定標記寬度
+    pTGSymbo.yPixel = size; // 設定標記高度
+    pTGSymbo.fillColor = color; // 設定填入顏色
+    pTGSymbo.fillOpacity = 0.7; // 設定透明度
+    pTGSymbo.strokeWeight = 2; // 設定框線寬度
+    pTGSymbo.strokeOpacity = 0.4; // 設定框線透明度
+    pTGSymbo.strokeColor = "#000000"; // 設定框線顏色
+    pTGSymbo.anchor.x = size/2; // 設定錨點x座標
+    pTGSymbo.anchor.y = size/2; // 設定錨點y座標
+    pTGSymbo.rotation = 0; // 設定符號旋轉方向
+    return pTGSymbo;
 }
 function addPosition(data){
-	var InfoWindowOptions = {
+    var InfoWindowOptions = {
          maxWidth:4000, //訊息視窗的最大寬度
          pixelOffset: new TGOS.TGSize(5, -30), //InfoWindow起始位置的偏移量
                                                //使用TGSize設定
                                                //向右X為正, 向上Y為負
          zIndex:99 //視窗堆疊順序
-	};
-	var multi_point = [];
-	var current_cluster = 1, current_color = "#AA2222";
-	symbol = getSymbol();
-   	for(var i = 0; i < data.length; i++) {
-   		if(current_cluster!=data[i][data[i].length-2]) current_color = getRandomColor();
-   		var symbol = getSymbol(current_color,parseInt(data[i][6]));
-		console.log(data);
-		var point = new TGOS.TGPoint(parseFloat(data[i][1]),parseFloat(data[i][2])); // create its position
-		var pTGMarker = new TGOS.TGMarker(pMap,point,data[i][3]+'-'+data[i][4], symbol, {flat:false}); // establish the point on map
+    };
+    var multi_point = [];
+    var current_cluster = 1, current_color = "#AA2222";
+    symbol = getSymbol();
+    for(var i = 0; i < data.length; i++) {
+        if(current_cluster!=data[i][data[i].length-2]) current_color = getRandomColor();
+        var symbol = getSymbol(current_color,parseInt(data[i][6]));
+        console.log(data);
+        var point = new TGOS.TGPoint(parseFloat(data[i][1]),parseFloat(data[i][2])); // create its position
+        var pTGMarker = new TGOS.TGMarker(pMap,point,data[i][3]+'-'+data[i][4], symbol, {flat:false}); // establish the point on map
 
-		if(current_cluster==data[i][data[i].length-2]) multi_point.push(pTGMarker);
-		else{
-			addMarkerClusters(multi_point);
-			multi_point = [pTGMarker];
-			current_cluster = data[i][data[i].length-2];
-		}
-		//-----------------establish a message box--------------------
-		var InfoWindowOptions = {
-		      maxWidth:4000, // 訊息視窗的最大寬度
-		      pixelOffset: new TGOS.TGSize(5, -30) //InfoWindow起始位置的偏移量, 使用TGSize設定, 向右X為正, 向上Y為負
-		};
-		var invoice_message = data[i][3]+'-'+data[i][4]+'：'+data[i][5]+'<br />頻率：'+data[i][6]+'<br />總消費金額：'+data[i][7]+'<br />最常購買商品：'+data[i][8];
-		messageBox = new TGOS.TGInfoWindow(invoice_message, point, InfoWindowOptions); // the content in message box
+        if(current_cluster==data[i][data[i].length-2]) multi_point.push(pTGMarker);
+        else{
+            addMarkerClusters(multi_point);
+            multi_point = [pTGMarker];
+            current_cluster = data[i][data[i].length-2];
+        }
+        //-----------------establish a message box--------------------
+        var InfoWindowOptions = {
+              maxWidth:4000, // 訊息視窗的最大寬度
+              pixelOffset: new TGOS.TGSize(5, -30) //InfoWindow起始位置的偏移量, 使用TGSize設定, 向右X為正, 向上Y為負
+        };
+        var invoice_message = data[i][3]+'-'+data[i][4]+'：'+data[i][5]+'<br />頻率：'+data[i][6]+'<br />總消費金額：'+data[i][7]+'<br />最常購買商品：'+data[i][8];
+        messageBox = new TGOS.TGInfoWindow(invoice_message, point, InfoWindowOptions); // the content in message box
 
-		TGOS.TGEvent.addListener(pTGMarker, "mouseover", function (pTGMarker, messageBox) { // when mouse over the point
-		     return function () {
-		     	messageBox.open(pMap, pTGMarker);
-		     }
-		} (pTGMarker, messageBox));
+        TGOS.TGEvent.addListener(pTGMarker, "mouseover", function (pTGMarker, messageBox) { // when mouse over the point
+             return function () {
+                messageBox.open(pMap, pTGMarker);
+             }
+        } (pTGMarker, messageBox));
 
-		TGOS.TGEvent.addListener(pTGMarker, "mouseout", function (messageBox) { // when mouse out the point
-		         return function () {
-		                    messageBox.close();
-		         }
-		} (messageBox));
-		TGOS.TGEvent.addListener(pTGMarker, "click", function (invoice_array){ // when click the point
-			return function (){
-				showBlock(true);
-				document.getElementById('detail').innerHTML = get_invoice_list_string(invoice_array);
-				}
-			}(data[i]) );
-	}
-	addMarkerClusters(multi_point); // add these point to the same cluster
+        TGOS.TGEvent.addListener(pTGMarker, "mouseout", function (messageBox) { // when mouse out the point
+                 return function () {
+                            messageBox.close();
+                 }
+        } (messageBox));
+        TGOS.TGEvent.addListener(pTGMarker, "click", function (invoice_array){ // when click the point
+            return function (){
+                showBlock('detail',true);
+                document.getElementById('detail').innerHTML = get_invoice_list_string(invoice_array);
+                }
+            }(data[i]) );
+    }
+    addMarkerClusters(multi_point); // add these point to the same cluster
 }
 function addMarkerClusters(markers) {                           //使用群聚標記點功能
     mCluster = new TGOS.TGMarkerCluster(pMap, markers,{}); //建立群聚標記點物件
@@ -235,10 +113,108 @@ function addMarkerClusters(markers) {                           //使用群聚�
     mCluster.redrawAll(true);                         //是否重新繪製群聚標記點物件
 }
 </script>
-</head>
 <body style="margin: 0px" onload="InitWnd();">
-	<div id="TGMap" style="width:100vw;height:100vh;"></div>
-	<div id="detail" class="CSSTableGenerator" style="position: absolute; background-color:orange; text-align:center; color: blue; width: 800px; height: 100vh; top: 0px; left:0; right:0; margin-left:auto; margin-right:auto; display:none; overflow-y: auto;"><font color="white"></font></div>
-	<div id="detail" class="CSSTableGenerator" style="position: absolute; top: 0px; left:0;"><input type="button" onclick="showall()" value="show list"/></div>
+
+<!--<div id="detail" style="position: absolute; background-color:orange; text-align:center; color: blue; width: 100vw; height: 100vh; top: 0px; margin-left:auto; margin-right:auto; display:none; overflow-y: auto;"></div>-->
+ <div id="wrapper" class="toggled">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="javascript: showBlock('TGMap',true);">電子發票地圖</a>
+                </li>
+                <li>
+                    <a href="#">發票清單</a>
+                </li>
+                <li>
+                    <a href="javascript: showall();">商家清單</a>
+                </li>
+                <li>
+                    <a href="#">記帳</a>
+                </li>
+                <li>
+                    <a href="#">統計資料</a>
+                </li>
+                <li>
+                    <a href="#"></a>
+                </li>
+                <li>
+                    <a href="#">設定</a>
+                </li>
+                <li>
+                    <a href="#">關於</a>
+                </li>
+            </ul>
+        </div>
+        <div id="TGMap" style="position: absolute;width:100vw;height:100vh;"></div>
+
+        <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">
+                <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
+        </a>
+        <div id="main_text"></div>
+
+        <div id="detail" style="z-index:999; position: absolute; background-color: #EBEBFF; width: 800px; height: 100vh; top: 0px; left:0; right:0; margin-left:auto; margin-right:auto; display:none; overflow-y: auto;"></div>
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/static/js/bootstrap.min.js"></script>
+
+    <!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+
+function get_invoice_list_string(invoice_array){
+    var items_array = invoice_array[invoice_idx][0][item_idx]; // 該張發票所有購買商品
+    //var item_num = items_array.length; // 該張發票商品筆數
+    //alert(item_num);
+    //alert(invoice_idx+':'+item_idx);
+    var invoice_list = '<center><a href="javascript:showBlock(\'detail\', false)">close</a><h1><font color="blue">'
+    + invoice_array[3] + invoice_array[4]
+    + '</font></h1></center><table class="table"><tr><th>順序</th><th>日期</th><th>發票號碼</th><th>總金額</th><th>#</th><th>商品名稱</th><th>數量</th><th>單價</th><th>總價</th></tr>';
+    for(var i=0;i<invoice_array[invoice_idx].length;++i){ // 第幾張發票
+        var items_array = invoice_array[invoice_idx][i][item_idx]; // 該張發票所有購買商品
+        var item_num = items_array.length; // 該張發票商品筆數
+        var invoice_list = invoice_list  + '<tr><td rowspan="' + item_num + '">' + (i+1) + '</td>'; // 順序
+        for(var j=0;j<invoice_array[invoice_idx][i].length-1;++j){ // 日期 發票號碼 總金額
+            invoice_list = invoice_list + '<td rowspan="' + item_num + '">' + invoice_array[invoice_idx][i][j] + '</td>';
+        }
+        for(var j=0;j<item_num;++j){ // 購買品項 商品名稱 數量 單價 總價
+            if(j!=0) invoice_list += '<tr>';
+            for(var kk=0;kk<items_array[j].length;++kk){
+                invoice_list = invoice_list + '<td>' + items_array[j][kk] + '</td>';
+            }
+            invoice_list += '</tr>';
+        }
+    }
+    invoice_list += '</table>';
+    return invoice_list;
+}
+function showall(){
+    showBlock('TGMap',false);
+    var invoice_list = '<h1>商店清單</h1>'
+    + '<table class="table table-hover"><tr><th>順序</th><th>商店名稱</th><th>分店名稱</th><th>商店地址</th><th>頻率</th><th>消費金額</th><th>最常購買品項</th><th>cluster</th>';
+    for(i=0;i<data.length;++i){
+        invoice_list += '<tr><td>'+(i+1)+'</td>';
+        for(j=3;j<data[i].length-1;++j){
+            invoice_list += '<td>' + data[i][j] + '</td>';
+        }
+    }
+    invoice_list += '</table>';
+    document.getElementById('main_text').innerHTML = invoice_list;
+}
+function showBlock(blockid, status){
+    document.getElementById(blockid).style.display = (status==true)?"block":"none";
+}
+    </script>
+
 </body>
+
 </html>
