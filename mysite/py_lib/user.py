@@ -51,6 +51,8 @@ class User(object):
 		self.sellers[s.id].set_branch_name(s.branch_name)
 		self.sellers[s.id].set_visit_frequency(self.visit_frequency[key_name])
 		self.sellers[s.id].set_consumption(self.consumption[key_name])
+		if len(self.top_item[key_name]) == 0:
+			return
 		self.sellers[s.id].set_top_item(self.top_item[key_name][0])
 		#self.sellers[s.id]._print()
 
