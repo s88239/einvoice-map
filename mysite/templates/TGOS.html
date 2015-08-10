@@ -15,6 +15,7 @@
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="/static/css/simple-sidebar.css" rel="stylesheet">
+    <link href="/static/css/hamburger.css" rel="stylesheet">
 </head>
 <div id="sellers" style="display:none">{{sellers}}</div>
 <script type="text/javascript">
@@ -113,11 +114,9 @@ function addMarkerClusters(markers) {                           //使用群聚�
     mCluster.redrawAll(true);                         //是否重新繪製群聚標記點物件
 }
 </script>
-<body style="margin: 0px" onload="InitWnd();">
+<body style="margin: 0px" onload="InitWnd();">    
 
-<!--<div id="detail" style="position: absolute; background-color:orange; text-align:center; color: blue; width: 100vw; height: 100vh; top: 0px; margin-left:auto; margin-right:auto; display:none; overflow-y: auto;"></div>-->
- <div id="wrapper" class="toggled">
-
+<div id="wrapper" class="toggled">
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
@@ -147,38 +146,63 @@ function addMarkerClusters(markers) {                           //使用群聚�
                 </li>
             </ul>
         </div>
+        <button type="button" class="hamburger is-closed" data-toggle="offcanvas">
+                <span class="hamb-top"></span>
+                <span class="hamb-middle"></span>
+                <span class="hamb-bottom"></span>
+        </button>
         <div id="TGMap" style="position: absolute;width:100vw;height:100vh;"></div>
-
-        <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">
-                <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
-        </a>
         <div id="main_text"></div>
 
-        <div id="detail" style="z-index:999; position: absolute; background-color: #EBEBFF; width: 800px; height: 100vh; top: 0px; left:0; right:0; margin-left:auto; margin-right:auto; display:none; overflow-y: auto;"></div>
+        <div id="detail" style="z-index:900; position: absolute; background-color: #EBEBFF; width: 800px; height: 100vh; top: 0px; left:0; right:0; margin-left:auto; margin-right:auto; display:none; overflow-y: auto;"></div>
     </div>
     <!-- /#wrapper -->
-
     <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
-    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="static/js/bootstrap.min.js"></script>
 
     <!-- Menu Toggle Script -->
-    <script>
-    $("#menu-toggle").click(function(e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
+<script>
+
+// press hamburger to hide or show sidebar
+$(document).ready(function () {
+  var trigger = $('.hamburger'),
+      overlay = $('.overlay'),
+     isClosed = false;
+
+    trigger.click(function () {
+      hamburger_cross();      
     });
+
+    function hamburger_cross() {
+
+      if (isClosed == true) {          
+        overlay.hide();
+        trigger.removeClass('is-open');
+        trigger.addClass('is-closed');
+        isClosed = false;
+      } else {   
+        overlay.show();
+        trigger.removeClass('is-closed');
+        trigger.addClass('is-open');
+        isClosed = true;
+      }
+  }
+  
+  $('[data-toggle="offcanvas"]').click(function () {
+        $('#wrapper').toggleClass('toggled');
+  });  
+});
 
 function get_invoice_list_string(invoice_array){
     var items_array = invoice_array[invoice_idx][0][item_idx]; // 該張發票所有購買商品
-
-    if(invoice_array[3]=='' || invoice_array[4]=='') delimiter = '';
-    else delimiter = '-'; // format: 商店-分店名
-
+    //var item_num = items_array.length; // 該張發票商品筆數
+    //alert(item_num);
+    //alert(invoice_idx+':'+item_idx);
     var invoice_list = '<center><a href="javascript:showBlock(\'detail\', false)">close</a><h1><font color="blue">'
-    + invoice_array[3] + delimiter + invoice_array[4]
+    + invoice_array[3] + invoice_array[4]
     + '</font></h1></center><table class="table"><tr><th>順序</th><th>日期</th><th>發票號碼</th><th>總金額</th><th>#</th><th>商品名稱</th><th>數量</th><th>單價</th><th>總價</th></tr>';
     for(var i=0;i<invoice_array[invoice_idx].length;++i){ // 第幾張發票
         var items_array = invoice_array[invoice_idx][i][item_idx]; // 該張發票所有購買商品
@@ -200,7 +224,7 @@ function get_invoice_list_string(invoice_array){
 }
 function showall(){
     showBlock('TGMap',false);
-    var invoice_list = '<h1>商店清單</h1>'
+    var invoice_list = '<center><p><font color="blue" size="+4">商店清單</font></p></center>'
     + '<table class="table table-hover"><tr><th>順序</th><th>商店名稱</th><th>分店名稱</th><th>商店地址</th><th>頻率</th><th>消費金額</th><th>最常購買品項</th><th>cluster</th>';
     for(i=0;i<data.length;++i){
         invoice_list += '<tr><td>'+(i+1)+'</td>';
