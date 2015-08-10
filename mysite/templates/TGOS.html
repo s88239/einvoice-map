@@ -17,7 +17,10 @@
     <link href="/static/css/simple-sidebar.css" rel="stylesheet">
     <link href="/static/css/hamburger.css" rel="stylesheet">
 </head>
-<div id="sellers" style="display:none">{{sellers}}</div>
+<!--<div id="sellers" style="display:none">{{sellers}}</div>
+<div id="einvoice" style="display:none">{{einvoice}}</div>-->
+<div id="sellers">{{sellers}}</div>
+<div id="einvoice" style="background-color: green">{{einvoice}}</div>
 <script type="text/javascript">
 data = eval(document.getElementById('sellers').innerHTML);
 invoice_idx = my_data[0].length-1;

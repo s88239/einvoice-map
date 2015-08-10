@@ -163,10 +163,10 @@ def login(account, password):
 	#all_sellers1 = list_sellers(csv)
 	user.statistics(csv)
 	(x, y) = clustering(user.sellers)
-	return x,y
+	return x,y,user.sort_inv_list()
 
 if __name__ == '__main__':
-	TEST = True
+	#TEST = True
 	api_key = "QWQ4dU9WMzRXa2xoYUdsZA=="
 	app_id = "EINV0201505042102"
 	card_type = "3J0002"

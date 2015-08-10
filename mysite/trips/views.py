@@ -15,8 +15,9 @@ def TGOS(request):
 	account = request.POST['account']
 	password = request.POST['password']
 	#try:
-	(x,y) = login(account, password)
+	(x,y,einvoice_list) = login(account, password)
 	
+	# get invoice list by shop
 	seller_list = []
 	for key in y:
 		invoice_list = []
@@ -42,6 +43,22 @@ def TGOS(request):
 		top_item_str,
 		x[key].cluster,
 		invoice_list])
+
+	# get sorted invoice list
+	sorted_invoice_list = []
+	for cur_einvoice in einvoice_list:
+		items = []
+		for item in cur_einvoice.item:
+			items.append([item.number,item.description,item.quantity,item.unitPrice,item.amount])
+		sorted_invoice_list.append([
+			cur_einvoice.inv_num,
+			cur_einvoice.card_type,
+			cur_einvoice.card_no,
+			cur_einvoice.seller_name,
+			cur_einvoice.amount,
+			cur_einvoice.inv_date.getDate(),
+			cur_einvoice.inv_period,
+			items])
 	'''except:
 		string = traceback.format_exc()
 		return render(request,
@@ -51,7 +68,7 @@ def TGOS(request):
 		)'''
 	return render(request,
 		'TGOS.html',
-		{'sellers': seller_list},
+		{'sellers': seller_list, 'einvoice': sorted_invoice_list},
 		context_instance = RequestContext(request)
 		)
 #{'current_time': datetime.now()}
