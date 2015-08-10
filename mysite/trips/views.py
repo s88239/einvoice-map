@@ -51,13 +51,13 @@ def TGOS(request):
 		for item in cur_einvoice.item:
 			items.append([item.number,item.description,item.quantity,item.unitPrice,item.amount])
 		sorted_invoice_list.append([
-			cur_einvoice.inv_num,
+			cur_einvoice.inv_period,
+			cur_einvoice.inv_date.getDate(),
 			cur_einvoice.card_type,
 			cur_einvoice.card_no,
 			cur_einvoice.seller_name,
 			cur_einvoice.amount,
-			cur_einvoice.inv_date.getDate(),
-			cur_einvoice.inv_period,
+			cur_einvoice.inv_num,
 			items])
 	'''except:
 		string = traceback.format_exc()

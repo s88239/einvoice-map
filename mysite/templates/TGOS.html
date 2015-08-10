@@ -127,7 +127,7 @@ function addMarkerClusters(markers) {                           //使用群聚�
                     <a href="javascript: showBlock('TGMap',true);">電子發票地圖</a>
                 </li>
                 <li>
-                    <a href="#">發票清單</a>
+                    <a href="javascript: show_all_einvoice();">發票清單</a>
                 </li>
                 <li>
                     <a href="javascript: showall();">商家清單</a>
@@ -233,6 +233,28 @@ function showall(){
         invoice_list += '<tr><td>'+(i+1)+'</td>';
         for(j=3;j<data[i].length-1;++j){
             invoice_list += '<td>' + data[i][j] + '</td>';
+        }
+    }
+    invoice_list += '</table>';
+    document.getElementById('main_text').innerHTML = invoice_list;
+}
+function show_all_einvoice(){
+    showBlock('TGMap',false);
+    var invoice_list = '<center><p><font color="blue" size="+4">電子發票清單</font></p></center>'
+    + '<table class="table table-hover"><tr><th>順序</th><th>消費日期</th><th>載具</th><th>商店名稱</th><th>消費金額</th><th>發票號碼</th>';
+    for(i=einvoice_list.length-1;i>=0;--i){
+        invoice_list += '<tr><td>'+(i+1)+'</td>'; // 順序
+        for(j=1;j<6;++j){
+            if(j==2){ // invoice.card_type
+                if(einvoice_list[i][j] == '3J0002') carrier_type = '手機條碼';
+                else if(einvoice_list[i][j] == '1K0001') carrier_type = '悠遊卡';
+                else if(einvoice_list[i][j] == '2G0001') carrier_type = 'iCash';
+                else carrier_type = '其他載具';
+                invoice_list += '<td>' + carrier_type + ' ' + einvoice_list[i][++j] + '</td>';
+            }
+            else{
+                invoice_list += '<td>' + einvoice_list[i][j] + '</td>';
+            }
         }
     }
     invoice_list += '</table>';
