@@ -122,7 +122,7 @@ function addMarkerClusters(markers) {                           //使用群聚�
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
                 <li class="sidebar-brand">
-                    <a href="javascript: showBlock('TGMap',true);">電子發票地圖</a>
+                    <a href="javascript: show_map_div();">電子發票地圖</a>
                 </li>
                 <li>
                     <a href="javascript: show_all_einvoice();">發票清單</a>
@@ -155,7 +155,7 @@ function addMarkerClusters(markers) {                           //使用群聚�
         <div id="TGMap" style="position: absolute;width:100vw;height:100vh;"></div>
         <div id="main_text"></div>
 
-        <div id="detail" style="z-index:900; position: absolute; background-color: #EBEBFF; width: 800px; height: 100vh; top: 0px; left:0; right:0; margin-left:auto; margin-right:auto; display:none; overflow-y: auto;"></div>
+        <div id="detail" style="z-index:900; position: relative; background-color: #EBEBFF; width: 800px; height: 100vh; top: 0px; left:0; right:0; margin-left:auto; margin-right:auto; display:none; overflow-y: auto;"></div>
     </div>
     <!-- /#wrapper -->
     <!-- jQuery -->
@@ -223,7 +223,8 @@ function get_invoice_list_string(invoice_array){
     invoice_list += '</table>';
     return invoice_list;
 }
-function showall(){
+function show_all_shop(){
+    showBlock('detail',false);
     showBlock('TGMap',false);
     var invoice_list = '<center><p><font color="blue" size="+4">商店清單</font></p></center>'
     + '<table class="table table-hover"><tr><th>順序</th><th>商店名稱</th><th>分店名稱</th><th>商店地址</th><th>頻率</th><th>消費金額</th><th>最常購買品項</th><th>cluster</th>';
@@ -237,6 +238,7 @@ function showall(){
     document.getElementById('main_text').innerHTML = invoice_list;
 }
 function show_all_einvoice(){
+    showBlock('detail',false);
     showBlock('TGMap',false);
     var invoice_list = '<center><p><font color="blue" size="+4">電子發票清單</font></p></center>'
     + '<table class="table table-hover"><tr><th>順序</th><th>消費日期</th><th>載具</th><th>商店名稱</th><th>消費金額</th><th>發票號碼</th>';
@@ -258,6 +260,11 @@ function show_all_einvoice(){
     }
     invoice_list += '</table>';
     document.getElementById('main_text').innerHTML = invoice_list;
+}
+function show_map_div(){
+    document.getElementById('main_text').innerHTML = '';
+    showBlock('detail',false);
+    showBlock('TGMap',true);
 }
 function showBlock(blockid, status){
     document.getElementById(blockid).style.display = (status==true)?"block":"none";
