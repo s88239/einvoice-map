@@ -25,7 +25,12 @@ def TGOS(request):
 			for item in invoice.item:
 				items.append([item.number,item.description,item.quantity,item.unitPrice,item.amount])
 			invoice_list.append([invoice.inv_date.getDate(),invoice.inv_num,invoice.amount, items])
-			
+
+		if len(x[key].top_item) != 0:
+			top_item_str = x[key].top_item[0] + ' x ' + str(x[key].top_item[1])
+		else:
+			top_item_str = 'none'
+
 		seller_list.append([key,
 		x[key].longitude,
 		x[key].latitude,
@@ -34,7 +39,7 @@ def TGOS(request):
 		x[key].address,
 		x[key].visit_frequency,
 		x[key].consumption,
-		x[key].top_item,
+		top_item_str,
 		x[key].cluster,
 		invoice_list])
 	'''except:
