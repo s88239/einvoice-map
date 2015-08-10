@@ -1,6 +1,5 @@
-invoice_idx = shop_data[0].length-1; // 發票list位於商家list的位置
-item_idx = shop_data[0][invoice_idx][0].length-1; // list位於發票list的位置
-
+invoice_idx = shop_data[0].length-1;
+item_idx = shop_data[0][invoice_idx][0].length-1;
 function get_invoice_list_string(invoice_array){
     var items_array = invoice_array[invoice_idx][0][item_idx]; // 該張發票所有購買商品
     var invoice_list = '<center><a href="javascript:showBlock(\'detail\', false)">close</a><h1><font color="blue">'
