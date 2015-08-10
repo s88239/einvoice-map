@@ -22,7 +22,7 @@ except:
 	ssl._create_default_https_context = ssl._create_unverified_context'''
 TEST =  False
 class User(object):
-	not_item_list = ['折扣', '折抵', '手續費', '滿額送', '抵用券', '紅利贈送', '任選第2件', '39元超值組合']
+	not_item_list = ['折扣', '折抵', '滿額送', '抵用券', '紅利贈送', '任選第2件', '39元超值組合']
 
 	def __init__(self, api_key, app_id, card_type, card_no, card_encrypt):
 		self.api_key = api_key
@@ -45,6 +45,8 @@ class User(object):
 		self.top_item = {} #value is(item_description, quantity)
 		self.all_items = {} #for top_item
 		self.consumption = {}
+
+		self.seller_not_on_csv = []
 
 	def add_seller(self, s, key_name):
 		self.sellers[s.id] = Seller(s.id, s.store_name, s.address, s.longitude, s.latitude)
@@ -112,9 +114,8 @@ class User(object):
 					self.sellers[all_sellers[j].id].invoice_list = tmp_invoice_list[i]
 					#print(i, self.visit_frequency[i], self.consumption[i], self.top_item[i][0].description, sellers[j].address)
 					seller_on_csv = True
-			# if not seller_on_csv:
-			# 	self.add_seller(Seller(None, i, None, None, None), i)
-
+			if not seller_on_csv:
+				self.seller_not_on_csv.append(i)
 
 
 def clustering(user):
@@ -183,6 +184,11 @@ if __name__ == '__main__':
 	# print(user.api_key,user.invoice_list)
 
 	user.statistics(csv)
+	# for i in user.seller_not_on_csv:
+	# 	print(i)
+	# print()
+	# for i in user.sellers:
+	# 	user.sellers[i]._print()
 	# for key in user.top_item:
 	# 	print(key)
 	# 	for item in user.top_item[key]:
