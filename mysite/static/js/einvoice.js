@@ -29,10 +29,10 @@ function show_all_shop(){
     showBlock('TGMap',false);
     var invoice_list = '<center><p><font color="blue" size="+4">商店清單</font></p></center>'
     + '<table class="table table-hover"><tr><th>順序</th><th>商店名稱</th><th>分店名稱</th><th>商店地址</th><th>頻率</th><th>消費金額</th><th>最常購買品項</th><th>cluster</th>';
-    for(i=0;i<data.length;++i){
+    for(i=0;i<shop_data.length;++i){
         invoice_list += '<tr><td>'+(i+1)+'</td>';
-        for(j=3;j<data[i].length-1;++j){
-            invoice_list += '<td>' + data[i][j] + '</td>';
+        for(j=3;j<shop_data[i].length-1;++j){
+            invoice_list += '<td>' + shop_data[i][j] + '</td>';
         }
     }
     invoice_list += '</table>';
