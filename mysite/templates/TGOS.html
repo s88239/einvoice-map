@@ -17,12 +17,11 @@
     <link href="/static/css/simple-sidebar.css" rel="stylesheet">
     <link href="/static/css/hamburger.css" rel="stylesheet">
 </head>
-<!--<div id="sellers" style="display:none">{{sellers}}</div>
-<div id="einvoice" style="display:none">{{einvoice}}</div>-->
-<div id="sellers">{{sellers}}</div>
-<div id="einvoice" style="background-color: green">{{einvoice}}</div>
+<div id="sellers" style="display:none">{{sellers}}</div>
+<div id="einvoice" style="display:none">{{einvoice}}</div>
 <script type="text/javascript">
 data = eval(document.getElementById('sellers').innerHTML);
+einvoice_list = eval(document.getElementById('einvoice').innerHTML);
 invoice_idx = my_data[0].length-1;
 item_idx = my_data[0][invoice_idx][0].length-1;
 var pMap = null;
@@ -242,9 +241,10 @@ function show_all_einvoice(){
     showBlock('TGMap',false);
     var invoice_list = '<center><p><font color="blue" size="+4">電子發票清單</font></p></center>'
     + '<table class="table table-hover"><tr><th>順序</th><th>消費日期</th><th>載具</th><th>商店名稱</th><th>消費金額</th><th>發票號碼</th>';
-    for(i=einvoice_list.length-1;i>=0;--i){
-        invoice_list += '<tr><td>'+(i+1)+'</td>'; // 順序
-        for(j=1;j<6;++j){
+    var count = 1;
+    for(i=einvoice_list.length-1;i>=0;--i,++count){
+        invoice_list += '<tr><td>' + count + '</td>'; // 順序
+        for(j=1;j<7;++j){
             if(j==2){ // invoice.card_type
                 if(einvoice_list[i][j] == '3J0002') carrier_type = '手機條碼';
                 else if(einvoice_list[i][j] == '1K0001') carrier_type = '悠遊卡';
