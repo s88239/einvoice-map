@@ -9,7 +9,7 @@
     <meta name="author" content="">
 
     <title>電子發票地圖 | Powered by TGOS MAP</title>
-    <script type="text/javascript" src="http://api.tgos.nat.gov.tw/TGOS_API/tgos?ver=2&AppID=Tw7cFZt2kGy6wTmw3sIekPBqrEIY0lreYgSFa4bcfVYojDkig/xlBA==&APIKey=cGEErDNy5yN/1fQ0vyTOZrghjE+jIU6u5ipI0qIhBu7EFQSTnV2gxTwzUff8quRx097rfBNjje7sHbyWWbX99SCpMT9K1S+ijwN5Jrs+jJzZFUp+9EVKc+Md9vHCphSN77s9oYXRwyC2rr0kKonjqe6z9cQZFV2nm4W8FdZX1hqhUr2C2OqLMw51SmZS8VElWODFnEIZ+Gv5OHSFgdKaYXj1thYkXX5/QsYr1cV+dFURFu/uMAmqkw+J9ZJf+tkbVKPCDe5+Q9ivRws/NP4ooCtKtQKPX2zpqw3j9dRC5gwAaH9JiCEPJ5HA3OfShj5YYm+k0K0E7P0fFAXXN9IRtGqvD9MNhVPafgGP11keOjeh47I3ZRiwJrlazOSQg0FO3ojSB62pLjkbeaZVFyDMHm4ETxUIukpeBc83wqIKFr4=" charset="utf-8"></script>
+    <script type="text/javascript" src="http://api.tgos.nat.gov.tw/TGOS_API/tgos?ver=2&AppID=Tw7cFZt2kGy6wTmw3sIekPBqrEIY0lreYgSFa4bcfVYojDkig/xlBA==&APIKey=cGEErDNy5yN/1fQ0vyTOZrghjE+jIU6u5ipI0qIhBu7EFQSTnV2gxTwzUff8quRx097rfBNjje7sHbyWWbX99SCpMT9K1S+ijwN5Jrs+jJzZFUp+9EVKc+Md9vHCphSN77s9oYXRwyC2rr0kKonjqe6z9cQZFV2nm4W8FdZX1hqhUr2C2OqLMw51SmZS8VElDWGVu4d/nUHmy/XbYMNC8FZY+VgxKPrw+IlhQL1v6dUdtZsNwMm1Yn57MG8mOf3dTP1pLtUlBXQ92utMV378r6ooc6wEEL1S7wtnUQn1GR5tD/i5zllGc2QwLs1y2zqygqqWAvh6QH0vhiWb9Xvsie423CKH+pM/Lzo/aypb6owVgYv9oGJK+uGnZ2jNkxSWtjI4K6WNWsQ=" charset="utf-8"></script>
 
     <!-- Bootstrap Core CSS -->
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
@@ -173,11 +173,12 @@ function addMarkerClusters(markers) {                           //使用群聚�
 
 function get_invoice_list_string(invoice_array){
     var items_array = invoice_array[invoice_idx][0][item_idx]; // 該張發票所有購買商品
-    //var item_num = items_array.length; // 該張發票商品筆數
-    //alert(item_num);
-    //alert(invoice_idx+':'+item_idx);
+
+    if(invoice_array[3]=='' || invoice_array[4]=='') delimiter = '';
+    else delimiter = '-'; // format: 商店-分店名
+
     var invoice_list = '<center><a href="javascript:showBlock(\'detail\', false)">close</a><h1><font color="blue">'
-    + invoice_array[3] + invoice_array[4]
+    + invoice_array[3] + delimiter + invoice_array[4]
     + '</font></h1></center><table class="table"><tr><th>順序</th><th>日期</th><th>發票號碼</th><th>總金額</th><th>#</th><th>商品名稱</th><th>數量</th><th>單價</th><th>總價</th></tr>';
     for(var i=0;i<invoice_array[invoice_idx].length;++i){ // 第幾張發票
         var items_array = invoice_array[invoice_idx][i][item_idx]; // 該張發票所有購買商品
