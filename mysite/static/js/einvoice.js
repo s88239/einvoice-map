@@ -1,5 +1,13 @@
 invoice_idx = shop_data[0].length-1; // 發票list位於商家list的位置
 item_idx = shop_data[0][invoice_idx][0].length-1; // list位於發票list的位置
+function showBlock(blockid, status){
+    document.getElementById(blockid).style.display = (status==true)?"block":"none";
+}
+function show_map_div(){
+    document.getElementById('main_text').innerHTML = '';
+    showBlock('detail',false);
+    showBlock('TGMap',true);
+}
 function get_invoice_list_string(invoice_array){
     var items_array = invoice_array[invoice_idx][0][item_idx]; // 該張發票所有購買商品
     var invoice_list = '<center><a href="javascript:showBlock(\'detail\', false)">close</a><h1><font color="blue">'
@@ -36,6 +44,7 @@ function show_all_shop(){
     }
     invoice_list += '</table>';
     document.getElementById('main_text').innerHTML = invoice_list;
+    window.scrollTo(0, 0); // Scroll back to the top
 }
 function show_all_einvoice(){
     showBlock('detail',false);
@@ -60,14 +69,7 @@ function show_all_einvoice(){
     }
     invoice_list += '</table>';
     document.getElementById('main_text').innerHTML = invoice_list;
-}
-function show_map_div(){
-    document.getElementById('main_text').innerHTML = '';
-    showBlock('detail',false);
-    showBlock('TGMap',true);
-}
-function showBlock(blockid, status){
-    document.getElementById(blockid).style.display = (status==true)?"block":"none";
+    window.scrollTo(0, 0);  // Scroll back to the top
 }
 einvoice_list_item_idx = einvoice_list[0].length-1; // list位於sorted發票list的位置
 total_price_idx = 4;
@@ -100,4 +102,5 @@ function accounting(start_date, end_date){
     }
     accounting_list += '</table><font color="blue" size="+2">消費總金額：' + total_amount + '</font>';
     document.getElementById('main_text').innerHTML =  accounting_list;
+    window.scrollTo(0, 0);  // Scroll back to the top
 }
