@@ -69,3 +69,35 @@ function show_map_div(){
 function showBlock(blockid, status){
     document.getElementById(blockid).style.display = (status==true)?"block":"none";
 }
+einvoice_list_item_idx = einvoice_list[0].length-1; // list位於sorted發票list的位置
+total_price_idx = 4;
+shop_idx = 3;
+function accounting(start_date, end_date){
+    if(start_date ==null) start_date = einvoice_list[0][0];
+    if(end_date == null) end_date = einvoice_list[einvoice_list.length-1][0];
+    //document.getElementById('main_text').innerHTML = 'start_date = ' + start_date + ', end_date = '  + end_date;
+    var item_count = 0;
+    var total_amount = 0;
+    var accounting_list = '<center><p><font color="blue" size="+4">記帳</font></p></center>'
+    + '<table class="table table-hover"><tr><th>順序</th><th>日期</th><th>商店名稱</th><th>商品名稱</th><th>數量</th><th>單價</th><th>總價</th></tr>';
+    for(var i=einvoice_list.length-1;i>=0;--i){
+        var cur_date = einvoice_list[i][0];
+        //var cur_date_array = einvoice_list[i][0].split("/");
+        if(start_date < cur_date && cur_date < end_date){
+            var shop_detail = '<td>' + cur_date + '</td><td>' + einvoice_list[i][shop_idx] + '</td>';
+            var items_array = einvoice_list[i][einvoice_list_item_idx];
+            for(var j=0;j<items_array.length;++j){ // 購買品項 商品名稱 數量 單價 總價
+                if( parseInt(items_array[j][total_price_idx]) <= 0) continue;
+                var item_detail = '';
+                ++item_count;
+                total_amount += parseInt(items_array[j][total_price_idx]);
+                for(var kk=1;kk<items_array[j].length;++kk){
+                    item_detail += '<td>' + items_array[j][kk] + '</td>';
+                }
+                accounting_list += '<tr><td>' + item_count + '</td>' + shop_detail + item_detail + '</tr>';
+            }
+        }
+    }
+    accounting_list += '</table><font color="blue" size="+2">消費總金額：' + total_amount + '</font>';
+    document.getElementById('main_text').innerHTML =  accounting_list;
+}
