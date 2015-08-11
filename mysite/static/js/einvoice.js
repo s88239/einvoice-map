@@ -45,8 +45,8 @@ function show_all_einvoice(){
     var count = 1;
     for(i=einvoice_list.length-1;i>=0;--i,++count){
         invoice_list += '<tr><td>' + count + '</td>'; // 順序
-        for(j=1;j<7;++j){
-            if(j==2){ // invoice.card_type
+        for(j=0;j<6;++j){
+            if(j==1){ // invoice.card_type
                 if(einvoice_list[i][j] == '3J0002') carrier_type = '手機條碼';
                 else if(einvoice_list[i][j] == '1K0001') carrier_type = '悠遊卡';
                 else if(einvoice_list[i][j] == '2G0001') carrier_type = 'iCash';
