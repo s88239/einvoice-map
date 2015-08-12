@@ -62,7 +62,6 @@ def carrier_query(api_key, app_id, card_type, card_no, card_encrypt):
 
 		(param_list, signature) = url_parameter(api_key, param_dict)
 		carrier_query_url = 'https://www.einvoice.nat.gov.tw/PB2CAPIVAN/Carrier/Aggregate?' + param_list + '&signature=' + signature.decode()
-		print(carrier_query_url)
 
 		with urllib.request.urlopen(carrier_query_url) as url:
 			data = json.loads(url.read().decode())
