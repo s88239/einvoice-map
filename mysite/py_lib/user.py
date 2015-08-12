@@ -30,6 +30,8 @@ class User(object):
 		self.card_type = card_type
 		self.card_no = card_no
 		self.card_encrypt = card_encrypt
+		self.carriers = einvoice.carrier_query(api_key, app_id, card_type, card_no, card_encrypt)
+
 		if not TEST:
 			self.invoice_list = einvoice.get_einvoice(api_key, app_id, card_type, card_no, card_encrypt)
 		else:

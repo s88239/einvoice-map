@@ -62,15 +62,15 @@ def carrier_query(api_key, app_id, card_type, card_no, card_encrypt):
 
 		(param_list, signature) = url_parameter(api_key, param_dict)
 		carrier_query_url = 'https://www.einvoice.nat.gov.tw/PB2CAPIVAN/Carrier/Aggregate?' + param_list + '&signature=' + signature.decode()
-		#print(carrier_query_url)
+		print(carrier_query_url)
 
 		with urllib.request.urlopen(carrier_query_url) as url:
 			data = json.loads(url.read().decode())
 
-	for carrier_property in data["carriers"]:
-		print(carrier_property)
+	# for carrier_property in data["carriers"]:
+	# 	print(carrier_property)
 
-	return data
+	return data["carriers"]
 
 def invoice_header_query(api_key, app_id, card_type, card_no, card_encrypt):
 	invoice_list = []
@@ -172,6 +172,7 @@ if __name__ == '__main__':
 	card_encrypt = "1212"
 
 	invoice_list = get_einvoice(api_key, app_id, card_type, card_no, card_encrypt)
+	# carrier_query(api_key, app_id, card_type, card_no, card_encrypt)
 	# import pickle
 	# with open('invoice_list_tmp.pkl', 'wb') as f:
 	# 	pickle.dump(invoice_list, f)
