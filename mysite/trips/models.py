@@ -12,16 +12,16 @@ class UserTable(models.Model):
 	invoice_keys = models.CharField(max_length=1000)
 	seller_keys = models.CharField(max_length=100)
 
-	def __unicode__(self):
-		return self.api_key + ' ' + app_id + ' ' + card_type + ' ' + card_no + ' ' + card_encrypt
+	def __str__(self):
+		return self.api_key
 
 class CarrierTable(models.Model):
 	carrier_type = models.CharField(max_length=100)
 	carrier_id = models.CharField(max_length=100)
 	carrier_name = models.CharField(max_length=100)
 
-	def __unicode__(self):
-		return self.carrier_type + ' ' + self.carrier_id + ' ' + self.carrier_name
+	def __str__(self):
+		return self.carrier_id
 
 class InvoiceTable(models.Model):
 	inv_num = models.CharField(max_length=100)
@@ -36,7 +36,7 @@ class InvoiceTable(models.Model):
 	donate_mark = models.CharField(max_length=100)
 	inv_items = models.CharField(max_length=1000)
 
-	def __unicode__(self):
+	def __str__(self):
 		return self.inv_num
 
 class SellerTable(models.Model):
@@ -54,5 +54,5 @@ class SellerTable(models.Model):
 	top_item = models.CharField(max_length=100)
 	cluster = models.CharField(max_length=100)
 
-	def __unicode__(self):
+	def __str__(self):
 		return self._id
