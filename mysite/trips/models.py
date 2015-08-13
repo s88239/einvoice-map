@@ -10,7 +10,7 @@ class UserTable(models.Model):
 	carriers_keys = models.CharField(max_length=100)
 
 	invoice_keys = models.CharField(max_length=1000)
-	seller_keys = models.CharField(max_length=100)
+	# seller_keys = models.CharField(max_length=100)
 
 	def __str__(self):
 		return self.api_key
@@ -39,20 +39,20 @@ class InvoiceTable(models.Model):
 	def __str__(self):
 		return self.inv_num
 
-class SellerTable(models.Model):
-	_id = models.CharField(max_length=100)
-	store_name = models.CharField(max_length=100)
-	branch_name = models.CharField(max_length=100)
-	address = models.CharField(max_length=100)
-	longitude = models.CharField(max_length=100)
-	latitude = models.CharField(max_length=100)
+# class SellerTable(models.Model):
+# 	_id = models.CharField(max_length=100)
+# 	store_name = models.CharField(max_length=100)
+# 	branch_name = models.CharField(max_length=100)
+# 	address = models.CharField(max_length=100)
+# 	longitude = models.CharField(max_length=100)
+# 	latitude = models.CharField(max_length=100)
 
-	#for user
-	invoice_keys = models.CharField(max_length=100)
-	visit_frequency = models.CharField(max_length=100)
-	consumption = models.CharField(max_length=100)
-	top_item = models.CharField(max_length=100)
-	cluster = models.CharField(max_length=100)
+# 	#for user
+# 	invoice_keys = models.CharField(max_length=100)
+# 	visit_frequency = models.CharField(max_length=100)
+# 	consumption = models.CharField(max_length=100)
+# 	top_item = models.CharField(max_length=100)
+# 	cluster = models.CharField(max_length=100)
 
-	def __str__(self):
-		return self._id
+# 	def __str__(self):
+# 		return self._id

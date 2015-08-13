@@ -50,6 +50,9 @@ class Item(object):
 		self.unitPrice = item["unitPrice"]
 		self.amount = item["amount"]
 
+	def __str__(self):
+		return ' '.join([self.number, self.description, self.quantity, self.unitPrice, self.amount])
+
 	def _print(self):
 		print("item #" + str(self.number), self.description, self.quantity, self.unitPrice, self.amount)
 		
