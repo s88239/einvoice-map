@@ -17,6 +17,8 @@ except:
 	from seller import Seller
 	from seller import split_store_and_branch
 	from seller import test_store_name
+	sys.path.append('/home/ubuntu/einvoice-map/mysite/trips')
+	from models import *
 
 '''if sys.version_info >= (2, 7, 9):
 	import ssl
@@ -238,7 +240,7 @@ def login(account, password):
 	return x,y,user.sort_inv_list()
 
 if __name__ == '__main__':
-	#TEST = True
+	TEST = True
 	api_key = "QWQ4dU9WMzRXa2xoYUdsZA=="
 	app_id = "EINV0201505042102"
 	card_type = "3J0002"
