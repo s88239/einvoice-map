@@ -53,6 +53,48 @@ class User(object):
 
 		self.seller_not_on_csv = []
 
+	def str_carriers(self):
+		carriers_str = ''
+		for ele in self.carriers:
+			carriers_str += ' '.join(ele.values()) + ' '	
+		return carriers_str.strip()
+
+	def str_items(self, items):
+		items_str = ''
+		for ele in items:
+			items_str += ele.__str__() + ' '
+		return items_str.strip()
+
+	def str_invoice_num(self):
+		invoice_num_str = ''
+		for ele in self.invoice_list:
+			invoice_num_str += ele.inv_num + ' '
+		return invoice_num_str.strip()
+
+	def store_invoice_database(self):
+		for invoice in self.invoice_list:
+			data = InvoiceTable.objects.create(inv_num=invoice.inv_num,
+				card_type=invoice.card_type,
+				card_no=invoice.card_no,
+				seller_name=invoice.seller_name,
+				amount=invoice.amount,
+				inv_date=invoice.inv_date,
+				inv_preiod=invoice.inv_period,
+				inv_status=invoice.inv_status,
+				inv_donatable=invoice.inv_donatable,
+				donate_mark=invoice.donate_mark,
+				inv_items=self.str_items(invoice.item))
+			data.save()
+
+	def store_carrier_database(self):
+		for ele in self.carriers:
+			data = CarrierTable.objects.create(
+				carrier_type = ele['carrierType'],
+				carrier_id = ele['carrierId2'],
+				carrier_name = ele['carrierName']
+				)
+			data.save()
+
 	def store_user_database(self):
 
 		data = UserTable.objects.create(api_key=self.api_key, 
@@ -60,51 +102,9 @@ class User(object):
 			card_type=self.card_type, 
 			card_no=self.card_no, 
 			card_encrypt=self.card_encrypt, 
-			carriers_keys=str_carriers(), 
-			invoice_keys=str_invoice_num())
+			carriers_keys=self.str_carriers(), 
+			invoice_keys=self.str_invoice_num())
 		data.save()
-
-	def str_carriers(self):
-		carriers_str = ''
-		for ele in self.carriers:
-			carriers_str += ' '.join(ele.values().split()) + ' '	
-		return carriers_str.trim()
-
-	def str_items(items):
-		items_str = ''
-		for ele in items:
-			item_str += ele.__str__() + ' '
-		return items_str.trim()
-
-	def str_invoice_num(self):
-		invoice_num_str = ''
-		for ele in self.invoice_list:
-			invoice_num_str += ele.inv_num + ' '
-		return invoice_num_str.trim()
-
-	def store_invoice_database(self):
-		for invoce in invoice_list:
-			data = InvoiceTable.objects.create(inv_num=invoice.inv_num,
-				card_type=invoice.card_type,
-				card_no=invoice.card_no,
-				seller_name=invoice.seller_name,
-				amount=invoice.amount,
-				inv_date=invoice.inv_date,
-				inv_preiod=invoice.inv_preiod,
-				inv_status=invoice.inv_status,
-				inv_donatable=invoice.inv_donatable,
-				donate_mark=invoice.donate_mark,
-				inv_items=str_items(invoice.item))
-			data.save()
-
-	def store_carrier_database(self):
-		for ele in self.carriers:
-			data = CarrierTable.objects.create(
-				carrier_type = ele.carrier_type,
-				carrier_id = ele.carrier_id,
-				carrier_name = ele.carrier_name
-				)
-			data.save()
 
 	# def store_seller_database(self):
 	# 	for i in self.sellers:
@@ -258,9 +258,6 @@ if __name__ == '__main__':
 	# print(user.api_key,user.invoice_list)
 
 	user.statistics(csv)
-	user.store_user_database()
-	user.store_invoice_database()
-	user.store_carrier_database()
 	# for i in user.seller_not_on_csv:
 	# 	print(i)
 	# print()

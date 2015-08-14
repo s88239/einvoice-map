@@ -51,7 +51,7 @@ class Item(object):
 		self.amount = item["amount"]
 
 	def __str__(self):
-		return ' '.join([self.number, self.description, self.quantity, self.unitPrice, self.amount])
+		return ' '.join(map(str, [self.number, self.description, self.quantity, self.unitPrice, self.amount]))
 
 	def _print(self):
 		print("item #" + str(self.number), self.description, self.quantity, self.unitPrice, self.amount)
