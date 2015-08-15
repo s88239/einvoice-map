@@ -1,3 +1,6 @@
 from django.contrib import admin
+from trips.models import *
 
-# Register your models here.
+admin.site.register(UserTable)
+admin.site.register(CarrierTable)
+admin.site.register(InvoiceTable)

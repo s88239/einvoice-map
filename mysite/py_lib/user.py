@@ -78,7 +78,7 @@ class User(object):
 				card_no=invoice.card_no,
 				seller_name=invoice.seller_name,
 				amount=invoice.amount,
-				inv_date=invoice.inv_date,
+				inv_date=invoice.inv_date.__str__(),
 				inv_preiod=invoice.inv_period,
 				inv_status=invoice.inv_status,
 				inv_donatable=invoice.inv_donatable,
