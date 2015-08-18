@@ -5,11 +5,11 @@ class UserTable(models.Model):
 	api_key = models.CharField(max_length=100)
 	app_id = models.CharField(max_length=100)
 	card_type = models.CharField(max_length=100)
-	card_no = models.CharField(max_length=100)
+	card_no = models.CharField(max_length=100, primary_key=True)
 	card_encrypt = models.CharField(max_length=100)
 	carriers_keys = models.CharField(max_length=100)
 
-	invoice_keys = models.CharField(max_length=1000)
+	invoice_keys = models.TextField(max_length=100000)
 	# seller_keys = models.CharField(max_length=100)
 
 	def __str__(self):
@@ -17,15 +17,15 @@ class UserTable(models.Model):
 
 class CarrierTable(models.Model):
 	carrier_type = models.CharField(max_length=100)
-	carrier_id = models.CharField(max_length=100)
+	carrier_id = models.CharField(max_length=100, primary_key=True)
 	carrier_name = models.CharField(max_length=100)
 
 	def __str__(self):
 		return self.carrier_id
 
 class InvoiceTable(models.Model):
-	inv_num = models.CharField(max_length=100)
 	card_type = models.CharField(max_length=100)
+	inv_num = models.CharField(max_length=100, primary_key=True)
 	card_no = models.CharField(max_length=100)
 	seller_name = models.CharField(max_length=100)
 	amount = models.CharField(max_length=100)
