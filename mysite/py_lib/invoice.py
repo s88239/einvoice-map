@@ -43,7 +43,7 @@ class InvDate(object):
 		print("invoice date:", "{0}/{1:0=2d}/{2:0=2d}".format(self.year, self.month, self.day), end=" ")
 		
 	def __str__(self):
-		return "invoice date:", "{0}/{1:0=2d}/{2:0=2d}".format(self.year, self.month, self.day)
+		return "{0}/{1:0=2d}/{2:0=2d}".format(self.year, self.month, self.day)
 
 class Item(object):
 	def __init__(self, item):

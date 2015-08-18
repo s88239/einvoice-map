@@ -1,6 +1,7 @@
 import sys
 import os
 
+import time, datetime, calendar
 try:
 	import py_lib.einvoice as einvoice
 	from py_lib.seller import list_sellers
@@ -17,8 +18,6 @@ except:
 	from seller import Seller
 	from seller import split_store_and_branch
 	from seller import test_store_name
-	sys.path.append('/home/ubuntu/einvoice-map/mysite/trips')
-	from models import *
 
 '''if sys.version_info >= (2, 7, 9):
 	import ssl
@@ -33,6 +32,8 @@ class User(object):
 		self.card_type = card_type
 		self.card_no = card_no
 		self.card_encrypt = card_encrypt
+
+
 		self.carriers = einvoice.carrier_query(api_key, app_id, card_type, card_no, card_encrypt)
 
 		if not TEST:
@@ -52,6 +53,22 @@ class User(object):
 		self.consumption = {}
 
 		self.seller_not_on_csv = []
+
+
+	def get_latest_date_of_user(self):
+		invoices_from_database = InvoiceTable.objects.filter(card_no = self.card_no)
+		if invoices_from_database == []:
+			start_date = '/'.join([int(YMD[0])+1911, *YMD])
+			
+		latest_date = sorted(invoices_from_database, key=lambda x: x.inv_date, reverse=True)[0].inv_date
+		latest_date = latest_date.replace("('invoice date:', '", '')
+		latest_date = latest_date.replace("')", '')
+		YMD = latest_date.split('/')
+		now = datetime.datetime.now()
+		start_date = '/'.join([int(YMD[0])+1911, *YMD])
+		end_date = "{0:0=4d}".format(now.year) + "/" + "{0:0=2d}".format(now.month) + "/" + "{0:0=2d}".format(now.day)
+
+
 
 	def str_carriers(self):
 		carriers_str = ''
