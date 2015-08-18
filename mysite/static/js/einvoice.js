@@ -50,7 +50,7 @@ function show_all_einvoice(){
     showBlock('detail',false);
     showBlock('TGMap',false);
     var invoice_list = '<center><p><font color="blue" size="+4">電子發票清單</font></p></center>'
-    + '<table class="table table-hover"><tr><th>順序</th><th>消費日期</th><th>載具</th><th>商店名稱</th><th>消費金額</th><th>發票號碼</th>';
+    + '<table class="table table-hover"><tr><th>順序</th><th>消費日期</th><th width="20%">載具</th><th>商店名稱</th><th>消費金額</th><th>發票號碼</th>';
     var count = 1;
     for(i=einvoice_list.length-1;i>=0;--i,++count){
         invoice_list += '<tr><td>' + count + '</td>'; // 順序

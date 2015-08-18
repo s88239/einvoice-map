@@ -1,0 +1,29 @@
+body {
+    font-family:"Arial","微軟正黑體";
+}
+#TGMap {
+	position: absolute;
+	width:100vw;
+	height:100vh;
+}
+#main_text {
+	padding-top:15px;
+	padding-left:50px;
+	padding-right:50px;
+	padding-bottom:40px;
+	border: 1px solid 000000;
+}
+#detail {
+	z-index:900;
+	position: relative;
+	background-color: #EBEBFF;
+	width: 800px;
+	height: 100vh;
+	top: 0px;
+	left:0;
+	right:0;
+	margin-left:auto;
+	margin-right:auto;
+	display:none;
+	overflow-y: auto;
+}

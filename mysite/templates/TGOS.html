@@ -13,6 +13,7 @@
     <!-- Custom CSS -->
     <link href="/static/css/simple-sidebar.css" rel="stylesheet">
     <link href="/static/css/hamburger.css" rel="stylesheet">
+    <link href="/static/css/map.css" rel="stylesheet">
 </head>
 <div id="sellers" style="display:none">{{sellers}}</div>
 <div id="einvoice" style="display:none">{{einvoice}}</div>
@@ -61,10 +62,9 @@ einvoice_list = eval(document.getElementById('einvoice').innerHTML);
                 <span class="hamb-middle"></span>
                 <span class="hamb-bottom"></span>
         </button>
-        <div id="TGMap" style="position: absolute;width:100vw;height:100vh;"></div>
+        <div id="TGMap"></div>
         <div id="main_text"></div>
-
-        <div id="detail" style="z-index:900; position: relative; background-color: #EBEBFF; width: 800px; height: 100vh; top: 0px; left:0; right:0; margin-left:auto; margin-right:auto; display:none; overflow-y: auto;"></div>
+        <div id="detail"></div>
     </div>
     <!-- /#wrapper -->
     <!-- jQuery -->
