@@ -58,14 +58,14 @@ class User(object):
 	def get_latest_date_of_user(self):
 		invoices_from_database = InvoiceTable.objects.filter(card_no = self.card_no)
 		if invoices_from_database == []:
-			start_date = '/'.join([int(YMD[0])+1911, *YMD])
+			start_date = '/'.join([int(YMD[0])+1911, YMD[1:]])
 			
 		latest_date = sorted(invoices_from_database, key=lambda x: x.inv_date, reverse=True)[0].inv_date
 		latest_date = latest_date.replace("('invoice date:', '", '')
 		latest_date = latest_date.replace("')", '')
 		YMD = latest_date.split('/')
 		now = datetime.datetime.now()
-		start_date = '/'.join([int(YMD[0])+1911, *YMD])
+		start_date = '/'.join([int(YMD[0])+1911, YMD[1:]])
 		end_date = "{0:0=4d}".format(now.year) + "/" + "{0:0=2d}".format(now.month) + "/" + "{0:0=2d}".format(now.day)
 
 
