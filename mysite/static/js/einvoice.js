@@ -10,20 +10,23 @@ function show_map_div(){
 }
 function get_invoice_list_string(invoice_array){
     var items_array = invoice_array[invoice_idx][0][item_idx]; // 該張發票所有購買商品
+    var delimeter = (invoice_array[3]=='' || invoice_array[4]=='')?'':'-';
     var invoice_list = '<center><a href="javascript:showBlock(\'detail\', false)">close</a><h1><font color="blue">'
-    + invoice_array[3] + invoice_array[4]
-    + '</font></h1></center><table class="table"><tr><th>順序</th><th>日期</th><th>發票號碼</th><th>總金額</th><th>#</th><th>商品名稱</th><th>數量</th><th>單價</th><th>總價</th></tr>';
+    + invoice_array[3] + delimeter + invoice_array[4]
+    + '</font></h1></center><table class="table">\
+    <tr class="row header">\
+        <th class="cell">順序</th><th>日期</th><th class="cell">發票號碼</th><th class="cell">總金額</th><th class="cell">#</th><th class="cell">商品名稱</th><th class="cell">數量</th><th class="cell">單價</th><th class="cell">總價</th></tr>';
     for(var i=0;i<invoice_array[invoice_idx].length;++i){ // 第幾張發票
         var items_array = invoice_array[invoice_idx][i][item_idx]; // 該張發票所有購買商品
         var item_num = items_array.length; // 該張發票商品筆數
-        var invoice_list = invoice_list  + '<tr><td rowspan="' + item_num + '">' + (i+1) + '</td>'; // 順序
+        var invoice_list = invoice_list  + '<tr class="row"><td class="cell" rowspan="' + item_num + '">' + (i+1) + '</td>'; // 順序
         for(var j=0;j<invoice_array[invoice_idx][i].length-1;++j){ // 日期 發票號碼 總金額
-            invoice_list = invoice_list + '<td rowspan="' + item_num + '">' + invoice_array[invoice_idx][i][j] + '</td>';
+            invoice_list = invoice_list + '<td class="cell" rowspan="' + item_num + '">' + invoice_array[invoice_idx][i][j] + '</td>';
         }
         for(var j=0;j<item_num;++j){ // 購買品項 商品名稱 數量 單價 總價
-            if(j!=0) invoice_list += '<tr>';
+            if(j!=0) invoice_list += '<tr class="row">';
             for(var kk=0;kk<items_array[j].length;++kk){
-                invoice_list = invoice_list + '<td>' + items_array[j][kk] + '</td>';
+                invoice_list = invoice_list + '<td class="cell">' + items_array[j][kk] + '</td>';
             }
             invoice_list += '</tr>';
         }

@@ -59,7 +59,12 @@ function addPosition(data){
               maxWidth:4000, // 訊息視窗的最大寬度
               pixelOffset: new TGOS.TGSize(5, -30) //InfoWindow起始位置的偏移量, 使用TGSize設定, 向右X為正, 向上Y為負
         };
-        var invoice_message = data[i][3]+'-'+data[i][4]+'：'+data[i][5]+'<br />頻率：'+data[i][6]+'<br />總消費金額：'+data[i][7]+'<br />最常購買商品：'+data[i][8];
+        var delimeter = (data[i][3]=='' || data[i][4]=='')?'':'-';
+        var invoice_message = '<h2><font color="#CE0000">' + data[i][3]+ delimeter+data[i][4]+'</font></h2>' // 商店名稱
+        + data[i][5] // 地址
+        +'<br />頻率：<font color="blue" size="+1"><b>' + data[i][6] + '</b></font>' // 頻率
+        +'<br />總消費金額：<font color="red">' + data[i][7] + '</font>' // 總消費金額
+        +'<br />最常購買商品：<font color="#009100">' + data[i][8] + '</font>'; //最常購買商品
         messageBox = new TGOS.TGInfoWindow(invoice_message, point, InfoWindowOptions); // the content in message box
 
         TGOS.TGEvent.addListener(pTGMarker, "mouseover", function (pTGMarker, messageBox) { // when mouse over the point
