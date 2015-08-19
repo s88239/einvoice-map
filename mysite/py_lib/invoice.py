@@ -16,14 +16,6 @@ class Invoice(object):
 	def add_item(self, _item):
 		self.item.append(Item(_item))
 
-	def _print(self):
-		print("invoice number:", self.inv_num, end=" ")
-		self.inv_date._print()
-		print("amount: {:>5d}".format(self.amount), end=" ")
-		print("seller name:", self.seller_name)
-		for i in self.item:
-			i._print()
-
 class InvDate(object):
 	def __init__(self, inv_date):
 		self.year = inv_date["year"]
@@ -37,13 +29,10 @@ class InvDate(object):
 		# self.timezoneOffset = inv_date["timezoneOffset"]
 	
 	def getDate(self):
-		return "{0}/{1:0=2d}/{2:0=2d}".format(self.year, self.month, self.day)
-		
-	def _print(self):
-		print("invoice date:", "{0}/{1:0=2d}/{2:0=2d}".format(self.year, self.month, self.day), end=" ")
+		return "{0}/{1:0=2d}/{2:0=2d}".format(int(self.year), int(self.month), int(self.day))
 		
 	def __str__(self):
-		return "{0}/{1:0=2d}/{2:0=2d}".format(self.year, self.month, self.day)
+		return "{0}/{1:0=2d}/{2:0=2d}".format(int(self.year), int(self.month), int(self.day))
 
 class Item(object):
 	def __init__(self, item):
@@ -54,8 +43,6 @@ class Item(object):
 		self.amount = item["amount"]
 
 	def __str__(self):
-		return ' '.join(map(str, [self.number, self.description, self.quantity, self.unitPrice, self.amount]))
+		return '|'.join(map(str, [self.number, self.description, self.quantity, self.unitPrice, self.amount]))
 
-	def _print(self):
-		print("item #" + str(self.number), self.description, self.quantity, self.unitPrice, self.amount)
 		

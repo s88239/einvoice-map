@@ -119,7 +119,7 @@ def invoice_header_query(user, start_date, end_date):
 					invoice_list.append(new_invoice)
 	return invoice_list
 
-def invoice_item_query(api_key, app_id, card_type, card_no, card_encrypt, invoice_list):
+def invoice_item_query(user, invoice_list):
 	for inv, i in zip(invoice_list, itertools.count()):
 		data = {}
 		while "code" not in data or data["code"] != 200:
