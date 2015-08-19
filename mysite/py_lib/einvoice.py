@@ -71,52 +71,52 @@ def carrier_query(api_key, app_id, card_type, card_no, card_encrypt):
 
 	return data["carriers"]
 
-def invoice_header_query(api_key, app_id, card_type, card_no, card_encrypt):
+def invoice_header_query(user, start_date, end_date):
 	invoice_list = []
-	now = datetime.datetime.now()
-	year = now.year
-	for year in range(now.year-1, now.year+1):
-		for month in range(1, 13):
-			if year >= now.year and month > now.month:
-				break
-			start_date = "{0:0=4d}".format(year) + "/" + "{0:0=2d}".format(month) + "/" + "01"
-			end_date = "{0:0=4d}".format(year) + "/" + "{0:0=2d}".format(month) + "/" + "{0:0=2d}".format(calendar.monthrange(year, month)[1])
+	# now = datetime.datetime.now()
+	# year = now.year
+	# for year in range(now.year-1, now.year+1):
+	# 	for month in range(1, 13):
+	# 		if year >= now.year and month > now.month:
+	# 			break
+	# 		start_date = "{0:0=4d}".format(year) + "/" + "{0:0=2d}".format(month) + "/" + "01"
+	# 		end_date = "{0:0=4d}".format(year) + "/" + "{0:0=2d}".format(month) + "/" + "{0:0=2d}".format(calendar.monthrange(year, month)[1])
 			
-			data = {}
-			while "code" not in data or data["code"] != 200:
-				param_dict = {}
-				param_dict["version"] = "0.2"
-				param_dict["action"] = "carrierInvChk"
-				param_dict["cardType"] = card_type
-				param_dict["cardNo"] = card_no
-				param_dict["cardEncrypt"] = card_encrypt
-				param_dict["appID"] = app_id
-				param_dict["timeStamp"] = str(int(time.time())+10)
-				param_dict["expTimeStamp"] = str(int(time.time())+1000)
-				param_dict["startDate"] = start_date
-				param_dict["endDate"] =  end_date				
-				param_dict["onlyWinningInv"] = "N"
-				param_dict["uuid"] = uniqid()
-			
-				(param_list, signature) = url_parameter(api_key, param_dict)
-				invoice_header_url = 'https://www.einvoice.nat.gov.tw/PB2CAPIVAN/invServ/InvServ?' + param_list + '&signature=' + signature.decode()
-				with urllib.request.urlopen(invoice_header_url) as url:
-					data = json.loads(url.read().decode())
+	data = {}
+	while "code" not in data or data["code"] != 200:
+		param_dict = {}
+		param_dict["version"] = "0.2"
+		param_dict["action"] = "carrierInvChk"
+		param_dict["cardType"] = user.card_type
+		param_dict["cardNo"] = user.card_no
+		param_dict["cardEncrypt"] = user.card_encrypt
+		param_dict["appID"] = user.app_id
+		param_dict["timeStamp"] = str(int(time.time())+10)
+		param_dict["expTimeStamp"] = str(int(time.time())+1000)
+		param_dict["startDate"] = start_date
+		param_dict["endDate"] =  end_date				
+		param_dict["onlyWinningInv"] = "N"
+		param_dict["uuid"] = uniqid()
 	
-				if data["code"] == 903:
-					break
-	
-				for inv in data["details"]:
-					if "sellerName" in inv:
-						new_invoice = Invoice(inv)
-						#new_invoice.inv_num = str(filter(lambda x: x in string.printable, new_invoice.inv_num))
-						check = True
-						for invoice in invoice_list:
-							if new_invoice.inv_num == invoice.inv_num:
-								check = False
-								break
-						if check:
-							invoice_list.append(new_invoice)
+		(param_list, signature) = url_parameter(user.api_key, param_dict)
+		invoice_header_url = 'https://www.einvoice.nat.gov.tw/PB2CAPIVAN/invServ/InvServ?' + param_list + '&signature=' + signature.decode()
+		with urllib.request.urlopen(invoice_header_url) as url:
+			data = json.loads(url.read().decode())
+
+		if data["code"] == 903:
+			break
+
+		for inv in data["details"]:
+			if "sellerName" in inv:
+				new_invoice = Invoice(inv)
+				#new_invoice.inv_num = str(filter(lambda x: x in string.printable, new_invoice.inv_num))
+				check = True
+				for invoice in invoice_list:
+					if new_invoice.inv_num == invoice.inv_num:
+						check = False
+						break
+				if check:
+					invoice_list.append(new_invoice)
 	return invoice_list
 
 def invoice_item_query(api_key, app_id, card_type, card_no, card_encrypt, invoice_list):
@@ -126,10 +126,10 @@ def invoice_item_query(api_key, app_id, card_type, card_no, card_encrypt, invoic
 			param_dict = {}
 			param_dict["version"] = "0.1"
 			param_dict["action"] = "carrierInvDetail"
-			param_dict["cardType"] = card_type
-			param_dict["cardNo"] = card_no
-			param_dict["cardEncrypt"] = card_encrypt
-			param_dict["appID"] = app_id
+			param_dict["cardType"] = user.card_type
+			param_dict["cardNo"] = user.card_no
+			param_dict["cardEncrypt"] = user.card_encrypt
+			param_dict["appID"] = user.app_id
 			param_dict["timeStamp"] = str(int(time.time())+10)
 			param_dict["expTimeStamp"] = str(int(time.time())+1000)
 			param_dict["uuid"] = uniqid()
@@ -138,7 +138,7 @@ def invoice_item_query(api_key, app_id, card_type, card_no, card_encrypt, invoic
 			param_dict["sellerName"] = urllib.parse.quote(inv.seller_name)
 			param_dict["amount"] = str(inv.amount)
 
-			(param_list, signature) = url_parameter(api_key, param_dict)
+			(param_list, signature) = url_parameter(user.api_key, param_dict)
 			invoice_item_url = 'https://www.einvoice.nat.gov.tw/PB2CAPIVAN/invServ/InvServ?' + param_list + '&signature=' + signature.decode()
 			with urllib.request.urlopen( invoice_item_url ) as url:
 				data = json.loads(url.read().decode())
@@ -146,22 +146,22 @@ def invoice_item_query(api_key, app_id, card_type, card_no, card_encrypt, invoic
 				invoice_list[i].add_item(item) 
 	return invoice_list
 
-def get_einvoice(api_key, app_id, card_type, card_no, card_encrypt):
-	invoice_list = invoice_header_query(api_key, app_id, card_type, card_no, card_encrypt)
-	invoice_list = invoice_item_query(api_key, app_id, card_type, card_no, card_encrypt, invoice_list)
+def get_einvoice(user, start_date, end_date):
+	invoice_list = invoice_header_query(user, start_date, end_date)
+	invoice_list = invoice_item_query(user, invoice_list)
 
 	return invoice_list
 
-def login(account, password):
-	#TEST
-	api_key = "QWQ4dU9WMzRXa2xoYUdsZA=="
-	app_id = "EINV0201505042102"
-	card_type = "3J0002"
-	card_no = account #"/SMV1EFQ"
-	card_encrypt = password #"1212"
+# def login(account, password):
+# 	#TEST
+# 	api_key = "QWQ4dU9WMzRXa2xoYUdsZA=="
+# 	app_id = "EINV0201505042102"
+# 	card_type = "3J0002"
+# 	card_no = account #"/SMV1EFQ"
+# 	card_encrypt = password #"1212"
 
-	invoice_list = get_einvoice(api_key, app_id, card_type, card_no, card_encrypt)
-	return invoice_list
+# 	invoice_list = get_einvoice(api_key, app_id, card_type, card_no, card_encrypt)
+# 	return invoice_list
 
 if __name__ == '__main__':
 	api_key = "QWQ4dU9WMzRXa2xoYUdsZA=="
@@ -170,7 +170,7 @@ if __name__ == '__main__':
 	card_no = "/SMV1EFQ"
 	card_encrypt = "1212"
 
-	invoice_list = get_einvoice(api_key, app_id, card_type, card_no, card_encrypt)
+	# invoice_list = get_einvoice(api_key, app_id, card_type, card_no, card_encrypt)
 	# carrier_query(api_key, app_id, card_type, card_no, card_encrypt)
 	# import pickle
 	# with open('invoice_list_tmp.pkl', 'wb') as f:

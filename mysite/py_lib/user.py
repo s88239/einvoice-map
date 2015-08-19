@@ -35,12 +35,12 @@ class User(object):
 
 
 		self.carriers = einvoice.carrier_query(api_key, app_id, card_type, card_no, card_encrypt)
-
-		if not TEST:
-			self.invoice_list = einvoice.get_einvoice(api_key, app_id, card_type, card_no, card_encrypt)
-		else:
-			with open('invoice_list_tmp.pkl', 'rb') as f:
-				self.invoice_list = pickle.load(f)
+		self.invoice_list = get_invoice_list()
+		# if not TEST:
+		# 	self.invoice_list = einvoice.get_einvoice(api_key, app_id, card_type, card_no, card_encrypt)
+		# else:
+		# 	with open('invoice_list_tmp.pkl', 'rb') as f:
+		# 		self.invoice_list = pickle.load(f)
 
 
 		#key is the id of seller
@@ -55,20 +55,92 @@ class User(object):
 		self.seller_not_on_csv = []
 
 
-	def get_latest_date_of_user(self):
+	def get_invoice_list(self):
+		invoice_list = []
+
 		invoices_from_database = InvoiceTable.objects.filter(card_no = self.card_no)
-		if invoices_from_database == []:
-			start_date = '/'.join([int(YMD[0])+1911, YMD[1:]])
-			
-		latest_date = sorted(invoices_from_database, key=lambda x: x.inv_date, reverse=True)[0].inv_date
-		latest_date = latest_date.replace("('invoice date:', '", '')
-		latest_date = latest_date.replace("')", '')
-		YMD = latest_date.split('/')
 		now = datetime.datetime.now()
-		start_date = '/'.join([int(YMD[0])+1911, YMD[1:]])
-		end_date = "{0:0=4d}".format(now.year) + "/" + "{0:0=2d}".format(now.month) + "/" + "{0:0=2d}".format(now.day)
+		for invoice in invoices_from_database:
+			details = {}
+			details['invNum'] = invoice.inv_num
+			details['cardType'] = invoice.card_type
+			details['cardNo'] = invoice.card_no
+			details['sellerName'] = invoice.seller_name
+			details['amount'] = invoice.amount
+			details['invPeriod']= invoice.inv_preiod
+			details['invStatus']= invoice.inv_status
+			details['invDonatable']= invoice.inv_donatable
+			details['doanteMark']= invoice.donate_mark
 
+			date_details = {}
+			date_details['year'] = invoice.inv_date.split('/')[0]
+			date_details['month'] = invoice.inv_date.split('/')[1]
+			date_details['date'] = invoice.inv_date.split('/')[2]
+			details['invDate'] = date_details
 
+			inv_items = invoice.inv_items.split()
+			invoice = Invoice(details)
+			i = 0
+			while i < len(inv_items):
+				item = {}
+				item['rowNum'] = inv_items[i]
+				item['description'] = inv_items[i+1]
+				item['quantity'] = inv_items[i+2]
+				item['unitPrice'] = inv_items[i+3]
+				item['amount'] = inv_items[i+4]
+				i += 5				
+				invoice.add_item(Item(item))
+
+			invoice_list.append(invoice)
+
+		if invoices_from_database == []:
+			for year in range(now.year-1, now.year+1):
+				for month in range(1, 13):
+					if year >= now.year and month > now.month:
+						break
+					(start_date, end_date) = date_for_query(year, month)
+					invoice_list.extend(einvoice.get_einvoice(self, start_date, end_date))
+		else:
+			latest_date = sorted(invoices_from_database, key=lambda x: x.inv_date, reverse=True)[0].inv_date
+			YMD = latest_date.split('/')
+			#start_date = '/'.join([int(YMD[0])+1911, YMD[1:]])
+			#end_date = "{0:0=4d}".format(now.year) + "/" + "{0:0=2d}".format(now.month) + "/" + "{0:0=2d}".format(now.day)
+
+			start_date = datetime.date(int(YMD[0])+1911, int(YMD[1]), int(YMD[2]))
+
+			for year in range(start_date.year, now.year+1):
+				if (year == start_date.year) and (year < now.year): 
+					for month in range(start_date.month, 13):
+						(start_date, end_date) = date_for_query(year, month)
+						invoice_list.extend(einvoice.get_einvoice(self, start_date, end_date))
+				elif (year > start_date.year) and (year < now.year):
+					for month in range(1,13):
+						(start_date, end_date) = date_for_query(year, month)
+						invoice_list.extend(einvoice.get_einvoice(self, start_date, end_date))
+				elif (year == now.year) and (year == start_date.year):
+					for month in range(start_date.month, now.month+1):
+						(start_date, end_date) = date_for_query(year, month)
+						invoice_list.extend(einvoice.get_einvoice(self, start_date, end_date))
+				elif (year == now.year) and (year > start_date.year):
+					for month in range(1, now.month+1):
+						(start_date, end_date) = date_for_query(year, month)
+						invoice_list.extend(einvoice.get_einvoice(self, start_date, end_date))
+
+		return get_unique_inv_list(invoice_list)
+
+	def get_unique_inv_list(self, invoice_list):
+		inv_nums = set()
+		for ele in invoice_list:
+			if ele.inv_num in inv_nums:
+				invoice_list.remove(ele)
+			else:
+				inv_nums.add(ele.inv_num)
+		return invoice_list
+
+	def date_for_query(self, year, month):
+		start_date = "{0:0=4d}".format(year) + "/" + "{0:0=2d}".format(month) + "/" + "01"
+		end_date = "{0:0=4d}".format(year) + "/" + "{0:0=2d}".format(month) + "/" + "{0:0=2d}".format(calendar.monthrange(year, month)[1])
+		return (start_date, end_date)
 
 	def str_carriers(self):
 		carriers_str = ''

@@ -29,12 +29,12 @@ class InvDate(object):
 		self.year = inv_date["year"]
 		self.month = inv_date["month"]
 		self.day = inv_date["date"]
-		self.week_day = inv_date["day"]
-		self.hours = inv_date["hours"]
-		self.minutes = inv_date["minutes"]
-		self.seconds = inv_date["seconds"]
-		self.time = inv_date["time"]
-		self.timezoneOffset = inv_date["timezoneOffset"]
+		# self.week_day = inv_date["day"]
+		# self.hours = inv_date["hours"]
+		# self.minutes = inv_date["minutes"]
+		# self.seconds = inv_date["seconds"]
+		# self.time = inv_date["time"]
+		# self.timezoneOffset = inv_date["timezoneOffset"]
 	
 	def getDate(self):
 		return "{0}/{1:0=2d}/{2:0=2d}".format(self.year, self.month, self.day)
@@ -48,7 +48,7 @@ class InvDate(object):
 class Item(object):
 	def __init__(self, item):
 		self.number = item["rowNum"]
-		self.description = item["description"]
+		self.description = item["description"].replace(' ', '')
 		self.quantity = item["quantity"]
 		self.unitPrice = item["unitPrice"]
 		self.amount = item["amount"]
