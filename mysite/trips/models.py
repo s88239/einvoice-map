@@ -39,20 +39,9 @@ class InvoiceTable(models.Model):
 	def __str__(self):
 		return self.inv_num
 
-# class SellerTable(models.Model):
-# 	_id = models.CharField(max_length=100)
-# 	store_name = models.CharField(max_length=100)
-# 	branch_name = models.CharField(max_length=100)
-# 	address = models.CharField(max_length=100)
-# 	longitude = models.CharField(max_length=100)
-# 	latitude = models.CharField(max_length=100)
 
-# 	#for user
-# 	invoice_keys = models.CharField(max_length=100)
-# 	visit_frequency = models.CharField(max_length=100)
-# 	consumption = models.CharField(max_length=100)
-# 	top_item = models.CharField(max_length=100)
-# 	cluster = models.CharField(max_length=100)
-
-# 	def __str__(self):
-# 		return self._id
+class UnMatchSellerTable(models.Model):
+	seller_name = models.CharField(max_length=100, primary_key=True)
+	
+	def __str__(self):
+		return self.seller_name
