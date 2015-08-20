@@ -4,7 +4,7 @@ function showBlock(blockid, status){
     document.getElementById(blockid).style.display = (status==true)?"block":"none";
 }
 function show_map_div(){
-    document.getElementById('main_text').innerHTML = '';
+    showBlock('main_text',false);
     showBlock('detail',false);
     showBlock('einvoice_detail',false);
     showBlock('TGMap',true);
@@ -42,6 +42,7 @@ function show_all_shop(){
     showBlock('detail',false);
     showBlock('einvoice_detail',false);
     showBlock('TGMap',false);
+    showBlock('main_text',true);
     var invoice_list = '<div class="title" align="center"><h2>商店清單</h2></div>'
     + '<table class="table"><tr class="row header blue"><th class="cell">順序</th><th class="cell">商店名稱</th><th class="cell">分店名稱</th><th class="cell">商店地址</th><th class="cell">頻率</th><th class="cell">消費金額</th><th class="cell">最常購買品項</th><th class="cell">cluster</th>';
     for(i=0;i<shop_data.length;++i){
@@ -72,6 +73,7 @@ function show_all_einvoice(){
     showBlock('detail',false);
     showBlock('einvoice_detail',false);
     showBlock('TGMap',false);
+    showBlock('main_text',true);
     var invoice_list = '<div class="title" align="center"><h2>電子發票清單</h2></div>'
     + '<table class="table"><tr class="row header blue"><th class="cell">順序</th><th class="cell">消費日期</th><th class="cell" width="20%">載具</th><th class="cell">商店名稱</th><th class="cell">消費金額</th><th class="cell">發票號碼</th>';
     var count = 1;
@@ -240,6 +242,7 @@ function accounting(){ // show the accounting page
     showBlock('detail',false);
     showBlock('einvoice_detail',false);
     showBlock('TGMap',false);
+    showBlock('main_text',true);
     var accounting_list = '<div class="title" align="center"><h2>記帳</h2></div>'
     + '<center><div class="btn-group" data-toggle="buttons">\
   <label class="btn btn-default" onClick="change_query_date_div(\'y\');">\
