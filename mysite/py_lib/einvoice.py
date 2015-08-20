@@ -46,21 +46,21 @@ def url_parameter(api_key, param_dict):
 	return(param_list, signature)
 
 
-def carrier_query(api_key, app_id, card_type, card_no, card_encrypt):
+def carrier_query(user):
 	data = {}
 	while "code" not in data or data["code"] != 200:
 		param_dict = {}
 		param_dict["version"] = "1.0"
 		param_dict["serial"] = "0000000001"
 		param_dict["action"] = "qryCarrierAgg"
-		param_dict["cardType"] = card_type
-		param_dict["cardNo"] = card_no
-		param_dict["cardEncrypt"] = card_encrypt
-		param_dict["appID"] = app_id
+		param_dict["cardType"] = user.card_type
+		param_dict["cardNo"] = user.card_no
+		param_dict["cardEncrypt"] = user.card_encrypt
+		param_dict["appID"] = user.app_id
 		param_dict["timeStamp"] = str(int(time.time())+10)
 		param_dict["uuid"] = uniqid()
 
-		(param_list, signature) = url_parameter(api_key, param_dict)
+		(param_list, signature) = url_parameter(user.api_key, param_dict)
 		carrier_query_url = 'https://www.einvoice.nat.gov.tw/PB2CAPIVAN/Carrier/Aggregate?' + param_list + '&signature=' + signature.decode()
 
 		with urllib.request.urlopen(carrier_query_url) as url:

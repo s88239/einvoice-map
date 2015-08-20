@@ -34,8 +34,7 @@ class User(object):
 		self.card_no = card_no
 		self.card_encrypt = card_encrypt
 
-
-		self.carriers = einvoice.carrier_query(api_key, app_id, card_type, card_no, card_encrypt)
+		self.carriers = einvoice.carrier_query(self)
 		self.invoice_list, self.invoices_to_database = self.get_invoice_list()
 		
 		#key is the id of seller
@@ -48,7 +47,7 @@ class User(object):
 		self.consumption = {}
 
 		self.seller_not_on_csv = []
-
+	
 
 	def get_invoice_list(self):
 		invoice_list = []
@@ -145,7 +144,7 @@ class User(object):
 	def str_carriers(self):
 		carriers_str = ''
 		for ele in self.carriers:
-			carriers_str += ' '.join(ele.values()) + ' '	
+			carriers_str +=	ele['carrierId2'] + ' '
 		return carriers_str.strip()
 
 	def str_items(self, items):
@@ -180,23 +179,29 @@ class User(object):
 
 	def store_carrier_database(self):
 		for ele in self.carriers:
-			data = CarrierTable.objects.create(
-				carrier_type = ele['carrierType'],
-				carrier_id = ele['carrierId2'],
-				carrier_name = ele['carrierName']
-				)
-			data.save()
+			carrier_from_database =  CarrierTable.objects.filter(carrier_id = ele['carrierId2'])
+			if len(carrier_from_database) == 0:
+				data = CarrierTable.objects.create(
+					carrier_type = ele['carrierType'],
+					carrier_id = ele['carrierId2'],
+					carrier_name = ele['carrierName']
+					)
+				data.save()
 
 	def store_user_database(self):
-
-		data = UserTable.objects.create(api_key=self.api_key, 
-			app_id=self.app_id, 
-			card_type=self.card_type, 
-			card_no=self.card_no, 
-			card_encrypt=self.card_encrypt, 
-			carriers_keys=self.str_carriers(), 
-			invoice_keys=self.str_invoice_num())
-		data.save()
+		try:
+			user_from_database = UserTable.objects.get(card_no = self.card_no)
+		except:
+			user_to_database = UserTable.objects.create(api_key=self.api_key, 
+					app_id=self.app_id, 
+					card_type=self.card_type, 
+					card_no=self.card_no, 
+					card_encrypt=self.card_encrypt, 
+					carriers_keys=self.str_carriers(), 
+					invoice_keys=self.str_invoice_num())
+			user_to_database.save()
+		user_from_database.carriers_keys = self.str_carriers()
+		user_from_database.save()
 
 	def add_seller(self, s, key_name):
 		self.sellers[s.id] = Seller(s.id, s.store_name, s.address, s.longitude, s.latitude)
@@ -299,6 +304,8 @@ def login(account, password):
 	user = User(api_key, app_id, card_type, card_no, card_encrypt)
 	csv = os.path.join(os.path.dirname(os.path.dirname(__file__)),'static','Taipei_shops_with_einvoice.csv')
 	user.statistics(csv)
+	user.store_user_database()
+	user.store_carrier_database()
 	user.store_invoice_database()
 	(x, y) = clustering(user.sellers)
 	return x,y,user.sort_inv_list()
