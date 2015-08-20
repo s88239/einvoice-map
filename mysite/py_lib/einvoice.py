@@ -149,7 +149,7 @@ def invoice_item_query(user, invoice_list):
 def get_einvoice(user, start_date, end_date):
 	invoice_list = invoice_header_query(user, start_date, end_date)
 	invoice_list = invoice_item_query(user, invoice_list)
-
+	
 	return invoice_list
 
 # def login(account, password):

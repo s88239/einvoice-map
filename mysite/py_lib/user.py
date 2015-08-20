@@ -101,7 +101,6 @@ class User(object):
 			YMD = latest_date.split('/')
 
 			start_date = datetime.date(int(YMD[0])+1911, int(YMD[1]), int(YMD[2]))
-
 			for year in range(start_date.year, now.year+1):
 				if (year == start_date.year) and (year < now.year): 
 					for month in range(start_date.month, 13):
@@ -123,24 +122,19 @@ class User(object):
 		return self.get_unique_inv_list(invoice_list, invoices_from_database)
 
 	def get_unique_inv_list(self, invoice_list, invoices_from_database):
-		print(len(invoice_list), len(invoices_from_database))	
-		inv_nums = set()
 		inv_nums_in_database = set()
 		invoices_to_database = []
 		for ele in invoices_from_database:
 			inv_nums_in_database.add(ele.inv_num)
-
+		
+		inv_nums = {}
 		for ele in invoice_list:
-			if ele.inv_num in inv_nums:
-				invoice_list.remove(ele)
-			else:
-				inv_nums.add(ele.inv_num)
-		print(len(inv_nums))
-		print(len(invoice_list), len(invoices_from_database))	
+			inv_nums[ele.inv_num] = ele
+		invoice_list = inv_nums.values()
+
 		for ele in invoice_list:
 			if ele.inv_num not in inv_nums_in_database:
 				invoices_to_database.append(ele)
-		print (invoices_to_database)
 		return invoice_list, invoices_to_database
 
 	def date_for_query(self, year, month):
