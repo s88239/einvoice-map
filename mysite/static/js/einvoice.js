@@ -6,75 +6,116 @@ function showBlock(blockid, status){
 function show_map_div(){
     document.getElementById('main_text').innerHTML = '';
     showBlock('detail',false);
+    showBlock('einvoice_detail',false);
     showBlock('TGMap',true);
 }
-function get_invoice_list_string(invoice_array){
-    var items_array = invoice_array[invoice_idx][0][item_idx]; // 該張發票所有購買商品
-    var delimeter = (invoice_array[3]=='' || invoice_array[4]=='')?'':'-';
-    var invoice_list = '<center><a href="javascript:showBlock(\'detail\', false)">close</a><h1><font color="blue">'
-    + invoice_array[3] + delimeter + invoice_array[4]
-    + '</font></h1></center><table class="table">\
+function get_invoice_list_table_at_shop(invoice_array){
+    var invoice_list_table_str = '<table class="table">\
     <tr class="row header">\
         <th class="cell">順序</th><th>日期</th><th class="cell">發票號碼</th><th class="cell">總金額</th><th class="cell">#</th><th class="cell">商品名稱</th><th class="cell">數量</th><th class="cell">單價</th><th class="cell">總價</th></tr>';
     for(var i=0;i<invoice_array[invoice_idx].length;++i){ // 第幾張發票
         var items_array = invoice_array[invoice_idx][i][item_idx]; // 該張發票所有購買商品
         var item_num = items_array.length; // 該張發票商品筆數
-        var invoice_list = invoice_list  + '<tr class="row"><td class="cell" rowspan="' + item_num + '">' + (i+1) + '</td>'; // 順序
+        var invoice_list_table_str = invoice_list_table_str  + '<tr class="row"><td class="cell" rowspan="' + item_num + '">' + (i+1) + '</td>'; // 順序
         for(var j=0;j<invoice_array[invoice_idx][i].length-1;++j){ // 日期 發票號碼 總金額
-            invoice_list = invoice_list + '<td class="cell" rowspan="' + item_num + '">' + invoice_array[invoice_idx][i][j] + '</td>';
+            invoice_list_table_str = invoice_list_table_str + '<td class="cell" rowspan="' + item_num + '">' + invoice_array[invoice_idx][i][j] + '</td>';
         }
         for(var j=0;j<item_num;++j){ // 購買品項 商品名稱 數量 單價 總價
-            if(j!=0) invoice_list += '<tr class="row">';
+            if(j!=0) invoice_list_table_str += '<tr class="row">';
             for(var kk=0;kk<items_array[j].length;++kk){
-                invoice_list = invoice_list + '<td class="cell">' + items_array[j][kk] + '</td>';
+                invoice_list_table_str = invoice_list_table_str + '<td class="cell">' + items_array[j][kk] + '</td>';
             }
-            invoice_list += '</tr>';
+            invoice_list_table_str += '</tr>';
         }
     }
-    invoice_list += '</table>';
-    return invoice_list;
+    invoice_list_table_str += '</table>';
+    return invoice_list_table_str;
+}
+function get_invoice_list_string(invoice_array){
+    var delimeter = (invoice_array[3]=='' || invoice_array[4]=='')?'':'-';
+    var invoice_list = '<center><a href="javascript:showBlock(\'detail\', false)">close</a><h1><font color="blue">'
+    + invoice_array[3] + delimeter + invoice_array[4]
+    + '</font></h1>';
+    return invoice_list + get_invoice_list_table_at_shop(invoice_array);
 }
 function show_all_shop(){
     showBlock('detail',false);
+    showBlock('einvoice_detail',false);
     showBlock('TGMap',false);
-    var invoice_list = '<center><p><font color="blue" size="+4">商店清單</font></p></center>'
-    + '<table class="table table-hover"><tr><th>順序</th><th>商店名稱</th><th>分店名稱</th><th>商店地址</th><th>頻率</th><th>消費金額</th><th>最常購買品項</th><th>cluster</th>';
+    var invoice_list = '<div class="title" align="center"><h2>商店清單</h2></div>'
+    + '<table class="table"><tr class="row header blue"><th class="cell">順序</th><th class="cell">商店名稱</th><th class="cell">分店名稱</th><th class="cell">商店地址</th><th class="cell">頻率</th><th class="cell">消費金額</th><th class="cell">最常購買品項</th><th class="cell">cluster</th>';
     for(i=0;i<shop_data.length;++i){
-        invoice_list += '<tr><td>'+(i+1)+'</td>';
+        invoice_list += '<tr class="row" onClick="show_einvoice(' + i + ');"><td class="cell">'+(i+1)+'</td>';
         for(j=3;j<shop_data[i].length-1;++j){
-            invoice_list += '<td>' + shop_data[i][j] + '</td>';
+            invoice_list += '<td class="cell">' + shop_data[i][j] + '</td>';
         }
     }
     invoice_list += '</table>';
     document.getElementById('main_text').innerHTML = invoice_list;
-    window.scrollTo(0, 0); // Scroll back to the top
+    document.getElementById('main_text').scrollTop = 0; // Scroll back to the top
 }
+function show_einvoice(target_shop_idx){
+    invoice_array = shop_data[target_shop_idx];
+    var delimeter = (invoice_array[3]=='' || invoice_array[4]=='')?'':'-';
+    var invoice_list = '<button type="button" class="btn btn-info" onClick="showBlock(\'einvoice_detail\', false);">返回電子發票列表</button>\
+    <font color="white"><center><h1>'+ invoice_array[3] + delimeter + invoice_array[4] + '</h1>'
+    + invoice_array[5] // 地址
+    +'</font><h3><font color="#FFAFFE"><b>頻率：' + invoice_array[6] + '</font>　<font color="FFD8AF">總消費金額：' + invoice_array[7] + '</font></b></h3>' // 頻率及總消費金額
+    +'<font color="white" size="+1">最常購買商品：' + invoice_array[8] + '</font></center><br />'; //最常購買商品
+    showBlock('einvoice_detail',true);
+    document.getElementById('einvoice_detail').innerHTML = invoice_list + get_invoice_list_table_at_shop(shop_data[target_shop_idx]);
+}
+einvoice_list_item_idx = einvoice_list[0].length-1; // list位於sorted發票list的位置
+total_price_idx = 4;
+shop_idx = 3;
 function show_all_einvoice(){
     showBlock('detail',false);
+    showBlock('einvoice_detail',false);
     showBlock('TGMap',false);
-    var invoice_list = '<center><p><font color="blue" size="+4">電子發票清單</font></p></center>'
-    + '<table class="table table-hover"><tr><th>順序</th><th>消費日期</th><th width="20%">載具</th><th>商店名稱</th><th>消費金額</th><th>發票號碼</th>';
+    var invoice_list = '<div class="title" align="center"><h2>電子發票清單</h2></div>'
+    + '<table class="table"><tr class="row header blue"><th class="cell">順序</th><th class="cell">消費日期</th><th class="cell" width="20%">載具</th><th class="cell">商店名稱</th><th class="cell">消費金額</th><th class="cell">發票號碼</th>';
     var count = 1;
     for(i=einvoice_list.length-1;i>=0;--i,++count){
-        invoice_list += '<tr><td>' + count + '</td>'; // 順序
+        invoice_list += '<tr class="row" onClick="show_items(' + i + ');"><td>' + count + '</td>'; // 順序
         for(j=0;j<6;++j){
             if(j==1){ // invoice.card_type
                 if(einvoice_list[i][j] == '3J0002') carrier_type = '手機條碼';
                 else if(einvoice_list[i][j] == '1K0001') carrier_type = '悠遊卡';
                 else if(einvoice_list[i][j] == '2G0001') carrier_type = 'iCash';
                 else carrier_type = '其他載具';
-                invoice_list += '<td>' + carrier_type + ' ' + einvoice_list[i][++j] + '</td>';
+                invoice_list += '<td class="cell">' + carrier_type + ' ' + einvoice_list[i][++j] + '</td>';
             }
             else{
-                invoice_list += '<td>' + einvoice_list[i][j] + '</td>';
+                invoice_list += '<td class="cell">' + einvoice_list[i][j] + '</td>';
             }
         }
     }
     invoice_list += '</table>';
     document.getElementById('main_text').innerHTML = invoice_list;
-    window.scrollTo(0, 0);  // Scroll back to the top
+    document.getElementById('main_text').scrollTop = 0; // Scroll back to the top of div
 }
-
+function show_items(target_einvoice_idx){
+    var total_amount = einvoice_list[target_einvoice_idx][total_price_idx]; // 發票總金額
+    var items_table_str = '<table width="100%"><tr><td><button type="button" class="btn btn-info" onClick="showBlock(\'einvoice_detail\', false);">返回電子發票列表</button></td>'
+    + '<td align="right"><span class="label label-default">' + einvoice_list[target_einvoice_idx][5] + '</span></td></tr></table>'
+    + '<center><font color="white" size="+1"><h3>' + einvoice_list[target_einvoice_idx][0] + '</h3></font>'
+    + '<h2><font color="white">' + einvoice_list[target_einvoice_idx][3] + '</font></h2>\
+    <h3><font color="white">消費總金額：' + total_amount + '</font></h3></center>\
+    <table class="table">\
+    <tr class="row header green"><th class="cell">#</th><th class="cell">商品名稱</th><th class="cell">數量</th><th class="cell">單價</th><th class="cell">總價</th></tr>';
+    var items_array = einvoice_list[target_einvoice_idx][einvoice_list_item_idx];
+    for(var i=0;i<items_array.length;++i){ // 購買品項 商品名稱 數量 單價 總價
+        items_table_str += '<tr class="row">'
+        for(var j=0;j<items_array[i].length;++j){
+            items_table_str += '<td class="cell">' + items_array[i][j] + '</td>';
+        }
+        items_table_str += '</tr>';
+    }
+    items_table_str += '</table>';
+    showBlock('einvoice_detail',true);
+    //showBlock('main_text',false);
+    document.getElementById('einvoice_detail').innerHTML = items_table_str;
+}
 
 // ======== used function when doing accounting  ============//
 
@@ -168,21 +209,17 @@ function change_query_date(start_date_param, end_date_param){ // change the cont
     );
 }
 
-
-einvoice_list_item_idx = einvoice_list[0].length-1; // list位於sorted發票list的位置
-total_price_idx = 4;
-shop_idx = 3;
 function get_accounting_table(start_date, end_date){
     if(start_date ==null) start_date = einvoice_list[0][0];
     if(end_date == null) end_date = einvoice_list[einvoice_list.length-1][0];
     var item_count = 0; // 計算商品數目
     var total_amount = 0; // 計算總金額
-    accounting_table_str = '<table class="table table-hover">\
-    <tr><th>順序</th><th>日期</th><th>商店名稱</th><th>商品名稱</th><th>數量</th><th>單價</th><th>總價</th></tr>';
+    accounting_table_str = '<table class="table">\
+    <tr class="row header green"><th class="cell">順序</th><th class="cell">日期</th><th class="cell">商店名稱</th><th class="cell">商品名稱</th><th class="cell">數量</th><th class="cell">單價</th><th class="cell">總價</th></tr>';
     for(var i=einvoice_list.length-1;i>=0;--i){ // query sorted invoice list
         var cur_date = einvoice_list[i][0];
         if(start_date <= cur_date && cur_date <= end_date){
-            var shop_detail = '<td>' + cur_date + '</td><td>' + einvoice_list[i][shop_idx] + '</td>';
+            var shop_detail = '<td class="cell">' + cur_date + '</td><td class="cell">' + einvoice_list[i][shop_idx] + '</td>';
             var items_array = einvoice_list[i][einvoice_list_item_idx];
             for(var j=0;j<items_array.length;++j){ // 購買品項 商品名稱 數量 單價 總價
                 if( parseInt(items_array[j][total_price_idx]) == 0) continue;
@@ -190,9 +227,9 @@ function get_accounting_table(start_date, end_date){
                 ++item_count;
                 total_amount += parseInt(items_array[j][total_price_idx]);
                 for(var kk=1;kk<items_array[j].length;++kk){
-                    item_detail += '<td>' + items_array[j][kk] + '</td>';
+                    item_detail += '<td class="cell">' + items_array[j][kk] + '</td>';
                 }
-                accounting_table_str += '<tr><td>' + item_count + '</td>' + shop_detail + item_detail + '</tr>';
+                accounting_table_str += '<tr class="row"><td class="cell">' + item_count + '</td>' + shop_detail + item_detail + '</tr>';
             }
         }
     }
@@ -201,9 +238,10 @@ function get_accounting_table(start_date, end_date){
 }
 function accounting(){ // show the accounting page
     showBlock('detail',false);
+    showBlock('einvoice_detail',false);
     showBlock('TGMap',false);
-    var accounting_list = '<center><p><font color="blue" size="+4">記帳</font></p>'
-    + '<div class="btn-group" data-toggle="buttons">\
+    var accounting_list = '<div class="title" align="center"><h2>記帳</h2></div>'
+    + '<center><div class="btn-group" data-toggle="buttons">\
   <label class="btn btn-default" onClick="change_query_date_div(\'y\');">\
     <input type="radio" name="options" id="option1" autocomplete="off">年\
   </label>\
@@ -224,5 +262,5 @@ function accounting(){ // show the accounting page
     var end_date = get_formated_date(today_year, today_month, today_day);
     document.getElementById('main_text').innerHTML =  accounting_list
      + '<div id="accounting_table">' +get_accounting_table(start_date, end_date) + '</div>';
-    window.scrollTo(0, 0);  // Scroll back to the top
+    document.getElementById('main_text').scrollTop = 0; // Scroll back to the top of div
 }

@@ -7,11 +7,14 @@ body {
 	height:100vh;
 }
 #main_text {
+	background: #E7CDFF;
 	padding-top:15px;
 	padding-left:50px;
 	padding-right:50px;
 	padding-bottom:40px;
 	border: 1px solid 000000;
+	height: 100vh;
+	overflow-y: auto;
 }
 #detail {
 	z-index:900;
@@ -28,7 +31,18 @@ body {
 	display:none;
 	overflow-y: auto;
 }
+#einvoice_detail {
+	position: relative;
+	background-color: #2b2b2b;
+	height: 100vh;
+	padding-top: 10px;
+	padding-left:100px;
+	padding-right:100px;
+	display:none;
+	overflow-y: auto;
+}
 
+/************* Used for table *************/
 .table {
   margin: 0 0 40px 0;
   width: 100%;
@@ -75,4 +89,17 @@ body {
     padding: 2px 12px;
     display: block;
   }
+}
+
+/************* Used for tiltle sentence *************/
+.title
+{
+	margin-bottom: 2.5em;
+}
+
+.title h2
+{
+	font-size: 3em;
+	font-weight: bold;
+	color: rgba(0,0,0,0.8);
 }
