@@ -303,13 +303,16 @@ def clustering(user):
 	for i in range(len(labels)):
 		user[ numbers[i] ].cluster = labels[i]
 
+	# find the biggest cluster
+	biggest_cluster = max(set(labels), key=list(labels).count)
 	cluster_centers = ms.cluster_centers_
+	biggest_cluster_center = cluster_centers[biggest_cluster]
 
 	labels_unique = np.unique(labels)
 	n_clusters_ = len(labels_unique)
 
 
-	return user, sorted(user, key=lambda x:user[x].cluster)
+	return user, sorted(user, key=lambda x:user[x].cluster), (biggest_cluster_center[0], biggest_cluster_center[1])
 
 def login(account, password):
 	csv = os.path.join(os.path.dirname(os.path.dirname(__file__)),'static','Taipei_shops_with_einvoice.csv')
