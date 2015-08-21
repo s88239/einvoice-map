@@ -43,13 +43,24 @@ function show_all_shop(){
     showBlock('einvoice_detail',false);
     showBlock('TGMap',false);
     showBlock('main_text',true);
-    var invoice_list = '<div class="title" align="center"><h2>商店清單</h2></div>'
-    + '<table class="table"><tr class="row header blue"><th class="cell">順序</th><th class="cell">商店名稱</th><th class="cell">分店名稱</th><th class="cell">商店地址</th><th class="cell">頻率</th><th class="cell">消費金額</th><th class="cell">最常購買品項</th><th class="cell">cluster</th>';
+    var invoice_list = '<div class="title" align="center"><h2>商店清單</h2></div>\
+    <div class="col-lg-4 col-lg-offset-4" style="margin-bottom: 20px">\
+        <div class="input-group">\
+          <input id="search" type="text" class="form-control" aria-label="..." placeholder="e.g. 統一超商-台大">\
+          <div class="input-group-btn">\
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">搜尋 <span class="caret"></span></button>\
+            <ul class="dropdown-menu dropdown-menu-right">\
+              <li><a href="javascript: search_shop(\'name\');">商店名稱</a></li>\
+              <li><a href="javascript: search_shop(\'address\');">商品地址</a></li>\
+              <li><a href="javascript: search_shop(\'item_name\');">商品名稱</a></li>\
+            </ul>\
+          </div>\
+        </div>\
+    </div>\
+    <table id="shop_table" class="table">\
+        <tr class="row header blue"><th class="cell">順序</th><th class="cell">商店名稱</th><th class="cell">分店名稱</th><th class="cell">商店地址</th><th class="cell">頻率</th><th class="cell">消費金額</th><th class="cell">最常購買品項</th><th class="cell">cluster</th>';
     for(i=0;i<shop_data.length;++i){
-        invoice_list += '<tr class="row" onClick="show_einvoice(' + i + ');"><td class="cell">'+(i+1)+'</td>';
-        for(j=3;j<shop_data[i].length-1;++j){
-            invoice_list += '<td class="cell">' + shop_data[i][j] + '</td>';
-        }
+        invoice_list += get_row_of_shop(i, i+1);
     }
     invoice_list += '</table>';
     document.getElementById('main_text').innerHTML = invoice_list;
@@ -244,24 +255,24 @@ function accounting(){ // show the accounting page
     showBlock('einvoice_detail',false);
     showBlock('TGMap',false);
     showBlock('main_text',true);
-    var accounting_list = '<div class="title" align="center"><h2>記帳</h2></div>'
-    + '<center><div class="btn-group" data-toggle="buttons">\
-  <label class="btn btn-default" onClick="change_query_date_div(\'y\');">\
-    <input type="radio" name="options" id="option1" autocomplete="off">年\
-  </label>\
-  <label class="btn btn-default active" onClick="change_query_date_div(\'m\');">\
-    <input type="radio" name="options" id="option2" autocomplete="off" checked>月\
-  </label>\
-  <label class="btn btn-default" onClick="change_query_date_div(\'d\');">\
-    <input type="radio" name="options" id="option3" autocomplete="off">日\
-  </label>\
-  <label class="btn btn-default" onClick="change_query_date_div(\'o\');">\
-    <input type="radio" name="options" id="option3" autocomplete="off">自訂\
-  </label>\
-</div>\
-<br />\
-<div id="query_date" style="padding: 10px">' + get_query_date_string('m') + '</div>\
-</center>';
+    var accounting_list = '<div class="title" align="center"><h2>記帳</h2></div>\
+    <center><div class="btn-group" data-toggle="buttons">\
+      <label class="btn btn-default" onClick="change_query_date_div(\'y\');">\
+        <input type="radio" name="options" id="option1" autocomplete="off">年\
+      </label>\
+      <label class="btn btn-default active" onClick="change_query_date_div(\'m\');">\
+        <input type="radio" name="options" id="option2" autocomplete="off" checked>月\
+      </label>\
+      <label class="btn btn-default" onClick="change_query_date_div(\'d\');">\
+        <input type="radio" name="options" id="option3" autocomplete="off">日\
+      </label>\
+      <label class="btn btn-default" onClick="change_query_date_div(\'o\');">\
+        <input type="radio" name="options" id="option3" autocomplete="off">自訂\
+      </label>\
+    </div>\
+    <br />\
+    <div id="query_date" style="padding: 10px">' + get_query_date_string('m') + '</div>\
+    </center>';
     var start_date = get_formated_date(today_year, today_month, 1);
     var end_date = get_formated_date(today_year, today_month, today_day);
     document.getElementById('main_text').innerHTML =  accounting_list
@@ -270,8 +281,8 @@ function accounting(){ // show the accounting page
 }
 function search_einvoice(search_col){
     var count = 0;
-    search_goal = document.getElementById('search').value;
-    result_str = '<tr class="row header blue"><th class="cell">順序</th><th class="cell">消費日期</th><th class="cell" width="20%">載具</th><th class="cell">商店名稱</th><th class="cell">消費金額</th><th class="cell">發票號碼</th></tr>';
+    var search_goal = document.getElementById('search').value;
+    var result_str = '<tr class="row header blue"><th class="cell">順序</th><th class="cell">消費日期</th><th class="cell" width="20%">載具</th><th class="cell">商店名稱</th><th class="cell">消費金額</th><th class="cell">發票號碼</th></tr>';
     for(var i=einvoice_list.length-1; i >= 0; --i){
         if( search_col=='item_name' ){
             var items_array = einvoice_list[i][einvoice_list_item_idx];
@@ -292,7 +303,7 @@ function search_einvoice(search_col){
     document.getElementById('einvoice_table').innerHTML = result_str;
 }
 function get_row_of_einvoice(einvoice_idx, count){
-    invoice_list = '<tr class="row" onClick="show_items(' + einvoice_idx + ');"><td>' + count + '</td>'; // 順序
+    var invoice_list = '<tr class="row" onClick="show_items(' + einvoice_idx + ');"><td>' + count + '</td>'; // 順序
     for(var j=0;j<6;++j){
         if(j==1){ // invoice.card_type
             if(einvoice_list[einvoice_idx][j] == '3J0002') carrier_type = '手機條碼';
@@ -307,4 +318,116 @@ function get_row_of_einvoice(einvoice_idx, count){
     }
     invoice_list += '</tr>';
     return invoice_list;
+}
+function search_shop(search_col){
+    var count = 0;
+    var search_goal = document.getElementById('search').value;
+    var result_str = '<tr class="row header blue"><th class="cell">順序</th><th class="cell">商店名稱</th><th class="cell">分店名稱</th><th class="cell">商店地址</th><th class="cell">頻率</th><th class="cell">消費金額</th><th class="cell">最常購買品項</th><th class="cell">cluster</th>';
+    var find_item_flag = false;
+    for(var shop_idx=0 ; shop_idx < shop_data.length; ++shop_idx){
+        if( search_col=='item_name' ){
+            for(var current_invoice_idx=0; current_invoice_idx<shop_data[shop_idx][invoice_idx].length; ++current_invoice_idx){ // 第幾張發票
+                var items_array = shop_data[shop_idx][invoice_idx][current_invoice_idx][item_idx]; // 該張發票所有購買商品
+                for( var current_item_idx=0; current_item_idx<items_array.length; ++current_item_idx){
+                    if( items_array[current_item_idx][1].indexOf(search_goal)!=-1 ){
+                        result_str += get_row_of_shop(shop_idx, ++count);
+                        find_item_flag = true;
+                        break;
+                    }
+                }
+                if( find_item_flag==true){
+                    find_item_flag = false;
+                    break;
+                }
+            }
+        }
+        else{
+            if( search_col=='name' ){
+                search_goal_split = search_goal.split("-");
+                search_shop_val = shop_data[shop_idx][3];
+                search_branch_val = shop_data[shop_idx][4];
+                if(search_goal_split.length==1){
+                    if(search_shop_val.indexOf(search_goal)!=-1 || search_branch_val.indexOf(search_goal)!=-1 ){
+                        result_str += get_row_of_shop(shop_idx, ++count);
+                    }
+                }
+                else if( search_shop_val.indexOf(search_goal_split[0])!=-1
+                    && search_branch_val.indexOf(search_goal_split[1])!=-1 ){
+                    result_str += get_row_of_shop(shop_idx, ++count);
+                }
+            }
+            else if( search_col=='address' ){
+                var current_shop_address = shop_data[shop_idx][5].replace("臺","台");
+                [current_county, current_town, current_others] = break_address(current_shop_address);
+                var search_goal = search_goal.replace("臺","台");
+                [search_county, search_town, search_others] = break_address(search_goal);
+                //alert(search_county +':'+search_town+':'+search_others);
+                if( ( search_county=='' || search_county==current_county ) 
+                    && (search_town=='' || search_town==current_town)
+                    && (search_others=='' || current_others.indexOf(search_others)!=-1 )
+                    || current_shop_address.indexOf(search_goal)!=-1 ){
+                    result_str += get_row_of_shop(shop_idx, ++count);
+                }
+            }
+        }
+    }
+    document.getElementById('shop_table').innerHTML = result_str;
+}
+function get_row_of_shop(shop_idx, count){
+    var invoice_list = '<tr class="row" onClick="show_einvoice(' + shop_idx + ');"><td class="cell">' + count + '</td>';
+    for(j=3;j<shop_data[shop_idx].length-1;++j){
+        invoice_list += '<td class="cell">' + shop_data[shop_idx][j] + '</td>';
+    }
+    return invoice_list;
+}
+function break_address(address){ // 分解地址成 [縣市,鄉鎮市區,其他]
+    var county = '';
+    var town = '';
+    var others = '';
+    if( (current_position = address.indexOf('縣'))!=-1 ){
+        county = address.substring(0,current_position+1);
+        test_char = ['鄉','鎮','市'];
+        for(var test_idx=0; test_idx<test_char.length; ++test_idx){
+            current_position = address.indexOf(test_char[test_idx]);
+            town = address.substring(3,current_position+1);
+            others = address.substring(current_position+1);
+            break;
+        }
+    }
+    else if( (current_position = address.indexOf('市'))!=-1 ){
+        county = address.substring(0,current_position+1);
+        test_city = ['台北','新北','基隆','桃園','新竹','台中','嘉義','台南','高雄']; // 直轄市、省轄市
+        city_flag = false;
+        for( city_idx in test_city){
+            if( county.indexOf(test_city[city_idx])!=-1 ){
+                county = address.substring(0,3);
+                city_flag = true;
+            }
+        }
+        if(city_flag==false){ // 縣轄市
+            town = county;
+            county = ''; // 沒有縣名
+            others = address.substring(3);
+        }
+        else if( (current_position = address.indexOf('區'))!=-1){
+            town = address.substring(3,current_position+1);
+            others = address.substring(current_position+1);
+        }
+        else{
+            town = ''; // 沒有區名
+            others = address.substring(3);
+        }
+    }
+    else{
+        if( (current_position = address.indexOf('鄉'))!=-1
+            || (current_position = address.indexOf('鎮'))!=-1
+            || (current_position = address.indexOf('區'))!=-1){
+            town = address.substring(0,current_position+1);
+            others = address.substring(current_position+1);
+        }
+        else{
+            others = address;
+        }
+    }
+    return [county,town,others];
 }
