@@ -27,7 +27,7 @@ def TGOS(request):
 			invoice_list.append([invoice.inv_date.getDate(),invoice.inv_num,invoice.amount, items])
 
 		if len(sellers[key].top_item) != 0:
-			top_item_str = sellers[key].top_item[0] + ' x ' + str(sellers[key].top_item[1])
+			top_item_str = sellers[key].top_item[0] + ' x ' + str( round(sellers[key].top_item[1], 2) )
 		else:
 			top_item_str = 'none'
 
@@ -70,5 +70,9 @@ def TGOS(request):
 		context_instance = RequestContext(request)
 		)
 #{'current_time': datetime.now()}
+def hello_world(request):
+	return render(request,'output.html',
+	{'test': test},
+	context_instance = RequestContext(request))
 def demo(request):
 	return render(request,'demo.html')
