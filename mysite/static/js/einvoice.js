@@ -58,11 +58,12 @@ function show_all_shop(){
 function show_einvoice(target_shop_idx){
     invoice_array = shop_data[target_shop_idx];
     var delimeter = (invoice_array[3]=='' || invoice_array[4]=='')?'':'-';
-    var invoice_list = '<button type="button" class="btn btn-info" onClick="showBlock(\'einvoice_detail\', false);">返回電子發票列表</button>\
+    var invoice_list = '<button type="button" class="btn btn-info" onClick="showBlock(\'einvoice_detail\', false);showBlock(\'main_text\', true);">返回電子發票列表</button>\
     <font color="white"><center><h1>'+ invoice_array[3] + delimeter + invoice_array[4] + '</h1>'
     + invoice_array[5] // 地址
     +'</font><h3><font color="#FFAFFE"><b>頻率：' + invoice_array[6] + '</font>　<font color="FFD8AF">總消費金額：' + invoice_array[7] + '</font></b></h3>' // 頻率及總消費金額
     +'<font color="white" size="+1">最常購買商品：' + invoice_array[8] + '</font></center><br />'; //最常購買商品
+    showBlock('main_text',false);
     showBlock('einvoice_detail',true);
     document.getElementById('einvoice_detail').innerHTML = invoice_list + get_invoice_list_table_at_shop(shop_data[target_shop_idx]);
 }
@@ -98,7 +99,7 @@ function show_all_einvoice(){
 }
 function show_items(target_einvoice_idx){
     var total_amount = einvoice_list[target_einvoice_idx][total_price_idx]; // 發票總金額
-    var items_table_str = '<table width="100%"><tr><td><button type="button" class="btn btn-info" onClick="showBlock(\'einvoice_detail\', false);">返回電子發票列表</button></td>'
+    var items_table_str = '<table width="100%"><tr><td><button type="button" class="btn btn-info" onClick="showBlock(\'einvoice_detail\', false);showBlock(\'main_text\', true);">返回電子發票列表</button></td>'
     + '<td align="right"><span class="label label-default">' + einvoice_list[target_einvoice_idx][5] + '</span></td></tr></table>'
     + '<center><font color="white" size="+1"><h3>' + einvoice_list[target_einvoice_idx][0] + '</h3></font>'
     + '<h2><font color="white">' + einvoice_list[target_einvoice_idx][3] + '</font></h2>\
@@ -114,8 +115,8 @@ function show_items(target_einvoice_idx){
         items_table_str += '</tr>';
     }
     items_table_str += '</table>';
+    showBlock('main_text',false);
     showBlock('einvoice_detail',true);
-    //showBlock('main_text',false);
     document.getElementById('einvoice_detail').innerHTML = items_table_str;
 }
 
