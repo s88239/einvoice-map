@@ -22,6 +22,7 @@ function get_invoice_list_table_at_shop(invoice_array){
         }
         for(var j=0;j<item_num;++j){ // 購買品項 商品名稱 數量 單價 總價
             if(j!=0) invoice_list_table_str += '<tr class="row">';
+            invoice_list_table_str += '<td class="cell">' + (j+1) + '</td>';
             for(var kk=0;kk<items_array[j].length;++kk){
                 invoice_list_table_str = invoice_list_table_str + '<td class="cell">' + items_array[j][kk] + '</td>';
             }
