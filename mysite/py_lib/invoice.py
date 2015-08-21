@@ -11,10 +11,21 @@ class Invoice(object):
 		self.inv_status = details["invStatus"]
 		self.inv_donatable = details["invDonatable"]
 		self.donate_mark = details["donateMark"]
+		self.carrier_name = ''
 		self.item = []
 
 	def add_item(self, _item):
 		self.item.append(Item(_item))
+
+	def add_carrier_name(self, user):
+		if user.card_no == self.card_no:
+			self.carrier_name = '手機條碼'
+			return
+		for ele in user.carriers:
+			if ele['carrierId2'] == self.card_no:
+				self.carrier_name = ele['carrierName']
+				return
+		self.carrier_name = 'Cannot find carrier name'
 
 class InvDate(object):
 	def __init__(self, inv_date):

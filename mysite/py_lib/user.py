@@ -4,21 +4,15 @@ import os
 import time, datetime, calendar
 try:
 	import py_lib.einvoice as einvoice
-	from py_lib.seller import list_sellers
-	from py_lib.seller import Seller
+	from py_lib.seller import *
 	from py_lib.invoice import *
-	from py_lib.seller import split_store_and_branch
-	from py_lib.seller import test_store_name
 	from trips.models import *
 	from django.db import IntegrityError
 except:
 	from invoice import * 
 	import pickle
 	import einvoice
-	from seller import list_sellers
-	from seller import Seller
-	from seller import split_store_and_branch
-	from seller import test_store_name
+	from seller import *
 
 '''if sys.version_info >= (2, 7, 9):
 	import ssl
@@ -75,7 +69,11 @@ class User(object):
 			details['invDate'] = date_details
 
 			inv_items = invoice.inv_items.split('|')
+			carrier_name = invoice.carrier_name			
+
 			invoice = Invoice(details)
+			invoice.carrier_name = carrier_name
+			
 			i = 0
 			while i < len(inv_items):
 				item = {}
@@ -164,6 +162,7 @@ class User(object):
 			data = InvoiceTable.objects.create(inv_num=invoice.inv_num,
 				card_type=invoice.card_type,
 				card_no=invoice.card_no,
+				carrier_name=invoice.carrier_name,
 				seller_name=invoice.seller_name,
 				amount=invoice.amount,
 				inv_date=invoice.inv_date.__str__(),

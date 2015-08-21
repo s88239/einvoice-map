@@ -27,6 +27,7 @@ class InvoiceTable(models.Model):
 	card_type = models.CharField(max_length=100)
 	inv_num = models.CharField(max_length=100, primary_key=True)
 	card_no = models.CharField(max_length=100)
+	carrier_name = models.CharField(max_length=100, null=True)
 	seller_name = models.CharField(max_length=100)
 	amount = models.CharField(max_length=100)
 	inv_date = models.CharField(max_length=100)
