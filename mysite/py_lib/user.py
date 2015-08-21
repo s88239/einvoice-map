@@ -328,8 +328,8 @@ def login(account, password):
 	user.store_invoice_database()
 	user.store_unmatchseller()
 
-	(x, y) = clustering(user.sellers)
-	return x,y,user.sort_inv_list()
+	(sellers, sorted_key) = clustering(user.sellers)
+	return sellers,sorted_key,user.sort_inv_list()
 
 if __name__ == '__main__':
 	TEST = True

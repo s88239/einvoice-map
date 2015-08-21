@@ -7,7 +7,6 @@ from py_lib.user import login
 # Create your views here.
 from datetime import datetime
 from django.http import HttpResponse
-test = ["OH~","suck","your","dick"]
 
 def index(request):
 	return render(request,'index.html')
@@ -15,33 +14,33 @@ def TGOS(request):
 	account = request.POST['account']
 	password = request.POST['password']
 	#try:
-	(x,y,einvoice_list) = login(account, password)
+	(sellers,sorted_key,einvoice_list) = login(account, password)
 	
 	# get invoice list by shop
 	seller_list = []
-	for key in y:
+	for key in sorted_key:
 		invoice_list = []
-		for invoice in x[key].invoice_list:
+		for invoice in sellers[key].invoice_list:
 			items = []
 			for item in invoice.item:
-				items.append([item.number,item.description,item.quantity,item.unitPrice,item.amount])
+				items.append([item.description,item.quantity,item.unitPrice,item.amount])
 			invoice_list.append([invoice.inv_date.getDate(),invoice.inv_num,invoice.amount, items])
 
-		if len(x[key].top_item) != 0:
-			top_item_str = x[key].top_item[0] + ' x ' + str(x[key].top_item[1])
+		if len(sellers[key].top_item) != 0:
+			top_item_str = sellers[key].top_item[0] + ' x ' + str(sellers[key].top_item[1])
 		else:
 			top_item_str = 'none'
 
 		seller_list.append([key,
-		x[key].longitude,
-		x[key].latitude,
-		x[key].store_name,
-		x[key].branch_name,
-		x[key].address,
-		x[key].visit_frequency,
-		x[key].consumption,
+		sellers[key].longitude,
+		sellers[key].latitude,
+		sellers[key].store_name,
+		sellers[key].branch_name,
+		sellers[key].address,
+		sellers[key].visit_frequency,
+		sellers[key].consumption,
 		top_item_str,
-		x[key].cluster,
+		sellers[key].cluster,
 		invoice_list])
 
 	# get sorted invoice list
@@ -52,7 +51,7 @@ def TGOS(request):
 			items.append([item.number,item.description,item.quantity,item.unitPrice,item.amount])
 		sorted_invoice_list.append([
 			cur_einvoice.inv_date.getDate(),
-			cur_einvoice.card_type,
+			cur_einvoice.carrier_name,
 			cur_einvoice.card_no,
 			cur_einvoice.seller_name,
 			cur_einvoice.amount,

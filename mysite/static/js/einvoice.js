@@ -118,8 +118,8 @@ function show_items(target_einvoice_idx){
     <table class="table">\
     <tr class="row header green"><th class="cell">#</th><th class="cell">商品名稱</th><th class="cell">數量</th><th class="cell">單價</th><th class="cell">總價</th></tr>';
     var items_array = einvoice_list[target_einvoice_idx][einvoice_list_item_idx];
-    for(var i=0;i<items_array.length;++i){ // 購買品項 商品名稱 數量 單價 總價
-        items_table_str += '<tr class="row">'
+    for(var i=0;i<items_array.length;++i){ // # 商品名稱 數量 單價 總價
+        items_table_str += '<tr class="row"><td class="cell">' + (i+1) + '</td>';
         for(var j=0;j<items_array[i].length;++j){
             items_table_str += '<td class="cell">' + items_array[i][j] + '</td>';
         }
@@ -235,12 +235,12 @@ function get_accounting_table(start_date, end_date){
         if(start_date <= cur_date && cur_date <= end_date){
             var shop_detail = '<td class="cell">' + cur_date + '</td><td class="cell">' + einvoice_list[i][shop_idx] + '</td>';
             var items_array = einvoice_list[i][einvoice_list_item_idx];
-            for(var j=0;j<items_array.length;++j){ // 購買品項 商品名稱 數量 單價 總價
+            for(var j=0;j<items_array.length;++j){ // # 商品名稱 數量 單價 總價
                 if( parseInt(items_array[j][total_price_idx]) == 0) continue;
                 var item_detail = '';
                 ++item_count;
                 total_amount += parseInt(items_array[j][total_price_idx]);
-                for(var kk=1;kk<items_array[j].length;++kk){
+                for(var kk=0;kk<items_array[j].length;++kk){
                     item_detail += '<td class="cell">' + items_array[j][kk] + '</td>';
                 }
                 accounting_table_str += '<tr class="row"><td class="cell">' + item_count + '</td>' + shop_detail + item_detail + '</tr>';
@@ -287,7 +287,7 @@ function search_einvoice(search_col){
         if( search_col=='item_name' ){
             var items_array = einvoice_list[i][einvoice_list_item_idx];
             for(var j=0; j < items_array.length; ++j){
-                if(items_array[j][1].indexOf(search_goal)!=-1){
+                if(items_array[j][0].indexOf(search_goal)!=-1){
                     result_str += get_row_of_einvoice(i, ++count);
                     break;
                 }
@@ -305,12 +305,8 @@ function search_einvoice(search_col){
 function get_row_of_einvoice(einvoice_idx, count){
     var invoice_list = '<tr class="row" onClick="show_items(' + einvoice_idx + ');"><td>' + count + '</td>'; // 順序
     for(var j=0;j<6;++j){
-        if(j==1){ // invoice.card_type
-            if(einvoice_list[einvoice_idx][j] == '3J0002') carrier_type = '手機條碼';
-            else if(einvoice_list[einvoice_idx][j] == '1K0001') carrier_type = '悠遊卡';
-            else if(einvoice_list[einvoice_idx][j] == '2G0001') carrier_type = 'iCash';
-            else carrier_type = '其他載具';
-            invoice_list += '<td class="cell">' + carrier_type + ' ' + einvoice_list[einvoice_idx][++j] + '</td>';
+        if(j==1){ // invoice.card_name
+            invoice_list += '<td class="cell">' + einvoice_list[einvoice_idx][j] + ' ' + einvoice_list[einvoice_idx][++j] + '</td>';
         }
         else{
             invoice_list += '<td class="cell">' + einvoice_list[einvoice_idx][j] + '</td>';
@@ -329,7 +325,7 @@ function search_shop(search_col){
             for(var current_invoice_idx=0; current_invoice_idx<shop_data[shop_idx][invoice_idx].length; ++current_invoice_idx){ // 第幾張發票
                 var items_array = shop_data[shop_idx][invoice_idx][current_invoice_idx][item_idx]; // 該張發票所有購買商品
                 for( var current_item_idx=0; current_item_idx<items_array.length; ++current_item_idx){
-                    if( items_array[current_item_idx][1].indexOf(search_goal)!=-1 ){
+                    if( items_array[current_item_idx][0].indexOf(search_goal)!=-1 ){
                         result_str += get_row_of_shop(shop_idx, ++count);
                         find_item_flag = true;
                         break;
