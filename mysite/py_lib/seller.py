@@ -28,8 +28,8 @@ class Seller(object):
 	def set_top_item(self, i):
 		self.top_item = i
 
-	def _print(self):
-		print(self.id, self.store_name, self.branch_name, self.address, self.longitude, self.latitude, self.visit_frequency, self.consumption, self.top_item, self.cluster)
+	def __str__(self):
+		return self.id + ' ' + self.store_name + ' ' + self.branch_name + ' ' + self.address + ' ' + self.longitude + ' ' + self.latitude
 
 def list_sellers(csv_file):
 	#key is the ID

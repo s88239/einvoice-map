@@ -21,7 +21,7 @@ TEST =  False
 class User(object):
 	not_item_list = ['折扣', '折抵', '滿額送', '抵用券', '紅利贈送', '任選第2件', '39元超值組合']
 
-	def __init__(self, api_key, app_id, card_type, card_no, card_encrypt):
+	def __init__(self, api_key, app_id, card_type, card_no, card_encrypt, all_sellers):
 		self.api_key = api_key
 		self.app_id = app_id
 		self.card_type = card_type
@@ -29,7 +29,7 @@ class User(object):
 		self.card_encrypt = card_encrypt
 
 		self.carriers = einvoice.carrier_query(self)
-		self.invoice_list, self.invoices_to_database = self.get_invoice_list()
+		self.invoice_list, self.invoices_to_database = self.get_invoice_list(all_sellers)
 		
 		#key is the id of seller
 		self.sellers = {}
@@ -43,7 +43,7 @@ class User(object):
 		self.seller_not_on_csv = []
 	
 
-	def get_invoice_list(self):
+	def get_invoice_list(self, all_sellers):
 		invoice_list = []
 		invoices_from_database = InvoiceTable.objects.filter(card_no = self.card_no)
 		for carrier in self.carriers:
@@ -92,7 +92,7 @@ class User(object):
 					if year >= now.year and month > now.month:
 						break
 					(start_date, end_date) = self.date_for_query(year, month)
-					invoice_list.extend(einvoice.get_einvoice(self, start_date, end_date))
+					invoice_list.extend(einvoice.get_einvoice(self, start_date, end_date, all_sellers))
 		else:
 			latest_date = sorted(invoices_from_database, key=lambda x: x.inv_date, reverse=True)[0].inv_date
 			YMD = latest_date.split('/')
@@ -102,19 +102,19 @@ class User(object):
 				if (year == start_date.year) and (year < now.year): 
 					for month in range(start_date.month, 13):
 						(start_date, end_date) = self.date_for_query(year, month)
-						invoice_list.extend(einvoice.get_einvoice(self, start_date, end_date))
+						invoice_list.extend(einvoice.get_einvoice(self, start_date, end_date, all_sellers))
 				elif (year > start_date.year) and (year < now.year):
 					for month in range(1,13):
 						(start_date, end_date) = self.date_for_query(year, month)
-						invoice_list.extend(einvoice.get_einvoice(self, start_date, end_date))
+						invoice_list.extend(einvoice.get_einvoice(self, start_date, end_date, all_sellers))
 				elif (year == now.year) and (year == start_date.year):
 					for month in range(start_date.month, now.month+1):
 						(start_date, end_date) = self.date_for_query(year, month)
-						invoice_list.extend(einvoice.get_einvoice(self, start_date, end_date))
+						invoice_list.extend(einvoice.get_einvoice(self, start_date, end_date, all_sellers))
 				elif (year == now.year) and (year > start_date.year):
 					for month in range(1, now.month+1):
 						(start_date, end_date) = self.date_for_query(year, month)
-						invoice_list.extend(einvoice.get_einvoice(self, start_date, end_date))
+						invoice_list.extend(einvoice.get_einvoice(self, start_date, end_date, all_sellers))
 		
 		return self.get_unique_inv_list(invoice_list, invoices_from_database)
 
@@ -215,7 +215,7 @@ class User(object):
 		if by_date:
 			return sorted(self.invoice_list, key=lambda inv: inv.inv_date.getDate())
 
-	def statistics(self, shop):
+	def statistics(self, all_sellers):
 		def is_item(item):
 			for not_item in User.not_item_list:
 				if item.description.find(not_item) != -1:
@@ -252,7 +252,6 @@ class User(object):
 				if self.all_items[i][j] >= top:
 					self.top_item[i].append( (j, self.all_items[i][j]) )
 
-		all_sellers = list_sellers(shop)
 		for i in self.visit_frequency:
 			seller_on_csv = False
 			for j in all_sellers:
@@ -295,17 +294,21 @@ def clustering(user):
 	return user, sorted(user, key=lambda x:user[x].cluster)
 
 def login(account, password):
+	csv = os.path.join(os.path.dirname(os.path.dirname(__file__)),'static','Taipei_shops_with_einvoice.csv')
+	all_sellers = list_sellers(csv)
+	
 	api_key = "QWQ4dU9WMzRXa2xoYUdsZA=="
 	app_id = "EINV0201505042102"
 	card_type = "3J0002"
 	card_no = account
 	card_encrypt = password
-	user = User(api_key, app_id, card_type, card_no, card_encrypt)
-	csv = os.path.join(os.path.dirname(os.path.dirname(__file__)),'static','Taipei_shops_with_einvoice.csv')
-	user.statistics(csv)
+	user = User(api_key, app_id, card_type, card_no, card_encrypt, all_sellers)
+
+	user.statistics(all_sellers)
 	user.store_user_database()
 	user.store_carrier_database()
 	user.store_invoice_database()
+
 	(x, y) = clustering(user.sellers)
 	return x,y,user.sort_inv_list()
 

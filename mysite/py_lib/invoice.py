@@ -1,3 +1,7 @@
+try:
+	from py_lib.seller import *
+except:
+	from seller import *
 
 class Invoice(object):
 	def __init__(self, details):
@@ -13,6 +17,7 @@ class Invoice(object):
 		self.donate_mark = details["donateMark"]
 		self.carrier_name = ''
 		self.item = []
+		self.seller = None
 
 	def add_item(self, _item):
 		self.item.append(Item(_item))
@@ -26,6 +31,10 @@ class Invoice(object):
 				self.carrier_name = ele['carrierName']
 				return
 		self.carrier_name = 'Cannot find carrier name'
+	
+	def add_seller(self, seller):
+		self.seller = seller
+
 
 class InvDate(object):
 	def __init__(self, inv_date):
