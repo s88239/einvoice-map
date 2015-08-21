@@ -70,9 +70,5 @@ def TGOS(request):
 		context_instance = RequestContext(request)
 		)
 #{'current_time': datetime.now()}
-def hello_world(request):
-	return render(request,'output.html',
-	{'test': test},
-	context_instance = RequestContext(request))
 def demo(request):
 	return render(request,'demo.html')
