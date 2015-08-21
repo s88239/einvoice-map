@@ -48,7 +48,7 @@ def TGOS(request):
 	for cur_einvoice in einvoice_list:
 		items = []
 		for item in cur_einvoice.item:
-			items.append([item.number,item.description,item.quantity,item.unitPrice,item.amount])
+			items.append([item.description,item.quantity,item.unitPrice,item.amount])
 		sorted_invoice_list.append([
 			cur_einvoice.inv_date.getDate(),
 			cur_einvoice.carrier_name,
