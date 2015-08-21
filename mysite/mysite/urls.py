@@ -6,7 +6,6 @@ from django.conf.urls.static import static
 from trips.views import index
 from trips.views import TGOS
 from trips.views import demo
-from trips.views import test
 
 urlpatterns = patterns('',
     # Examples:
