@@ -75,23 +75,23 @@ function show_all_einvoice(){
     showBlock('einvoice_detail',false);
     showBlock('TGMap',false);
     showBlock('main_text',true);
-    var invoice_list = '<div class="title" align="center"><h2>電子發票清單</h2></div>'
-    + '<table class="table"><tr class="row header blue"><th class="cell">順序</th><th class="cell">消費日期</th><th class="cell" width="20%">載具</th><th class="cell">商店名稱</th><th class="cell">消費金額</th><th class="cell">發票號碼</th>';
+    var invoice_list = '<div class="title" align="center"><h2>電子發票清單</h2></div>\
+    <div class="col-lg-4 col-lg-offset-4" style="margin-bottom: 20px">\
+        <div class="input-group">\
+          <input id="search" type="text" class="form-control" aria-label="..." placeholder="Search">\
+          <div class="input-group-btn">\
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">搜尋 <span class="caret"></span></button>\
+            <ul class="dropdown-menu dropdown-menu-right">\
+              <li><a href="javascript: search_einvoice(\'name\');">商店名稱</a></li>\
+              <li><a href="javascript: search_einvoice(\'item_name\');">商品名稱</a></li>\
+            </ul>\
+          </div>\
+        </div>\
+    </div>\
+    <table id="einvoice_table" class="table"><tr class="row header blue"><th class="cell">順序</th><th class="cell">消費日期</th><th class="cell" width="20%">載具</th><th class="cell">商店名稱</th><th class="cell">消費金額</th><th class="cell">發票號碼</th></tr>';
     var count = 1;
     for(i=einvoice_list.length-1;i>=0;--i,++count){
-        invoice_list += '<tr class="row" onClick="show_items(' + i + ');"><td>' + count + '</td>'; // 順序
-        for(j=0;j<6;++j){
-            if(j==1){ // invoice.card_type
-                if(einvoice_list[i][j] == '3J0002') carrier_type = '手機條碼';
-                else if(einvoice_list[i][j] == '1K0001') carrier_type = '悠遊卡';
-                else if(einvoice_list[i][j] == '2G0001') carrier_type = 'iCash';
-                else carrier_type = '其他載具';
-                invoice_list += '<td class="cell">' + carrier_type + ' ' + einvoice_list[i][++j] + '</td>';
-            }
-            else{
-                invoice_list += '<td class="cell">' + einvoice_list[i][j] + '</td>';
-            }
-        }
+        invoice_list += get_row_of_einvoice(i, count);
     }
     invoice_list += '</table>';
     document.getElementById('main_text').innerHTML = invoice_list;
@@ -253,7 +253,7 @@ function accounting(){ // show the accounting page
     <input type="radio" name="options" id="option2" autocomplete="off" checked>月\
   </label>\
   <label class="btn btn-default" onClick="change_query_date_div(\'d\');">\
-    <input onClick="alert(\'fuck\');" type="radio" name="options" id="option3" autocomplete="off">日\
+    <input type="radio" name="options" id="option3" autocomplete="off">日\
   </label>\
   <label class="btn btn-default" onClick="change_query_date_div(\'o\');">\
     <input type="radio" name="options" id="option3" autocomplete="off">自訂\
@@ -267,4 +267,44 @@ function accounting(){ // show the accounting page
     document.getElementById('main_text').innerHTML =  accounting_list
      + '<div id="accounting_table">' +get_accounting_table(start_date, end_date) + '</div>';
     document.getElementById('main_text').scrollTop = 0; // Scroll back to the top of div
+}
+function search_einvoice(search_col){
+    var count = 0;
+    search_goal = document.getElementById('search').value;
+    result_str = '<tr class="row header blue"><th class="cell">順序</th><th class="cell">消費日期</th><th class="cell" width="20%">載具</th><th class="cell">商店名稱</th><th class="cell">消費金額</th><th class="cell">發票號碼</th></tr>';
+    for(var i=einvoice_list.length-1; i >= 0; --i){
+        if( search_col=='item_name' ){
+            var items_array = einvoice_list[i][einvoice_list_item_idx];
+            for(var j=0; j < items_array.length; ++j){
+                if(items_array[j][1].indexOf(search_goal)!=-1){
+                    result_str += get_row_of_einvoice(i, ++count);
+                    break;
+                }
+            }
+        }
+        else{
+            if( search_col=='name' ) search_val = einvoice_list[i][3];
+            if( search_val.indexOf(search_goal)!=-1 ){
+                result_str += get_row_of_einvoice(i, ++count);
+            }
+        }
+    }
+    document.getElementById('einvoice_table').innerHTML = result_str;
+}
+function get_row_of_einvoice(einvoice_idx, count){
+    invoice_list = '<tr class="row" onClick="show_items(' + einvoice_idx + ');"><td>' + count + '</td>'; // 順序
+    for(var j=0;j<6;++j){
+        if(j==1){ // invoice.card_type
+            if(einvoice_list[einvoice_idx][j] == '3J0002') carrier_type = '手機條碼';
+            else if(einvoice_list[einvoice_idx][j] == '1K0001') carrier_type = '悠遊卡';
+            else if(einvoice_list[einvoice_idx][j] == '2G0001') carrier_type = 'iCash';
+            else carrier_type = '其他載具';
+            invoice_list += '<td class="cell">' + carrier_type + ' ' + einvoice_list[einvoice_idx][++j] + '</td>';
+        }
+        else{
+            invoice_list += '<td class="cell">' + einvoice_list[einvoice_idx][j] + '</td>';
+        }
+    }
+    invoice_list += '</tr>';
+    return invoice_list;
 }
