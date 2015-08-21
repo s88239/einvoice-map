@@ -58,9 +58,9 @@ class Item(object):
 	def __init__(self, item):
 		self.number = item["rowNum"]
 		self.description = item["description"].replace(' ', '')
-		self.quantity = item["quantity"]
-		self.unitPrice = item["unitPrice"]
-		self.amount = item["amount"]
+		self.quantity = round(float(item["quantity"]), 2)
+		self.unitPrice = round(float(item["unitPrice"]), 2)
+		self.amount = round(float(item["amount"]), 2)
 
 	def __str__(self):
 		return '|'.join(map(str, [self.number, self.description, self.quantity, self.unitPrice, self.amount]))

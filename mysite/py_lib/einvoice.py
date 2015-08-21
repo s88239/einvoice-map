@@ -153,10 +153,13 @@ def get_einvoice(user, start_date, end_date, all_sellers):
 	invoice_list = invoice_item_query(user, invoice_list)
 	for inv in invoice_list:
 		inv.add_carrier_name(user)	
-		for key, value in all_sellers.items():
-			(cur_store_name, cur_branch_name) = split_store_and_branch(inv.seller_name)	
-			if value.branch_name == cur_branch_name and (cur_store_name=='' and test_store_name(value.store_name) or cur_store_name[:2] == value.store_name[:2]):
-				inv.add_seller(value)
+		#for key, value in all_sellers.items():
+		#	(cur_store_name, cur_branch_name) = split_store_and_branch(inv.seller_name)	
+		#	if value.branch_name == cur_branch_name and (cur_store_name=='' and test_store_name(value.store_name) or cur_store_name[:2] == value.store_name[:2]):
+		#		inv.add_seller(value)
+		#		break
+		#if inv.seller == None:
+		#	inv.add_seller(Seller(-1, inv.seller_name, '', 0, 0))
 	return invoice_list
 
 # def login(account, password):

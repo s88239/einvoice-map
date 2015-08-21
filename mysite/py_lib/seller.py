@@ -29,7 +29,7 @@ class Seller(object):
 		self.top_item = i
 
 	def __str__(self):
-		return self.id + ' ' + self.store_name + ' ' + self.branch_name + ' ' + self.address + ' ' + self.longitude + ' ' + self.latitude
+		return str(self.id) + ' ' + self.store_name + ' ' + self.branch_name + ' ' + self.address + ' ' + str(self.longitude) + ' ' + str(self.latitude)
 
 def list_sellers(csv_file):
 	#key is the ID

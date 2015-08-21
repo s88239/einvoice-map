@@ -30,7 +30,8 @@ class User(object):
 
 		self.carriers = einvoice.carrier_query(self)
 		self.invoice_list, self.invoices_to_database = self.get_invoice_list(all_sellers)
-		
+		self.seller_to_invoice(all_sellers)		
+
 		#key is the id of seller
 		self.sellers = {}
 
@@ -42,13 +43,22 @@ class User(object):
 
 		self.seller_not_on_csv = []
 	
+	def seller_to_invoice(self, all_sellers):
+		for inv in self.invoice_list:
+			for key, value in all_sellers.items():
+				(cur_store_name, cur_branch_name) = split_store_and_branch(inv.seller_name)	
+				if value.branch_name == cur_branch_name and (cur_store_name=='' and test_store_name(value.store_name) or cur_store_name[:2] == value.store_name[:2]):
+					inv.add_seller(value)
+					break
+			if inv.seller == None:
+				inv.add_seller(Seller(-1, inv.seller_name, '', 0, 0))
+
 
 	def get_invoice_list(self, all_sellers):
 		invoice_list = []
 		invoices_from_database = InvoiceTable.objects.filter(card_no = self.card_no)
 		for carrier in self.carriers:
 			invoices_from_database = invoices_from_database | InvoiceTable.objects.filter(card_no=carrier['carrierId2'])
-		print(len(invoices_from_database))
 		now = datetime.datetime.now()
 		for invoice in invoices_from_database:
 			details = {}
@@ -84,7 +94,7 @@ class User(object):
 				item['amount'] = inv_items[i+4]
 				i += 5				
 				invoice.add_item(item)
-
+			
 			invoice_list.append(invoice)
 		if len(invoices_from_database) == 0:
 			for year in range(now.year-1, now.year+1):
@@ -156,7 +166,15 @@ class User(object):
 		for ele in self.invoice_list:
 			invoice_num_str += ele.inv_num + ' '
 		return invoice_num_str.strip()
-
+	
+	def store_unmatchseller(self):
+		for ele in self.seller_not_on_csv:
+			try:
+				data = UnMatchSellerTable.objects.get(seller_name = ele)
+			except IntegrityError as e:
+				data= UnMatchSellerTable.objects.create( seller_name =ele )
+				data.save()
+	
 	def store_invoice_database(self):
 		for invoice in self.invoices_to_database:
 			data = InvoiceTable.objects.create(inv_num=invoice.inv_num,
@@ -308,6 +326,7 @@ def login(account, password):
 	user.store_user_database()
 	user.store_carrier_database()
 	user.store_invoice_database()
+	user.store_unmatchseller()
 
 	(x, y) = clustering(user.sellers)
 	return x,y,user.sort_inv_list()
