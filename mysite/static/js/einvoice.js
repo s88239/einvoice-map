@@ -106,13 +106,12 @@ function search_shop(search_col){
             }
             else if( search_col=='address' ){
                 var current_shop_address = shop_data[shop_idx][5].replace("臺","台");
-                [current_county, current_town, current_others] = break_address(current_shop_address);
+                current_broken_address = break_address(current_shop_address);
                 var search_goal = search_goal.replace("臺","台");
-                [search_county, search_town, search_others] = break_address(search_goal);
-                //alert(search_county +':'+search_town+':'+search_others);
-                if( ( search_county=='' || search_county==current_county ) 
-                    && (search_town=='' || search_town==current_town)
-                    && (search_others=='' || current_others.indexOf(search_others)!=-1 )
+                search_broken_address = break_address(search_goal);
+                if( ( search_broken_address[0]=='' || search_broken_address[0]==current_broken_address[0] ) 
+                    && (search_broken_address[1]=='' || search_broken_address[1]==current_broken_address[1])
+                    && (search_broken_address[2]=='' || current_broken_address[2].indexOf(search_broken_address[2])!=-1 )
                     || current_shop_address.indexOf(search_goal)!=-1 ){
                     result_str += get_row_of_shop(shop_idx, ++count);
                 }
