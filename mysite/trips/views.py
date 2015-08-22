@@ -52,6 +52,7 @@ def TGOS(request):
 		for item in cur_einvoice.item:
 			items.append([item.description,item.quantity,item.unitPrice,item.amount])
 
+		cur_seller_idx = -1
 		for seller_idx in range(len(seller_list)): # get the idx of seller in einvoice
 			if cur_einvoice.seller == seller_list[seller_idx]:
 				cur_seller_idx = seller_idx
@@ -63,7 +64,7 @@ def TGOS(request):
 			cur_einvoice.seller_name,
 			cur_einvoice.amount,
 			cur_einvoice.inv_num,
-			seller_idx,
+			cur_seller_idx,
 			items])
 	'''except:
 		string = traceback.format_exc()
