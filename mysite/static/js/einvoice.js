@@ -460,10 +460,12 @@ function search_each_einvoice(type, search_col, search_goal){
             var items_array = einvoice_list[i][einvoice_list_item_idx];
             for(var j=0; j < items_array.length; ++j){
                 if(items_array[j][0].indexOf(search_goal)!=-1){
-                    if(type=='einvoice') result_str += get_row_of_einvoice(i, ++count);
-                    else if(type=='item') result_str += get_row_of_item(i, j, ++count);
                     total_amount += parseInt(einvoice_list[i][einvoice_list_item_idx][j][3]);
-                    break;
+                    if(type=='einvoice'){
+                        result_str += get_row_of_einvoice(i, ++count);
+                        break;
+                    }
+                    else if(type=='item') result_str += get_row_of_item(i, j, ++count);
                 }
             }
         }
