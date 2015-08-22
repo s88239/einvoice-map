@@ -51,6 +51,11 @@ def TGOS(request):
 		items = []
 		for item in cur_einvoice.item:
 			items.append([item.description,item.quantity,item.unitPrice,item.amount])
+
+		for seller_idx in range(seller_list): # get the idx of seller in einvoice
+			if cur_einvoice.seller == seller_list[seller_idx]:
+				cur_seller_idx = seller_idx
+				break
 		sorted_invoice_list.append([
 			cur_einvoice.inv_date.getDate(),
 			cur_einvoice.carrier_name,
@@ -58,6 +63,7 @@ def TGOS(request):
 			cur_einvoice.seller_name,
 			cur_einvoice.amount,
 			cur_einvoice.inv_num,
+			seller_idx,
 			items])
 	'''except:
 		string = traceback.format_exc()
