@@ -49,7 +49,8 @@ class User(object):
 		for inv in self.invoice_list:
 			for key, value in all_sellers.items():
 				(cur_store_name, cur_branch_name) = split_store_and_branch(inv.seller_name)	
-				if value.branch_name == cur_branch_name and (cur_store_name=='' and test_store_name(value.store_name) or cur_store_name[:2] == value.store_name[:2]):
+				if value.branch_name == cur_branch_name
+					and (cur_store_name=='' and test_store_name(value.store_name) or value.store_name in cur_store_name):
 					inv.add_seller(value)
 					break
 			if inv.seller == None:
@@ -277,16 +278,17 @@ class User(object):
 				if self.all_items[i][j] >= top:
 					self.top_item[i].append( (j, self.all_items[i][j]) )
 
-		for i in self.visit_frequency:
+		for seller_name in self.visit_frequency:
 			seller_on_csv = False
-			for j in all_sellers:
-				(cur_store_name, cur_branch_name) = split_store_and_branch(i)
-				if all_sellers[j].branch_name == cur_branch_name and (cur_store_name=='' and test_store_name(all_sellers[j].store_name) or cur_store_name[:2]==all_sellers[j].store_name[:2]):
-					self.add_seller(all_sellers[j],i)
-					self.sellers[all_sellers[j].id].invoice_list = tmp_invoice_list[i]
+			for csv_seller_key in all_sellers:
+				(cur_store_name, cur_branch_name) = split_store_and_branch(seller_name)
+				if all_sellers[csv_seller_key].branch_name == cur_branch_name
+					and (cur_store_name=='' and test_store_name(all_sellers[csv_seller_key].store_name)	or all_sellers[csv_seller_key].store_name in cur_store_name):
+					self.add_seller(all_sellers[csv_seller_key],seller_name)
+					self.sellers[all_sellers[csv_seller_key].id].invoice_list = tmp_invoice_list[seller_name]
 					seller_on_csv = True
 			if not seller_on_csv:
-				self.seller_not_on_csv.append(i)
+				self.seller_not_on_csv.append(seller_name)
 
 
 def clustering(user):
