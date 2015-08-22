@@ -362,11 +362,11 @@ function get_accounting_table(start_date, end_date){
     for(var i=einvoice_list.length-1;i>=0;--i){ // query sorted invoice list
         var cur_date = einvoice_list[i][0];
         if(start_date <= cur_date && cur_date <= end_date){
+            total_amount += einvoice_list[i][total_price_idx];
             accounting_table_str += get_row_of_einvoice_with_item(i, ++item_count);
         }
     }
-    accounting_table_str += '</table>';//<font color="blue" size="+2">消費總金額：' + total_amount + '</font>';
-    return accounting_table_str;
+    return '<div id="total_amount" align="center"><h2>' + total_amount + '</h2></div>' + accounting_table_str;
 }
 function accounting(){ // show the accounting page
     showBlock('detail',false);
@@ -392,12 +392,13 @@ function accounting(){ // show the accounting page
       </label>\
     </div>\
     <br />\
-    <div id="query_date" style="padding: 10px">' + get_query_date_string('m') + '</div>\
+    <div id="query_date" style="padding-top: 10px">' + get_query_date_string('m') + '</div>\
+    <h3><span class="label label-warning">消費總金額</span></h3>\
     </center>';
     var start_date = get_formated_date(today_year, today_month, 1);
     var end_date = get_formated_date(today_year, today_month, today_day);
-    document.getElementById('main_text').innerHTML =  accounting_list
-     + '<div id="accounting_table">' + get_accounting_table(start_date, end_date) + '</div>';
+    document.getElementById('main_text').innerHTML =  accounting_list;
+    document.getElementById('main_text').innerHTML += '<div id="accounting_table">' + get_accounting_table(start_date, end_date) + '</div>';
     document.getElementById('main_text').scrollTop = 0; // Scroll back to the top of div
 }
 function search_einvoice(search_col){
@@ -432,7 +433,6 @@ function get_row_of_einvoice_with_item(einvoice_idx, count){
     for(var j=0;j<items_array.length;++j){ // # 商品名稱 數量 單價 總價
         if( parseInt(items_array[j][total_price_idx]) == 0) continue;
         var item_detail = '';
-        //total_amount += parseInt(items_array[j][total_price_idx]);
         for(var kk=0;kk<items_array[j].length;++kk){
             item_detail += '<td class="cell">' + items_array[j][kk] + '</td>';
         }
@@ -453,6 +453,7 @@ function get_row_of_item(einvoice_idx, current_item_idx, count){
 }
 function search_each_einvoice(type, search_col, search_goal){
     var count = 0;
+    var total_amount = 0;
     var result_str = '';
     var search_val = '';
     for(var i=einvoice_list.length-1; i >= 0; --i){
@@ -462,6 +463,7 @@ function search_each_einvoice(type, search_col, search_goal){
                 if(items_array[j][0].indexOf(search_goal)!=-1){
                     if(type=='einvoice') result_str += get_row_of_einvoice(i, ++count);
                     else if(type=='item') result_str += get_row_of_item(i, j, ++count);
+                    total_amount += einvoice_list[i][einvoice_list_item_idx][j][3];
                     break;
                 }
             }
@@ -471,8 +473,10 @@ function search_each_einvoice(type, search_col, search_goal){
             if( search_val.indexOf(search_goal)!=-1 ){
                 if(type=='einvoice') result_str += get_row_of_einvoice(i, ++count);
                 else if(type=='item') result_str += get_row_of_einvoice_with_item(i, ++count);
+                total_amount += einvoice_list[i][total_price_idx];
             }
         }
     }
+    if(type=='item') document.getElementById('total_amount').innerHTML = '<h2>' + total_amount + '</h2>';
     return result_str;
 }

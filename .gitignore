@@ -5,3 +5,4 @@ staticfiles
 db.sqlite3
 requirement.txt
 einvoice-map-test
+shop_address.py
