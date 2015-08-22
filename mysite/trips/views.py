@@ -54,7 +54,7 @@ def TGOS(request):
 
 		cur_seller_idx = -1
 		for seller_idx in range(len(seller_list)): # get the idx of seller in einvoice
-			if cur_einvoice.seller == seller_list[seller_idx]:
+			if cur_einvoice.seller.store_name == seller_list[seller_idx].store_name and cur_einvoice.seller.branch_name == seller_list[seller_idx].branch_name:
 				cur_seller_idx = seller_idx
 				break
 		sorted_invoice_list.append([
