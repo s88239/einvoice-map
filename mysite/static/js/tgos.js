@@ -2,7 +2,7 @@ var pMap = null;
 function InitWnd() {
     var pOMap = document.getElementById("TGMap");
     pMap = new TGOS.TGOnlineMap(pOMap, TGOS.TGCoordSys.EPSG3857); // set coordinate to WGS84
-    pMap.setCenter(new TGOS.TGPoint(121.516946, 25.047941) );  // set the center of the initial map
+    pMap.setCenter(new TGOS.TGPoint(center_point[0], center_point[1]) );  // set the center of the initial map
     pMap.setZoom(13); // Zooming scale
     addPosition(shop_data);
 }

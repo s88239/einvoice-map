@@ -270,6 +270,9 @@ function accounting(){ // show the accounting page
       <label class="btn btn-default" onClick="change_query_date_div(\'o\');">\
         <input type="radio" name="options" id="option3" autocomplete="off">自訂\
       </label>\
+      <label class="btn btn-default" onClick="search_item();">\
+        <input type="radio" name="options" id="option3" autocomplete="off">搜尋\
+      </label>\
     </div>\
     <br />\
     <div id="query_date" style="padding: 10px">' + get_query_date_string('m') + '</div>\
@@ -427,4 +430,28 @@ function break_address(address){ // 分解地址成 [縣市,鄉鎮市區,其他]
         }
     }
     return [county,town,others];
+}
+function search_item(search_col){
+    var item_count = 0; // 計算商品數目
+    var total_amount = 0; // 計算總金額
+    accounting_table_str = '<table class="table">\
+    <tr class="row header green"><th class="cell">順序</th><th class="cell">日期</th><th class="cell">商店名稱</th><th class="cell">商品名稱</th><th class="cell">數量</th><th class="cell">單價</th><th class="cell">總價</th></tr>';
+    for(var i=einvoice_list.length-1;i>=0;--i){ // query sorted invoice list
+        var cur_date = einvoice_list[i][0];
+        if(start_date <= cur_date && cur_date <= end_date){
+            var shop_detail = '<td class="cell">' + cur_date + '</td><td class="cell">' + einvoice_list[i][shop_idx] + '</td>';
+            var items_array = einvoice_list[i][einvoice_list_item_idx];
+            for(var j=0;j<items_array.length;++j){ // # 商品名稱 數量 單價 總價
+                if( parseInt(items_array[j][total_price_idx]) == 0) continue;
+                var item_detail = '';
+                ++item_count;
+                total_amount += parseInt(items_array[j][total_price_idx]);
+                for(var kk=0;kk<items_array[j].length;++kk){
+                    item_detail += '<td class="cell">' + items_array[j][kk] + '</td>';
+                }
+                accounting_table_str += '<tr class="row"><td class="cell">' + item_count + '</td>' + shop_detail + item_detail + '</tr>';
+            }
+        }
+    }
+    accounting_table_str += '</table><font color="blue" size="+2">消費總金額：' + total_amount + '</font>';
 }

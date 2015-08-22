@@ -14,8 +14,10 @@ def TGOS(request):
 	account = request.POST['account']
 	password = request.POST['password']
 	#try:
-	(sellers,sorted_key,einvoice_list) = login(account, password)
+	(sellers,sorted_key,einvoice_list,center) = login(account, password)
 	
+	# get center point
+	center_point = [center[0], center[1]];
 	# get invoice list by shop
 	seller_list = []
 	for key in sorted_key:
@@ -66,7 +68,7 @@ def TGOS(request):
 		)'''
 	return render(request,
 		'TGOS.html',
-		{'sellers': seller_list, 'einvoice': sorted_invoice_list},
+		{'sellers': seller_list, 'einvoice': sorted_invoice_list, 'center': center_point},
 		context_instance = RequestContext(request)
 		)
 #{'current_time': datetime.now()}
