@@ -235,6 +235,11 @@ class User(object):
 		if by_date:
 			return sorted(self.invoice_list, key=lambda inv: inv.inv_date.getDate())
 
+	def sort_inv_list_in_sellers(self, by_date=True):
+		if by_date:
+			for key in self.sellers:
+				self.sellers[key].invoice_list = sorted(self.sellers[key].invoice_list, key=lambda inv: inv.inv_date.getDate(), reverse=True)
+
 	def statistics(self, all_sellers):
 		def is_item(item):
 			for not_item in User.not_item_list:
@@ -330,6 +335,7 @@ def login(account, password):
 		return False
 
 	user.statistics(all_sellers)
+	user.sort_inv_list_in_sellers()
 	user.store_user_database()
 	user.store_carrier_database()
 	user.store_invoice_database()
