@@ -53,8 +53,8 @@ def TGOS(request):
 			items.append([item.description,item.quantity,item.unitPrice,item.amount])
 
 		cur_seller_idx = -1
-		for sorted_key_idx in range(len(sorted_key)): # get the idx of seller in einvoice
-			if cur_einvoice.seller == sellers[ sorted_key[sorted_key_idx] ]:
+		for shop_idx in range(len(seller_list)): # get the idx of seller in einvoice
+			if cur_einvoice.seller.store_name == seller_list[shop_idx][3] and cur_einvoice.seller.branch_name == seller_list[shop_idx][4]:
 				cur_seller_idx = sorted_key_idx
 				break
 		sorted_invoice_list.append([
