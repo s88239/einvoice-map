@@ -144,8 +144,9 @@ def invoice_item_query(user, invoice_list):
 			invoice_item_url = 'https://www.einvoice.nat.gov.tw/PB2CAPIVAN/invServ/InvServ?' + param_list + '&signature=' + signature.decode()
 			with urllib.request.urlopen( invoice_item_url ) as url:
 				data = json.loads(url.read().decode())
-			for item in data["details"]:
-				invoice_list[i].add_item(item) 
+			if "details" in data:	
+				for item in data["details"]:
+					invoice_list[i].add_item(item) 
 	return invoice_list
 
 def get_einvoice(user, start_date, end_date, all_sellers):
