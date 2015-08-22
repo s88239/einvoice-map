@@ -50,6 +50,7 @@ def url_parameter(api_key, param_dict):
 
 def carrier_query(user):
 	data = {}
+	count = 0
 	while "code" not in data or data["code"] != 200:
 		param_dict = {}
 		param_dict["version"] = "1.0"
@@ -67,6 +68,10 @@ def carrier_query(user):
 
 		with urllib.request.urlopen(carrier_query_url) as url:
 			data = json.loads(url.read().decode())
+
+		if count > 10:
+			return False
+		count += 1
 
 	# for carrier_property in data["carriers"]:
 	# 	print(carrier_property)
