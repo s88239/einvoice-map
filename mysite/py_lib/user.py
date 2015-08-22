@@ -237,8 +237,8 @@ class User(object):
 
 	def sort_inv_list_in_sellers(self, by_date=True):
 		if by_date:
-			for (key, value) in self.sellers:
-				value.invoice_list = sorted(value.invoice_list, key=lambda inv: inv.inv_date.getDate())
+			for key in self.sellers:
+				self.sellers[key].invoice_list = sorted(self.sellers[key].invoice_list, key=lambda inv: inv.inv_date.getDate(), reverse=True)
 
 	def statistics(self, all_sellers):
 		def is_item(item):
