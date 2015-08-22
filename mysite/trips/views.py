@@ -14,7 +14,10 @@ def TGOS(request):
 	account = request.POST['account']
 	password = request.POST['password']
 	#try:
-	(sellers,sorted_key,einvoice_list,center) = login(account, password)
+	result = login(account, password)
+	if result == False:
+		return render(request,'error.html')
+	(sellers,sorted_key,einvoice_list,center) = result
 	
 	# get center point
 	center_point = [center[0], center[1]];
