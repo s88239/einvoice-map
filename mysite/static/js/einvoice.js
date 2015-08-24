@@ -1,5 +1,6 @@
 invoice_idx = shop_data[0].length-1; // 發票list位於商家list的位置
 item_idx = shop_data[0][invoice_idx][0].length-1; // list位於發票list的位置
+enterprise_array = []; // format at each term: [enterprise,branch_idx_array,freq,total amount]
 function showBlock(blockid, status){
     document.getElementById(blockid).style.display = (status==true)?"block":"none";
 }
@@ -535,9 +536,80 @@ function statistics(){
       <label class="btn btn-default" onClick="get_statistics(\'amount\');">\
         <input type="radio" name="options" id="option2" autocomplete="off">依金額\
       </label>\
+      <label class="btn btn-default" onClick="get_enterprise_statistics(\'freq\');">\
+        <input type="radio" name="options" id="option3" autocomplete="off">依公司頻率\
+      </label>\
+      <label class="btn btn-default" onClick="get_enterprise_statistics(\'amount\');">\
+        <input type="radio" name="options" id="option3" autocomplete="off">依公司金額\
+      </label>\
     </div>\
     <div id="query_statistics" style="padding-top: 10px">' + get_statistics_str('freq') + '</div>';
     document.getElementById('main_text').innerHTML = statistics_str;
     document.getElementById('main_text').scrollTop = 0; // Scroll back to the top of div
     //return statistics_str;
+}
+function get_enterprise_statistics(type){
+    calculate_enterprise_statistics();
+    if( type=='freq' ){
+        type_idx = 2;
+        type_name = '頻率';
+    }
+    else if( type=='amount' ){
+        type_idx = 3;
+        type_name = '消費總金額';
+    }
+    else return;
+    var enterprise_str = '<table class="table"><tr class="row header blue"><th class="cell">名次</th>\
+    <th class="cell">商店名稱</th><th class="cell">分店名稱</th>\
+    <th class="cell">' + type_name + '</th><th class="cell">比率</th></tr>';
+    var total_num = 0;
+
+    // ****** start sorting ******//
+    var raw_data = [];
+    for(var enterprise_idx = 0; enterprise_idx < enterprise_array.length; ++enterprise_idx){
+        total_num += enterprise_array[enterprise_idx][type_idx];
+        raw_data.push( [enterprise_idx, enterprise_array[enterprise_idx][type_idx]] );
+    }
+    sorted_data = sorting(raw_data, true);
+    // ****** end of sorting ******//
+
+    for(var sort_idx = 0; sort_idx < sorted_data.length; ++sort_idx){
+        var ratio = sorted_data[sort_idx][1]/total_num * 100;
+        var enterprise_idx = sorted_data[sort_idx][0];
+        enterprise_str += '<tr class="row"><td class="cell">' + (sort_idx+1) + '</td>\
+        <td class="cell">' + enterprise_array[enterprise_idx][0] + '</td><td class="cell">';
+        var counted_word = 0;
+        for(var i = 0; i < enterprise_array[enterprise_idx][1].length; ++i){
+            shop_idx = enterprise_array[enterprise_idx][1][i];
+            enterprise_str += '<a href="javascript: show_einvoice(' + shop_idx + ');">';
+            enterprise_str += (shop_data[shop_idx][4]=='')? '總公司':shop_data[shop_idx][4];
+            enterprise_str += '</a> ';
+            counted_word += shop_data[shop_idx][4].length;
+            if( counted_word>=20){
+                enterprise_str += '<br />';
+                counted_word = 0;
+            }
+        }
+        enterprise_str += '</td><td class="cell">' + enterprise_array[enterprise_idx][type_idx] + '</td><td class="cell">' + ratio.toFixed(2) + '</td></tr>';
+    }
+    document.getElementById('query_statistics').innerHTML = enterprise_str;
+}
+function calculate_enterprise_statistics(){
+    if( enterprise_array.length!=0 ) return; // already establish the enterprise array
+    for(var shop_idx = 0; shop_idx < shop_data.length; ++shop_idx){
+        in_array_flag = false;
+        for(var enterprise_idx = 0; enterprise_idx < enterprise_array.length; ++enterprise_idx){
+            if(shop_data[shop_idx][3] == enterprise_array[enterprise_idx][0]){
+                enterprise_array[enterprise_idx][1].push(shop_idx);
+                enterprise_array[enterprise_idx][2] += shop_data[shop_idx][6];
+                enterprise_array[enterprise_idx][3] += shop_data[shop_idx][7];
+                in_array_flag = true;
+                break;
+            }
+        }
+        if(!in_array_flag){
+                enterprise_array.push( [shop_data[shop_idx][3], [shop_idx], shop_data[shop_idx][6], shop_data[shop_idx][7]]);
+                //                       enterprise name   ,  shop_idx array,   total freq.       ,     total amount
+        }
+    }
 }
