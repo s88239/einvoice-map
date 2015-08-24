@@ -481,3 +481,63 @@ function search_each_einvoice(type, search_col, search_goal){
     if(type=='item') document.getElementById('total_amount').innerHTML = '<h2>' + total_amount + '</h2>';
     return result_str;
 }
+function sorting(raw_data, invert){
+    return sorted_data = (invert==true)?raw_data.sort(function(a, b){return b[1]-a[1]})
+                                        :raw_data.sort(function(a, b){return a[1]-b[1]});
+}
+function get_statistics_str(type){
+    if( type=='freq' ){
+        type_idx = 6;
+        type_name = '頻率';
+    }
+    else if( type=='amount' ){
+        type_idx = 7;
+        type_name = '消費總金額';
+    }
+    else return;
+    var statistics_str = '<table class="table"><tr class="row header blue"><th class="cell">名次</th>\
+    <th class="cell">商店名稱</th><th class="cell">分店名稱</th>\
+    <th class="cell">' + type_name + '</th><th class="cell">比率</th></tr>';
+    var total_num = 0;
+
+    // ****** start sorting ******//
+    var raw_data = [];
+    for(var i=0; i<shop_data.length; ++i){
+        total_num += shop_data[i][type_idx];
+        raw_data.push( [i,shop_data[i][type_idx]] );
+    }
+    sorted_data = sorting(raw_data, true);
+    // ****** end of sorting ******//
+
+    for(var sort_idx = 0; sort_idx < sorted_data.length ; ++sort_idx){
+        var ratio = sorted_data[sort_idx][1]/total_num * 100;
+        var shop_idx = sorted_data[sort_idx][0];
+        statistics_str += '<tr class="row" onClick="show_einvoice(' + shop_idx + ');"><td class="cell">' + (sort_idx+1) + '</td>\
+        <td class="cell">' + shop_data[shop_idx][3] + '</td><td class="cell">' + shop_data[shop_idx][4] + '</td>\
+        <td class="cell">' + shop_data[shop_idx][type_idx] + '</td><td class="cell">' + ratio.toFixed(2) + '</td></tr>';
+    }
+    statistics_str += '</table>';
+    return statistics_str;
+}
+function get_statistics(type){
+    document.getElementById('query_statistics').innerHTML = get_statistics_str(type);
+}
+function statistics(){
+    showBlock('detail',false);
+    showBlock('einvoice_detail',false);
+    showBlock('TGMap',false);
+    showBlock('main_text',true);
+    var statistics_str = '<div class="title" align="center"><h2>統計資料</h2></div>\
+    <center><div class="btn-group" data-toggle="buttons">\
+      <label class="btn btn-default active" onClick="get_statistics(\'freq\');">\
+        <input type="radio" name="options" id="option1" autocomplete="off" checked>依頻率\
+      </label>\
+      <label class="btn btn-default" onClick="get_statistics(\'amount\');">\
+        <input type="radio" name="options" id="option2" autocomplete="off">依金額\
+      </label>\
+    </div>\
+    <div id="query_statistics" style="padding-top: 10px">' + get_statistics_str('freq') + '</div>';
+    document.getElementById('main_text').innerHTML = statistics_str;
+    document.getElementById('main_text').scrollTop = 0; // Scroll back to the top of div
+    //return statistics_str;
+}
