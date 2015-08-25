@@ -455,7 +455,7 @@ function get_row_of_item(einvoice_idx, current_item_idx, count){
     return accounting_table_str;
 }
 function search_each_einvoice(type, search_col, search_goal){
-    count = 0;
+    var count = 0;
     var total_amount = 0;
     var result_str = '';
     var search_val = '';
@@ -544,9 +544,6 @@ function statistics(){
       </label>\
       <label class="btn btn-default" onClick="get_enterprise_statistics(\'amount\');">\
         <input type="radio" name="options" id="option3" autocomplete="off">依公司金額\
-      </label>\
-      <label class="btn btn-default" onClick="get_statistics(\'search\');">\
-        <input type="radio" name="options" id="option3" autocomplete="off">依分群\
       </label>\
     </div>\
     <div id="query_statistics" style="padding-top: 10px">' + get_statistics_str('freq') + '</div>';
