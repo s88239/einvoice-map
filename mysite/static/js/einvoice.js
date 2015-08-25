@@ -48,12 +48,12 @@ function show_all_shop(){
     var invoice_list = '<div class="title" align="center"><h2>商店清單</h2></div>\
     <div class="col-lg-4 col-lg-offset-4" style="margin-bottom: 20px">\
         <div class="input-group">\
-          <input id="search" type="text" class="form-control" aria-label="..." placeholder="e.g. 統一超商-台大">\
+          <input id="search" type="text" class="form-control" aria-label="..." placeholder="e.g. 全聯 統一超商-台大">\
           <div class="input-group-btn">\
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">搜尋 <span class="caret"></span></button>\
             <ul class="dropdown-menu dropdown-menu-right">\
               <li><a href="javascript: search_shop(\'name\');">商店名稱</a></li>\
-              <li><a href="javascript: search_shop(\'address\');">商品地址</a></li>\
+              <li><a href="javascript: search_shop(\'address\');">商店地址</a></li>\
               <li><a href="javascript: search_shop(\'item_name\');">商品名稱</a></li>\
             </ul>\
           </div>\
@@ -78,7 +78,7 @@ function search_shop(search_col){
             for(var current_invoice_idx=0; current_invoice_idx<shop_data[shop_idx][invoice_idx].length; ++current_invoice_idx){ // 第幾張發票
                 var items_array = shop_data[shop_idx][invoice_idx][current_invoice_idx][item_idx]; // 該張發票所有購買商品
                 for( var current_item_idx=0; current_item_idx<items_array.length; ++current_item_idx){
-                    if( items_array[current_item_idx][0].indexOf(search_goal)!=-1 ){
+                    if( is_term_match(search_goal, [items_array[current_item_idx][0]] )==true ){
                         result_str += get_row_of_shop(shop_idx, ++count);
                         find_item_flag = true;
                         break;
@@ -91,30 +91,24 @@ function search_shop(search_col){
             }
         }
         else{
-            if( search_col=='name' ){
-                search_goal_split = search_goal.split("-");
-                search_shop_val = shop_data[shop_idx][3];
-                search_branch_val = shop_data[shop_idx][4];
-                if(search_goal_split.length==1){
-                    if(search_shop_val.indexOf(search_goal)!=-1 || search_branch_val.indexOf(search_goal)!=-1 ){
-                        result_str += get_row_of_shop(shop_idx, ++count);
-                    }
-                }
-                else if( search_shop_val.indexOf(search_goal_split[0])!=-1
-                    && search_branch_val.indexOf(search_goal_split[1])!=-1 ){
+            if( search_col=='name' ){ // search the name of shop
+                if( is_term_match(search_goal, [shop_data[shop_idx][3], shop_data[shop_idx][4]] )==true ){
                     result_str += get_row_of_shop(shop_idx, ++count);
                 }
             }
             else if( search_col=='address' ){
                 var current_shop_address = shop_data[shop_idx][5].replace("臺","台");
-                current_broken_address = break_address(current_shop_address);
-                var search_goal = search_goal.replace("臺","台");
-                search_broken_address = break_address(search_goal);
-                if( ( search_broken_address[0]=='' || search_broken_address[0]==current_broken_address[0] ) 
-                    && (search_broken_address[1]=='' || search_broken_address[1]==current_broken_address[1])
-                    && (search_broken_address[2]=='' || current_broken_address[2].indexOf(search_broken_address[2])!=-1 )
-                    || current_shop_address.indexOf(search_goal)!=-1 ){
-                    result_str += get_row_of_shop(shop_idx, ++count);
+                var current_broken_address = break_address(current_shop_address);
+                var split_term = search_goal.split(' ');
+                for(var term_idx in split_term){ // try to match multiple search
+                    var search_goal_term = split_term[term_idx].replace("臺","台");
+                    search_broken_address = break_address(search_goal_term);
+                    if( ( search_broken_address[0]=='' || search_broken_address[0]==current_broken_address[0] ) 
+                        && (search_broken_address[1]=='' || search_broken_address[1]==current_broken_address[1])
+                        && (search_broken_address[2]=='' || current_broken_address[2].indexOf(search_broken_address[2])!=-1 )
+                        || current_shop_address.indexOf(search_goal_term)!=-1 ){ // address match
+                        result_str += get_row_of_shop(shop_idx, ++count);
+                    }
                 }
             }
         }
@@ -203,7 +197,7 @@ function show_all_einvoice(){
     var invoice_list = '<div class="title" align="center"><h2>電子發票清單</h2></div>\
     <div class="col-lg-4 col-lg-offset-4" style="margin-bottom: 20px">\
         <div class="input-group">\
-          <input id="search" type="text" class="form-control" aria-label="..." placeholder="Search">\
+          <input id="search" type="text" class="form-control" aria-label="..." placeholder="e.g. 全聯 統一超商-台大">\
           <div class="input-group-btn">\
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">搜尋 <span class="caret"></span></button>\
             <ul class="dropdown-menu dropdown-menu-right">\
@@ -269,7 +263,7 @@ function get_query_date_string(type){ // get html string to create <slect> menu 
 
     if(type=='s'){
         query_date_str = '<div class="col-lg-4 input-group">\
-              <input id="search" type="text" class="form-control" aria-label="..." placeholder="Search">\
+              <input id="search" type="text" class="form-control" aria-label="..." placeholder="可搜尋多個 e.g 全聯-華山 統一超商">\
               <div class="input-group-btn">\
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">搜尋 <span class="caret"></span></button>\
                 <ul class="dropdown-menu dropdown-menu-right">\
@@ -430,14 +424,8 @@ function search_item(search_col){
 
 function get_row_of_einvoice_with_item(einvoice_idx){
     var accounting_table_str = '';
-    var shop_detail = '<td class="cell">' + einvoice_list[einvoice_idx][0] + '</td>';
-
-    // **** get the full name of seller ***** //
-    var shop_idx = einvoice_list[einvoice_idx][einvoice_list_item_idx-1];
-    var shop_row = shop_data[shop_idx];
-    var delimeter = (shop_row[3]=='' || shop_row[4]=='')?'':'-';
-    shop_detail += '<td class="cell"><a href="javascript: show_einvoice(' + shop_idx + ');">'
-    + shop_row[3] + delimeter + shop_row[4] + '</a></td>';
+    var shop_detail = '<td class="cell">' + einvoice_list[einvoice_idx][0] + '</td>\
+    <td class="cell">' + get_full_shop_name(einvoice_idx) + '</td>';
 
     var items_array = einvoice_list[einvoice_idx][einvoice_list_item_idx];
     for(var j=0;j<items_array.length;++j){ // # 商品名稱 數量 單價 總價
@@ -454,7 +442,8 @@ function get_row_of_einvoice_with_item(einvoice_idx){
 function get_row_of_item(einvoice_idx, current_item_idx, count){
     var accounting_table_str = '<tr class="row"><td class="cell">' + count + '</td>\
     <td class="cell">' + einvoice_list[einvoice_idx][0] + '</td>\
-    <td class="cell">' + einvoice_list[einvoice_idx][shop_idx] + '</td>';
+    <td class="cell">' + get_full_shop_name(einvoice_idx) + '</td>';
+
     var items_array = einvoice_list[einvoice_idx][einvoice_list_item_idx];
     for(var i=0;i<items_array[current_item_idx].length;++i){
         accounting_table_str += '<td class="cell">' + items_array[current_item_idx][i] + '</td>';
@@ -471,7 +460,7 @@ function search_each_einvoice(type, search_col, search_goal){
         if( search_col=='item_name' ){
             var items_array = einvoice_list[i][einvoice_list_item_idx];
             for(var j=0; j < items_array.length; ++j){
-                if(items_array[j][0].indexOf(search_goal)!=-1){
+                if(is_term_match(search_goal,[items_array[j][0]])==true){
                     total_amount += parseInt(einvoice_list[i][einvoice_list_item_idx][j][3]);
                     if(type=='einvoice'){
                         result_str += get_row_of_einvoice(i, ++count);
@@ -484,13 +473,11 @@ function search_each_einvoice(type, search_col, search_goal){
         else{
             if( search_col=='name' ){
                 shop_idx = einvoice_list[i][einvoice_list_item_idx-1];
-                search_val = [einvoice_list[i][3], shop_data[shop_idx][3], shop_data[shop_idx][3]]; // 發票商家名稱, 商店名, 分店名
-                for( current_idx in search_val ){
-                    if( search_val[current_idx].indexOf(search_goal)!=-1 ){
-                        if(type=='einvoice') result_str += get_row_of_einvoice(i, ++count);
-                        else if(type=='item') result_str += get_row_of_einvoice_with_item(i);
-                        total_amount += parseInt(einvoice_list[i][total_price_idx]);
-                    }
+                search_val = [einvoice_list[i][3], shop_data[shop_idx][3], shop_data[shop_idx][4]]; // 發票商家名稱, 商店名, 分店名
+                if( is_term_match(search_goal,search_val)==true ){
+                    if(type=='einvoice') result_str += get_row_of_einvoice(i, ++count);
+                    else if(type=='item') result_str += get_row_of_einvoice_with_item(i);
+                    total_amount += parseInt(einvoice_list[i][total_price_idx]);
                 }
             }
         }
@@ -628,4 +615,36 @@ function calculate_enterprise_statistics(){
                 //                       enterprise name   ,  shop_idx array,   total freq.       ,     total amount
         }
     }
+}
+function is_term_match(requirment, current_row){
+    var split_term = requirment.split(' ');
+    for(var term_idx in split_term){
+        var find_flag = false;
+        for(var current_idx in current_row){
+            if(current_row[current_idx].indexOf(split_term[term_idx])!=-1){ // match etheir term in split_term
+                return true;
+            }
+        }
+        if( split_term[term_idx].indexOf('-')!=-1 ){ // logic operation: AND
+            split_term_by_dash = split_term[term_idx].split('-');
+            for(var dash_term_idx in split_term_by_dash){
+                var find_flag = false;
+                for(var current_idx in current_row){
+                    if( current_row[current_idx].indexOf(split_term_by_dash[dash_term_idx])!=-1){
+                        find_flag = true;
+                        break;
+                    }
+                }
+                if(find_flag==false) break; // can't match all term in split_term_by_dash
+            }
+            if(find_flag==true) return true; // match all term in split_term_by_dash
+        }
+    }
+    return false;
+}
+function get_full_shop_name(einvoice_idx){
+    var shop_idx = einvoice_list[einvoice_idx][einvoice_list_item_idx-1];
+    var shop_row = shop_data[shop_idx];
+    var delimeter = (shop_row[3]=='' || shop_row[4]=='')?'':'-';
+    return '<a href="javascript: show_einvoice(' + shop_idx + ');">' + shop_row[3] + delimeter + shop_row[4] + '</a>';
 }
