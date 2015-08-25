@@ -214,9 +214,9 @@ function show_all_einvoice(){
         </div>\
     </div>\
     <table id="einvoice_table" class="table"><tr class="row header blue"><th class="cell">順序</th><th class="cell">消費日期</th><th class="cell" width="20%">載具</th><th class="cell">商店名稱</th><th class="cell">消費金額</th><th class="cell">發票號碼</th></tr>';
-    var count = 1;
-    for(i=einvoice_list.length-1;i>=0;--i,++count){
-        invoice_list += get_row_of_einvoice(i, count);
+    var einvoice_count = 1;
+    for(i=einvoice_list.length-1;i>=0;--i,++einvoice_count){
+        invoice_list += get_row_of_einvoice(i, einvoice_count);
     }
     invoice_list += '</table>';
     document.getElementById('main_text').innerHTML = invoice_list;
@@ -355,7 +355,7 @@ function change_query_date(start_date_param, end_date_param){ // change the cont
 function get_accounting_table(start_date, end_date){
     if(start_date ==null) start_date = einvoice_list[0][0];
     if(end_date == null) end_date = einvoice_list[einvoice_list.length-1][0];
-    var item_count = 0; // 計算商品數目
+    item_count = 1;
     var total_amount = 0; // 計算總金額
     accounting_table_str = '<table id="item_table" class="table">\
     <tr class="row header green"><th class="cell">順序</th><th class="cell">日期</th><th class="cell">商店名稱</th><th class="cell">商品名稱</th><th class="cell">數量</th><th class="cell">單價</th><th class="cell">總價</th></tr>';
@@ -363,7 +363,7 @@ function get_accounting_table(start_date, end_date){
         var cur_date = einvoice_list[i][0];
         if(start_date <= cur_date && cur_date <= end_date){
             total_amount += parseInt(einvoice_list[i][total_price_idx]);
-            accounting_table_str += get_row_of_einvoice_with_item(i, ++item_count);
+            accounting_table_str += get_row_of_einvoice_with_item(i);
         }
     }
     return '<div id="total_amount" align="center"><h2>' + total_amount + '</h2></div>' + accounting_table_str;
@@ -421,22 +421,25 @@ function get_row_of_einvoice(einvoice_idx, count){
     return invoice_list;
 }
 function search_item(search_col){
+    item_count = 1;
     var search_goal = document.getElementById('search').value;
     var accounting_table_str = '<tr class="row header green"><th class="cell">順序</th><th class="cell">日期</th><th class="cell">商店名稱</th><th class="cell">商品名稱</th><th class="cell">數量</th><th class="cell">單價</th><th class="cell">總價</th></tr>'
     + search_each_einvoice('item', search_col, search_goal);
     document.getElementById('item_table').innerHTML = accounting_table_str;
 }
-function get_row_of_einvoice_with_item(einvoice_idx, count){
+
+function get_row_of_einvoice_with_item(einvoice_idx){
     var accounting_table_str = '';
     var shop_detail = '<td class="cell">' + einvoice_list[einvoice_idx][0] + '</td><td class="cell">' + einvoice_list[einvoice_idx][shop_idx] + '</td>';
     var items_array = einvoice_list[einvoice_idx][einvoice_list_item_idx];
     for(var j=0;j<items_array.length;++j){ // # 商品名稱 數量 單價 總價
-        if( parseInt(items_array[j][total_price_idx]) == 0) continue;
+        if( parseInt(items_array[j][3]) == 0) continue; // 總價為0的item不列入
         var item_detail = '';
         for(var kk=0;kk<items_array[j].length;++kk){
             item_detail += '<td class="cell">' + items_array[j][kk] + '</td>';
         }
-        accounting_table_str += '<tr class="row"><td class="cell">' + count + '</td>' + shop_detail + item_detail + '</tr>';
+        accounting_table_str += '<tr class="row"><td class="cell">' + item_count + '</td>' + shop_detail + item_detail + '</tr>';
+        ++item_count;
     }
     return accounting_table_str;
 }
@@ -452,7 +455,7 @@ function get_row_of_item(einvoice_idx, current_item_idx, count){
     return accounting_table_str;
 }
 function search_each_einvoice(type, search_col, search_goal){
-    var count = 0;
+    count = 0;
     var total_amount = 0;
     var result_str = '';
     var search_val = '';
@@ -474,7 +477,7 @@ function search_each_einvoice(type, search_col, search_goal){
             if( search_col=='name' ) search_val = einvoice_list[i][3];
             if( search_val.indexOf(search_goal)!=-1 ){
                 if(type=='einvoice') result_str += get_row_of_einvoice(i, ++count);
-                else if(type=='item') result_str += get_row_of_einvoice_with_item(i, ++count);
+                else if(type=='item') result_str += get_row_of_einvoice_with_item(i);
                 total_amount += parseInt(einvoice_list[i][total_price_idx]);
             }
         }
@@ -541,6 +544,9 @@ function statistics(){
       </label>\
       <label class="btn btn-default" onClick="get_enterprise_statistics(\'amount\');">\
         <input type="radio" name="options" id="option3" autocomplete="off">依公司金額\
+      </label>\
+      <label class="btn btn-default" onClick="get_statistics(\'search\');">\
+        <input type="radio" name="options" id="option3" autocomplete="off">依分群\
       </label>\
     </div>\
     <div id="query_statistics" style="padding-top: 10px">' + get_statistics_str('freq') + '</div>';
