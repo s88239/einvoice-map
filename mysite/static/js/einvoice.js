@@ -430,7 +430,15 @@ function search_item(search_col){
 
 function get_row_of_einvoice_with_item(einvoice_idx){
     var accounting_table_str = '';
-    var shop_detail = '<td class="cell">' + einvoice_list[einvoice_idx][0] + '</td><td class="cell">' + einvoice_list[einvoice_idx][shop_idx] + '</td>';
+    var shop_detail = '<td class="cell">' + einvoice_list[einvoice_idx][0] + '</td>';
+
+    // **** get the full name of seller ***** //
+    var shop_idx = einvoice_list[einvoice_idx][einvoice_list_item_idx-1];
+    var shop_row = shop_data[shop_idx];
+    var delimeter = (shop_row[3]=='' || shop_row[4]=='')?'':'-';
+    shop_detail += '<td class="cell"><a href="javascript: show_einvoice(' + shop_idx + ');">'
+    + shop_row[3] + delimeter + shop_row[4] + '</a></td>';
+
     var items_array = einvoice_list[einvoice_idx][einvoice_list_item_idx];
     for(var j=0;j<items_array.length;++j){ // # 商品名稱 數量 單價 總價
         if( parseInt(items_array[j][3]) == 0) continue; // 總價為0的item不列入
@@ -474,11 +482,16 @@ function search_each_einvoice(type, search_col, search_goal){
             }
         }
         else{
-            if( search_col=='name' ) search_val = einvoice_list[i][3];
-            if( search_val.indexOf(search_goal)!=-1 ){
-                if(type=='einvoice') result_str += get_row_of_einvoice(i, ++count);
-                else if(type=='item') result_str += get_row_of_einvoice_with_item(i);
-                total_amount += parseInt(einvoice_list[i][total_price_idx]);
+            if( search_col=='name' ){
+                shop_idx = einvoice_list[i][einvoice_list_item_idx-1];
+                search_val = [einvoice_list[i][3], shop_data[shop_idx][3], shop_data[shop_idx][3]]; // 發票商家名稱, 商店名, 分店名
+                for( current_search_val in search_val ){
+                    if( search_val.indexOf(search_goal)!=-1 ){
+                        if(type=='einvoice') result_str += get_row_of_einvoice(i, ++count);
+                        else if(type=='item') result_str += get_row_of_einvoice_with_item(i);
+                        total_amount += parseInt(einvoice_list[i][total_price_idx]);
+                    }
+                }
             }
         }
     }
