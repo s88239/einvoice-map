@@ -179,9 +179,8 @@ total_price_idx = 4;
 shop_idx = 3;
 function show_einvoice(target_shop_idx){
     invoice_array = shop_data[target_shop_idx];
-    var delimeter = (invoice_array[3]=='' || invoice_array[4]=='')?'':'-';
     var invoice_list = '<button type="button" class="btn btn-info" onClick="showBlock(\'einvoice_detail\', false);showBlock(\'main_text\', true);">返回電子發票列表</button>\
-    <font color="white"><center><h1>'+ invoice_array[3] + delimeter + invoice_array[4] + '</h1>'
+    <font color="white"><center><h1>'+ get_full_shop_name_by_shop_idx(target_shop_idx) + '</h1>'
     + invoice_array[5] // 地址
     +'</font><h3><font color="#FFAFFE"><b>頻率：' + invoice_array[6] + '</font>　<font color="FFD8AF">總消費金額：' + invoice_array[7] + '</font></b></h3>' // 頻率及總消費金額
     +'<font color="white" size="+1">最常購買商品：' + invoice_array[8] + '</font></center><br />'; //最常購買商品
@@ -521,6 +520,14 @@ function get_statistics_str(type){
         <td class="cell">' + shop_data[shop_idx][type_idx] + '</td><td class="cell">' + ratio.toFixed(2) + '</td></tr>';
     }
     statistics_str += '</table>';
+
+    // **** create pie chart ****//
+    for(var sort_idx in sorted_data){
+        var shop_idx = sorted_data[sort_idx][0];
+        sorted_data[sort_idx][0] = get_full_shop_name_by_shop_idx(shop_idx); // replace the name of shop intead of idx
+    }
+    make_pie_char(sorted_data, total_num);
+
     return statistics_str;
 }
 function get_statistics(type){
@@ -533,8 +540,8 @@ function statistics(){
     showBlock('main_text',true);
     var statistics_str = '<div class="title" align="center"><h2>統計資料</h2></div>\
     <center><div class="btn-group" data-toggle="buttons">\
-      <label class="btn btn-default active" onClick="get_statistics(\'freq\');">\
-        <input type="radio" name="options" id="option1" autocomplete="off" checked>依頻率\
+      <label class="btn btn-default" onClick="get_statistics(\'freq\');">\
+        <input type="radio" name="options" id="option1" autocomplete="off">依頻率\
       </label>\
       <label class="btn btn-default" onClick="get_statistics(\'amount\');">\
         <input type="radio" name="options" id="option2" autocomplete="off">依金額\
@@ -546,10 +553,14 @@ function statistics(){
         <input type="radio" name="options" id="option3" autocomplete="off">依公司金額\
       </label>\
     </div>\
-    <div id="query_statistics" style="padding-top: 10px">' + get_statistics_str('freq') + '</div>';
+    <div id="chartdiv">\
+        <h2><font color="blue">請點選上排按鈕以獲取統計資料</font></h2>\
+        <h3><font color="red">統計資料提供的資訊包含圓餅圖、排序及表格</font></h3>\
+        <br /><p><font color="purple"><b>依公司統計表示把所有分公司算在同一母公司裡去做統計與排序</b></font></p>\
+    </div>\
+    <div id="query_statistics"></div>';
     document.getElementById('main_text').innerHTML = statistics_str;
     document.getElementById('main_text').scrollTop = 0; // Scroll back to the top of div
-    //return statistics_str;
 }
 function get_enterprise_statistics(type){
     calculate_enterprise_statistics();
@@ -596,6 +607,13 @@ function get_enterprise_statistics(type){
         enterprise_str += '</td><td class="cell">' + enterprise_array[enterprise_idx][type_idx] + '</td><td class="cell">' + ratio.toFixed(2) + '</td></tr>';
     }
     document.getElementById('query_statistics').innerHTML = enterprise_str;
+
+    // **** create pie chart ****//
+    for(var sort_idx in sorted_data){
+        var enterprise_idx = sorted_data[sort_idx][0];
+        sorted_data[sort_idx][0] = enterprise_array[enterprise_idx][0]; // replace the name of enterprise intead of idx
+    }
+    make_pie_char(sorted_data, total_num);
 }
 function calculate_enterprise_statistics(){
     if( enterprise_array.length!=0 ) return; // already establish the enterprise array
@@ -644,7 +662,45 @@ function is_term_match(requirment, current_row){
 }
 function get_full_shop_name(einvoice_idx){
     var shop_idx = einvoice_list[einvoice_idx][einvoice_list_item_idx-1];
+    if(shop_idx==-1) return einvoice_list[einvoice_idx][3]; // can't find full name, return seller name showed in einvoice
+    return '<a href="javascript: show_einvoice(' + shop_idx + ');">' + get_full_shop_name_by_shop_idx(shop_idx) + '</a>';
+}
+function get_full_shop_name_by_shop_idx(shop_idx){
     var shop_row = shop_data[shop_idx];
     var delimeter = (shop_row[3]=='' || shop_row[4]=='')?'':'-';
-    return '<a href="javascript: show_einvoice(' + shop_idx + ');">' + shop_row[3] + delimeter + shop_row[4] + '</a>';
+    return (shop_row[3] + delimeter + shop_row[4]);
+}
+function make_pie_char(showing_data, total_num){
+    var shop_array = [];
+    var others_value = 0;
+    for(var data_idx in showing_data){
+        if( showing_data[data_idx][1]/total_num < 0.01 || data_idx > 15){
+            others_value += showing_data[data_idx][1];
+            continue;
+        }
+        var shop_dict = {};
+        shop_dict["seller"] = showing_data[data_idx][0];
+        shop_dict["value"] = showing_data[data_idx][1];
+        shop_array.push( shop_dict );
+    }
+    if(others_value>0){
+        var shop_dict = {};
+        shop_dict["seller"] = '其他';
+        shop_dict["value"] = others_value;
+        shop_array.push( shop_dict );
+    }
+    var chart = AmCharts.makeChart( "chartdiv", {
+          "type": "pie",
+          "theme": "light",
+          "dataProvider": shop_array,
+          "valueField": "value",
+          "titleField": "seller",
+          "outlineAlpha": 0.4,
+          "depth3D": 15,
+          "balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+          "angle": 30,
+          "export": {
+            "enabled": true
+          }
+        } );
 }

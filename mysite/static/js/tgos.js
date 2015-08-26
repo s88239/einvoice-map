@@ -46,7 +46,9 @@ function addPosition(data){
         var symbol = getSymbol(current_color,parseInt(data[i][6]));
         console.log(data);
         var point = new TGOS.TGPoint(parseFloat(data[i][1]),parseFloat(data[i][2])); // create its position
-        var pTGMarker = new TGOS.TGMarker(pMap,point,data[i][3]+'-'+data[i][4], symbol, {flat:false}); // establish the point on map
+        
+        var delimeter = (data[i][3]=='' || data[i][4]=='')?'':'-';
+        var pTGMarker = new TGOS.TGMarker(pMap,point,data[i][3] + delimeter + data[i][4], symbol, {flat:false}); // establish the point on map
 
         if(current_cluster==data[i][data[i].length-2]) multi_point.push(pTGMarker);
         else{
@@ -59,7 +61,6 @@ function addPosition(data){
               maxWidth:4000, // 訊息視窗的最大寬度
               pixelOffset: new TGOS.TGSize(5, -30) //InfoWindow起始位置的偏移量, 使用TGSize設定, 向右X為正, 向上Y為負
         };
-        var delimeter = (data[i][3]=='' || data[i][4]=='')?'':'-';
         var invoice_message = '<h2><font color="#CE0000">' + data[i][3]+ delimeter+data[i][4]+'</font></h2>' // 商店名稱
         + data[i][5] // 地址
         +'<br />頻率：<font color="blue" size="+1"><b>' + data[i][6] + '</b></font>' // 頻率
@@ -81,7 +82,7 @@ function addPosition(data){
         TGOS.TGEvent.addListener(pTGMarker, "click", function (invoice_array){ // when click the point
             return function (){
                 showBlock('detail',true);
-                document.getElementById('detail').innerHTML = get_invoice_list_string(invoice_array);
+                document.getElementById('detail').innerHTML = get_invoice_list_string(current_shop_data);
                 }
             }(data[i]) );
     }
