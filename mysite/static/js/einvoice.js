@@ -472,7 +472,8 @@ function search_each_einvoice(type, search_col, search_goal){
         else{
             if( search_col=='name' ){
                 shop_idx = einvoice_list[i][einvoice_list_item_idx-1];
-                search_val = (shop_idx==-1)?[einvoice_list[i][3]]:[einvoice_list[i][3], shop_data[shop_idx][3], shop_data[shop_idx][4]]; // 發票商家名稱, 商店名, 分店名
+                if(shop_idx==-1) search_val = [einvoice_list[i][3]];
+                else search_val = [einvoice_list[i][3], shop_data[shop_idx][3], shop_data[shop_idx][4]]; // 發票商家名稱, 商店名, 分店名
                 if( is_term_match(search_goal,search_val)==true ){
                     if(type=='einvoice') result_str += get_row_of_einvoice(i, ++count);
                     else if(type=='item') result_str += get_row_of_einvoice_with_item(i);
