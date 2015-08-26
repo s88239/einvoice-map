@@ -173,7 +173,7 @@ class User(object):
 		for ele in self.seller_not_on_csv:
 			try:
 				data = UnMatchSellerTable.objects.get(seller_name = ele)
-			except IntegrityError as e:
+			except:
 				data= UnMatchSellerTable.objects.create( seller_name =ele )
 				data.save()
 	
@@ -209,18 +209,18 @@ class User(object):
 
 	def store_user_database(self):
 		try:
-			user_from_database = UserTable.objects.get(card_no = self.card_no)
+			_user = UserTable.objects.get(card_no = self.card_no)
 		except:
-			user_to_database = UserTable.objects.create(api_key=self.api_key, 
+			_user = UserTable.objects.create(api_key=self.api_key, 
 					app_id=self.app_id, 
 					card_type=self.card_type, 
 					card_no=self.card_no, 
 					card_encrypt=self.card_encrypt, 
 					carriers_keys=self.str_carriers(), 
 					invoice_keys=self.str_invoice_num())
-			user_to_database.save()
-		user_from_database.carriers_keys = self.str_carriers()
-		user_from_database.save()
+			_user.save()
+		_user.carriers_keys = self.str_carriers()
+		_user.save()
 
 	def add_seller(self, s, key_name):
 		self.sellers[s.id] = Seller(s.id, s.store_name, s.address, s.longitude, s.latitude)
