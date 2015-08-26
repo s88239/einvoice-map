@@ -79,7 +79,7 @@ function addPosition(data){
                             messageBox.close();
                  }
         } (messageBox));
-        TGOS.TGEvent.addListener(pTGMarker, "click", function (invoice_array){ // when click the point
+        TGOS.TGEvent.addListener(pTGMarker, "click", function (current_shop_data){ // when click the point
             return function (){
                 showBlock('detail',true);
                 document.getElementById('detail').innerHTML = get_invoice_list_string(current_shop_data);
