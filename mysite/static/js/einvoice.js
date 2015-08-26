@@ -675,7 +675,8 @@ function make_pie_char(showing_data, total_num){
     var shop_array = [];
     var others_value = 0;
     for(var data_idx in showing_data){
-        if( showing_data[data_idx][1]/total_num < 0.01 || data_idx > 15){
+        if( others_value==0 && data_idx==showing_data.length-1) ; // 'others' only one shop contains, so quit using 'others'
+        else if( showing_data[data_idx][1]/total_num < 0.01 || data_idx > 15){
             others_value += showing_data[data_idx][1];
             continue;
         }
