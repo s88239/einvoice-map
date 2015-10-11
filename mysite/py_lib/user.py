@@ -19,7 +19,7 @@ except:
 	ssl._create_default_https_context = ssl._create_unverified_context'''
 TEST =  False
 class User(object):
-	not_item_list = ['折扣', '折抵', '滿額送', '抵用券', '紅利贈送', '任選第2件', '39元超值組合']
+	not_item_list = ['折扣', '折抵', '滿額送', '抵用券', '紅利贈送', '任選第2件', '39元超值組合', '49元超值組合']
 
 	def __init__(self, api_key, app_id, card_type, card_no, card_encrypt, all_sellers):
 		self.api_key = api_key

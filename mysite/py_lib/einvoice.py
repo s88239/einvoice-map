@@ -8,9 +8,9 @@ import base64
 import hmac
 import hashlib
 import urllib.request
+import json
 
-import  json
-
+from http.cookiejar import CookieJar
 try:
 	from py_lib.invoice import Invoice
 	from py_lib.seller import *
@@ -47,6 +47,13 @@ def url_parameter(api_key, param_dict):
 	signature = base64.b64encode(signature)
 	return(param_list, signature)
 
+def get_url_json(query_url):
+	req = urllib.request.Request(query_url, None, {'User-Agent': 'Mozilla/5.0 (X11; Linux i686; G518Rco3Yp0uLV40Lcc9hAzC1BOROTJADjicLjOmlr4=) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36','Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8','Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3','Accept-Encoding': 'gzip, deflate, sdch','Accept-Language': 'en-US,en;q=0.8','Connection': 'keep-alive'})
+	cj = CookieJar()
+	opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj))
+	with opener.open(req) as url:
+		data = json.loads(url.read().decode())
+	return data
 
 def carrier_query(user):
 	data = {}
@@ -66,8 +73,7 @@ def carrier_query(user):
 		(param_list, signature) = url_parameter(user.api_key, param_dict)
 		carrier_query_url = 'https://www.einvoice.nat.gov.tw/PB2CAPIVAN/Carrier/Aggregate?' + param_list + '&signature=' + signature.decode()
 
-		with urllib.request.urlopen(carrier_query_url) as url:
-			data = json.loads(url.read().decode())
+		data = get_url_json(carrier_query_url)
 
 		if count > 10:
 			return False
@@ -107,8 +113,7 @@ def invoice_header_query(user, start_date, end_date):
 	
 		(param_list, signature) = url_parameter(user.api_key, param_dict)
 		invoice_header_url = 'https://www.einvoice.nat.gov.tw/PB2CAPIVAN/invServ/InvServ?' + param_list + '&signature=' + signature.decode()
-		with urllib.request.urlopen(invoice_header_url) as url:
-			data = json.loads(url.read().decode())
+		data = get_url_json(invoice_header_url)
 
 		if data["code"] == 903:
 			break
@@ -147,8 +152,7 @@ def invoice_item_query(user, invoice_list):
 
 			(param_list, signature) = url_parameter(user.api_key, param_dict)
 			invoice_item_url = 'https://www.einvoice.nat.gov.tw/PB2CAPIVAN/invServ/InvServ?' + param_list + '&signature=' + signature.decode()
-			with urllib.request.urlopen( invoice_item_url ) as url:
-				data = json.loads(url.read().decode())
+			data = get_url_json(invoice_item_url)
 			if "details" in data:	
 				for item in data["details"]:
 					invoice_list[i].add_item(item) 
