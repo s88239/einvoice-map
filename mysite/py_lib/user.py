@@ -28,9 +28,9 @@ class User(object):
 		self.card_no = card_no
 		self.card_encrypt = card_encrypt
 
-		is_login, self.carriers = einvoice.carrier_query(self)
-		#if is_login > 10:
-	#		return
+		self.is_login, self.carriers = einvoice.carrier_query(self)
+		if self.is_login > 10:
+			return
 		self.invoice_list, self.invoices_to_database = self.get_invoice_list(all_sellers)
 		self.seller_to_invoice(all_sellers)		
 
@@ -331,7 +331,7 @@ def login(account, password):
 	card_no = account
 	card_encrypt = password
 	user = User(api_key, app_id, card_type, card_no, card_encrypt, all_sellers)
-	if not user.carriers:
+	if user.is_login > 10:
 		return False
 
 	user.statistics(all_sellers)

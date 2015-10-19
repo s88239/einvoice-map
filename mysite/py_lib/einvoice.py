@@ -84,7 +84,6 @@ def carrier_query(user):
 
 	# for carrier_property in data["carriers"]:
 	# 	print(carrier_property)
-
 	return count, data["carriers"]
 
 def invoice_header_query(user, start_date, end_date):
@@ -190,10 +189,10 @@ if __name__ == '__main__':
 	api_key = "QWQ4dU9WMzRXa2xoYUdsZA=="
 	app_id = "EINV0201505042102"
 	card_type = "3J0002"
-	card_no = "/SMV1EFQ"
-	card_encrypt = "1212"
+	card_no = "/U6OUYN2"
+	card_encrypt = "s88239"
 
-	# invoice_list = get_einvoice(api_key, app_id, card_type, card_no, card_encrypt)
+	#invoice_list = get_einvoice(api_key, app_id, card_type, card_no, card_encrypt)
 	# carrier_query(api_key, app_id, card_type, card_no, card_encrypt)
 	# import pickle
 	# with open('invoice_list_tmp.pkl', 'wb') as f:
