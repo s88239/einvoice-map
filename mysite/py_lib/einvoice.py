@@ -7,7 +7,7 @@ import itertools
 import base64
 import hmac
 import hashlib
-import urllib
+import urllib.parse
 import json
 
 from http.cookiejar import CookieJar
@@ -43,14 +43,15 @@ def get_param_list(param_dict):
 	encode_param_list = encode_param_list[:len(encode_param_list)-1]
 	return param_list,encode_param_list
 
-def url_parameter(api_key, param_dict):
+def get_query_url(api_key, param_dict):
 	param_dict = dict_sort(param_dict)
 	[param_list,encode_param_list] = get_param_list(param_dict)
 	signature = hmac.new(api_key.encode('utf-8'), param_list.encode('utf-8'), hashlib.sha1).digest()
 	signature = base64.b64encode(signature)
-	return(encode_param_list, signature)
+	query_url = 'https://www.einvoice.nat.gov.tw/PB2CAPIVAN/Carrier/Aggregate?' + param_list + '&signature=' + urllib.parse.quote_plus( signature.decode() );
+	return query_url
 
-def get_url_json(query_url):
+def get_json_data(query_url):
 	req = urllib.request.Request(query_url, None, {'User-Agent': 'Mozilla/5.0 (X11; Linux i686; G518Rco3Yp0uLV40Lcc9hAzC1BOROTJADjicLjOmlr4=) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36','Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8','Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3','Accept-Encoding': 'gzip, deflate, sdch','Accept-Language': 'en-US,en;q=0.8','Connection': 'keep-alive'})
 	cj = CookieJar()
 	opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj))
@@ -73,10 +74,7 @@ def carrier_query(user):
 		param_dict["timeStamp"] = str(int(time.time())+10)
 		param_dict["uuid"] = uniqid()
 
-		(param_list, signature) = url_parameter(user.api_key, param_dict)
-		carrier_query_url = 'https://www.einvoice.nat.gov.tw/PB2CAPIVAN/Carrier/Aggregate?' + param_list + '&signature=' + signature.decode()
-
-		data = get_url_json(carrier_query_url)
+		data = get_json_data( get_query_url(user.api_key, param_dict) )
 
 		if count > 10:
 			break
@@ -112,10 +110,8 @@ def invoice_header_query(user, start_date, end_date):
 		param_dict["endDate"] =  end_date				
 		param_dict["onlyWinningInv"] = "N"
 		param_dict["uuid"] = uniqid()
-	
-		(param_list, signature) = url_parameter(user.api_key, param_dict)
-		invoice_header_url = 'https://www.einvoice.nat.gov.tw/PB2CAPIVAN/invServ/InvServ?' + param_list + '&signature=' + signature.decode()
-		data = get_url_json(invoice_header_url)
+
+		data = get_json_data( get_query_url(user.api_key, param_dict) )
 
 		if data["code"] == 903:
 			break
@@ -152,9 +148,8 @@ def invoice_item_query(user, invoice_list):
 			param_dict["sellerName"] = urllib.parse.quote(inv.seller_name)
 			param_dict["amount"] = str(inv.amount)
 
-			(param_list, signature) = url_parameter(user.api_key, param_dict)
-			invoice_item_url = 'https://www.einvoice.nat.gov.tw/PB2CAPIVAN/invServ/InvServ?' + param_list + '&signature=' + signature.decode()
-			data = get_url_json(invoice_item_url)
+			data = get_json_data( get_query_url(user.api_key, param_dict) )
+			
 			if "details" in data:	
 				for item in data["details"]:
 					invoice_list[i].add_item(item) 
