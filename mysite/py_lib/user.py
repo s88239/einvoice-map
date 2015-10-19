@@ -28,8 +28,8 @@ class User(object):
 		self.card_no = card_no
 		self.card_encrypt = card_encrypt
 
-		self.carriers = einvoice.carrier_query(self)
-		if not self.carriers:
+		is_login, self.carriers = einvoice.carrier_query(self)
+		if is_login > 10:
 			return
 		self.invoice_list, self.invoices_to_database = self.get_invoice_list(all_sellers)
 		self.seller_to_invoice(all_sellers)		

@@ -79,13 +79,13 @@ def carrier_query(user):
 		data = get_url_json(carrier_query_url)
 
 		if count > 10:
-			return False
+			break
 		count += 1
 
 	# for carrier_property in data["carriers"]:
 	# 	print(carrier_property)
 
-	return data["carriers"]
+	return count, data["carriers"]
 
 def invoice_header_query(user, start_date, end_date):
 	invoice_list = []
