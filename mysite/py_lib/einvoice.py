@@ -7,7 +7,7 @@ import itertools
 import base64
 import hmac
 import hashlib
-import urllib.request
+import urllib
 import json
 
 from http.cookiejar import CookieJar
@@ -35,17 +35,20 @@ def dict_sort(d):
 
 def get_param_list(param_dict):
 	param_list = ""
+	encode_param_list = ""
 	for key, value in param_dict:
 		param_list += key + "=" + value + "&"
+		encode_param_list += key + "=" + urllib.parse.quote_plus(value) + "&"
 	param_list = param_list[:len(param_list)-1]
-	return param_list
+	encode_param_list = encode_param_list[:len(encode_param_list)-1]
+	return param_list,encode_param_list
 
 def url_parameter(api_key, param_dict):
 	param_dict = dict_sort(param_dict)
-	param_list = get_param_list(param_dict)
+	[param_list,encode_param_list] = get_param_list(param_dict)
 	signature = hmac.new(api_key.encode('utf-8'), param_list.encode('utf-8'), hashlib.sha1).digest()
 	signature = base64.b64encode(signature)
-	return(param_list, signature)
+	return(encode_param_list, signature)
 
 def get_url_json(query_url):
 	req = urllib.request.Request(query_url, None, {'User-Agent': 'Mozilla/5.0 (X11; Linux i686; G518Rco3Yp0uLV40Lcc9hAzC1BOROTJADjicLjOmlr4=) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36','Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8','Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3','Accept-Encoding': 'gzip, deflate, sdch','Accept-Language': 'en-US,en;q=0.8','Connection': 'keep-alive'})
