@@ -49,7 +49,7 @@ class User(object):
 		for inv in self.invoice_list:
 			for key, value in all_sellers.items():
 				(cur_store_name, cur_branch_name) = split_store_and_branch(inv.seller_name)	
-				if value.branch_name == cur_branch_name	and (cur_store_name=='' and test_store_name(value.store_name) or value.store_name in cur_store_name):
+				if inv.seller_name==value.store_name or value.branch_name == cur_branch_name	and (cur_store_name=='' and test_store_name(value.store_name) or value.store_name in cur_store_name):
 					inv.add_seller(value)
 					break
 			if inv.seller == None:
@@ -281,7 +281,7 @@ class User(object):
 			seller_on_csv = False
 			for csv_seller_key in all_sellers:
 				(cur_store_name, cur_branch_name) = split_store_and_branch(seller_name)
-				if all_sellers[csv_seller_key].branch_name == cur_branch_name and (cur_store_name=='' and test_store_name(all_sellers[csv_seller_key].store_name) or all_sellers[csv_seller_key].store_name in cur_store_name):
+				if seller_name==all_sellers[csv_seller_key].store_name or all_sellers[csv_seller_key].branch_name == cur_branch_name and (cur_store_name=='' and test_store_name(all_sellers[csv_seller_key].store_name) or all_sellers[csv_seller_key].store_name in cur_store_name):
 					self.add_seller(all_sellers[csv_seller_key],seller_name)
 					self.sellers[all_sellers[csv_seller_key].id].invoice_list = tmp_invoice_list[seller_name]
 					seller_on_csv = True
@@ -290,6 +290,16 @@ class User(object):
 
 
 def clustering(user):
+	if len(user) <= 3:
+		i = 0
+		longitude = 121.516946
+		latitude = 25.047941
+		for key in user.keys():
+			longitude = user[key].longitude
+			latitude = user[key].latitude
+			user[key].cluster = i
+			i = i+1
+		return user, user.keys(), (longitude, latitude)
 	import numpy as np
 	from sklearn.cluster import MeanShift, estimate_bandwidth
 	from sklearn.datasets.samples_generator import make_blobs
