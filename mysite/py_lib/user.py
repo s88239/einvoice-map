@@ -28,9 +28,10 @@ class User(object):
 		self.card_no = card_no
 		self.card_encrypt = card_encrypt
 
-		self.is_login, self.carriers = einvoice.carrier_query(self)
-		if self.is_login > 10:
+		carrier_status = einvoice.carrier_query(self)
+		if carrier_status==False:
 			return
+		self.carriers = carrier_status
 		self.invoice_list, self.invoices_to_database = self.get_invoice_list(all_sellers)
 		self.seller_to_invoice(all_sellers)		
 
@@ -49,7 +50,7 @@ class User(object):
 		for inv in self.invoice_list:
 			for key, value in all_sellers.items():
 				(cur_store_name, cur_branch_name) = split_store_and_branch(inv.seller_name)	
-				if inv.seller_name==value.store_name or value.branch_name == cur_branch_name	and (cur_store_name=='' and test_store_name(value.store_name) or value.store_name in cur_store_name):
+				if inv.seller_name==value.store_name and value.store_name=="" or value.branch_name == cur_branch_name	and (cur_store_name=='' and test_store_name(value.store_name) or value.store_name in cur_store_name):
 					inv.add_seller(value)
 					break
 			if inv.seller == None:
@@ -281,7 +282,7 @@ class User(object):
 			seller_on_csv = False
 			for csv_seller_key in all_sellers:
 				(cur_store_name, cur_branch_name) = split_store_and_branch(seller_name)
-				if seller_name==all_sellers[csv_seller_key].store_name or all_sellers[csv_seller_key].branch_name == cur_branch_name and (cur_store_name=='' and test_store_name(all_sellers[csv_seller_key].store_name) or all_sellers[csv_seller_key].store_name in cur_store_name):
+				if seller_name==all_sellers[csv_seller_key].store_name and all_sellers[csv_seller_key].branch_name=="" or all_sellers[csv_seller_key].branch_name == cur_branch_name and (cur_store_name=='' and test_store_name(all_sellers[csv_seller_key].store_name) or all_sellers[csv_seller_key].store_name in cur_store_name):
 					self.add_seller(all_sellers[csv_seller_key],seller_name)
 					self.sellers[all_sellers[csv_seller_key].id].invoice_list = tmp_invoice_list[seller_name]
 					seller_on_csv = True
@@ -341,7 +342,7 @@ def login(account, password):
 	card_no = account
 	card_encrypt = password
 	user = User(api_key, app_id, card_type, card_no, card_encrypt, all_sellers)
-	if user.is_login > 10:
+	if user.carrier_status==False:
 		return False
 
 	user.statistics(all_sellers)
