@@ -28,10 +28,9 @@ class User(object):
 		self.card_no = card_no
 		self.card_encrypt = card_encrypt
 
-		carrier_status = einvoice.carrier_query(self)
-		if carrier_status==False:
+		self.carriers = einvoice.carrier_query(self)
+		if self.carriers==False:
 			return
-		self.carriers = carrier_status
 		self.invoice_list, self.invoices_to_database = self.get_invoice_list(all_sellers)
 		self.seller_to_invoice(all_sellers)		
 
@@ -342,7 +341,7 @@ def login(account, password):
 	card_no = account
 	card_encrypt = password
 	user = User(api_key, app_id, card_type, card_no, card_encrypt, all_sellers)
-	if user.carrier_status==False:
+	if user.carriers==False:
 		return False
 
 	user.statistics(all_sellers)
@@ -360,8 +359,8 @@ if __name__ == '__main__':
 	api_key = "QWQ4dU9WMzRXa2xoYUdsZA=="
 	app_id = "EINV0201505042102"
 	card_type = "3J0002"
-	card_no = '/SMV1EFQ'
-	card_encrypt = '1212'
+	card_no = ''
+	card_encrypt = ''
 	user = User(api_key, app_id, card_type, card_no, card_encrypt)
 	csv = os.path.join('..','static','Taipei_shops_with_einvoice.csv')
 	all_sellers1 = list_sellers(csv)	
