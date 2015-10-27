@@ -50,7 +50,7 @@ def split_store_and_branch(shop_name):
 		branch_name = shop_name
 	return company_name, branch_name
 
-no_company_name_list = ['統一','全家','萊爾富','台灣楓康超市','千越自助加油站','太平洋崇光百貨','中華電信']
+no_company_name_list = ['統一','全家','萊爾富','台灣楓康超市','千越自助加油站','太平洋崇光百貨','中華電信','麥當勞']
 def test_store_name(com_name):
 	for store_name in no_company_name_list:
 		if com_name[:len(store_name)] == store_name:
