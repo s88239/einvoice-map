@@ -48,8 +48,7 @@ class User(object):
 	def seller_to_invoice(self, all_sellers):
 		for inv in self.invoice_list:
 			for key, value in all_sellers.items():
-				(cur_store_name, cur_branch_name) = split_store_and_branch(inv.seller_name)	
-				if inv.seller_name==value.store_name and value.store_name=="" or value.branch_name == cur_branch_name	and (cur_store_name=='' and test_store_name(value.store_name) or value.store_name in cur_store_name):
+				if match_seller(inv.seller_name, value):
 					inv.add_seller(value)
 					break
 			if inv.seller == None:
@@ -280,8 +279,7 @@ class User(object):
 		for seller_name in self.visit_frequency:
 			seller_on_csv = False
 			for csv_seller_key in all_sellers:
-				(cur_store_name, cur_branch_name) = split_store_and_branch(seller_name)
-				if seller_name==all_sellers[csv_seller_key].store_name and all_sellers[csv_seller_key].branch_name=="" or all_sellers[csv_seller_key].branch_name == cur_branch_name and (cur_store_name=='' and test_store_name(all_sellers[csv_seller_key].store_name) or all_sellers[csv_seller_key].store_name in cur_store_name):
+				if match_seller(seller_name, all_sellers[csv_seller_key]):
 					self.add_seller(all_sellers[csv_seller_key],seller_name)
 					self.sellers[all_sellers[csv_seller_key].id].invoice_list = tmp_invoice_list[seller_name]
 					seller_on_csv = True
