@@ -3,7 +3,7 @@ import csv
 
 class Seller(object):
 	def __init__(self, _id, store_name, address, longitude, latitude):
-		store_name = replace_seller_name(store_name)
+		store_name = replace_seller_name(store_name.strip())
 		self.id = _id
 		self.store_name = store_name if store_name.find("-") == -1 else store_name[:store_name.find("-")]
 		self.branch_name = "" if store_name.find("-") == -1 else store_name[store_name.find("-")+1:]
@@ -79,7 +79,7 @@ def test_store_name(com_name):
 	return False
 
 def match_seller(einvoice_seller_name, test_seller):
-	(cur_store_name, cur_branch_name) = split_store_and_branch(einvoice_seller_name)
+	(cur_store_name, cur_branch_name) = split_store_and_branch(einvoice_seller_name.strip())
 	store_name = test_seller.store_name
 	branch_name = test_seller.branch_name
 	#print(cur_store_name, "-", cur_branch_name," / ",store_name,"-",branch_name)
@@ -95,8 +95,8 @@ def match_seller(einvoice_seller_name, test_seller):
 if __name__ == '__main__':
 	#TEST
 	#all_sellers1 = list_sellers("Taipei_shops_with_einvoice.csv")
-	seller_name_list = ['燦坤-楊梅新成分公司','全家便利商店-高雄市第三○九分公司','來來超商-第1182分公司','台灣家樂福-北大分公司','美華泰-嘉義中山分公司']
-	test_seller_list = ['燦坤實業(股)楊梅新成分公司','高雄市第309分公司','來來超商股份有限公司第１１８２分公司','家福-北大分公司','美華泰(股)公司嘉義中山分公司']
+	seller_name_list = ['燦坤-楊梅新成分公司','全家便利商店-高雄市第三○九分公司','來來超商-第1182分公司','台灣家樂福-北大分公司','美華泰-嘉義中山分公司','台糖-油品事業部嘉保加油站']
+	test_seller_list = ['燦坤實業(股)楊梅新成分公司','高雄市第309分公司','來來超商股份有限公司第１１８２分公司','家福-北大分公司','美華泰(股)公司嘉義中山分公司','台灣糖業（股）公司油品事業部嘉保加油站']
 	seller_list = []
 	for i in range(0,len(seller_name_list)):
 		print(i,":",seller_name_list[i])
