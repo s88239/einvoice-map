@@ -51,25 +51,25 @@ def replace_seller_name(shop_name):
 
 def split_store_and_branch(shop_name):
 	find_dash = shop_name.find('-')
-	if find_dash != -1:
+	if find_dash != -1: # find the delimeter -
 		company_name = shop_name[:find_dash]
 		branch_name = shop_name[find_dash+1:]
-		return replace_seller_name(company_name), replace_seller_name(branch_name)
+		return company_name.strip(), branch_name.strip()
 
 	find_1 = shop_name.find('公司')
-	if find_1 != -1 and shop_name[find_1-1]!='分':
+	if find_1 != -1 and shop_name[find_1-1]!='分': # find the delimeter 公司
 		company_name = shop_name[:find_1+2]
 		branch_name = shop_name[find_1+2:]
 	else:
-		find_2 = shop_name.find('(股)')
+		find_2 = shop_name.find('(股)') # find the delimeter (股)
 		if find_2 != -1:
 			company_name = shop_name[:find_2]
 			branch_name = shop_name[find_2+3:]
-		else:
+		else: # can't split
 			company_name = ''
 			branch_name = shop_name
 
-	return replace_seller_name(company_name), replace_seller_name(branch_name)
+	return company_name.strip(), branch_name.strip()
 
 no_company_name_list = ['統一','全家','萊爾富','台灣楓康超市','千越自助加油站','太平洋崇光百貨','中華電信','麥當勞','台糖量販','台糖健康超市','台糖蜜鄰超市']
 def test_store_name(com_name):
@@ -79,11 +79,14 @@ def test_store_name(com_name):
 	return False
 
 def match_seller(einvoice_seller_name, test_seller):
-	(cur_store_name, cur_branch_name) = split_store_and_branch(einvoice_seller_name.strip())
+	full_einvoice_seller_name = replace_seller_name( einvoice_seller_name.strip() );
+	(cur_store_name, cur_branch_name) = split_store_and_branch(full_einvoice_seller_name)
 	store_name = test_seller.store_name
 	branch_name = test_seller.branch_name
-	#print(cur_store_name, "-", cur_branch_name," / ",store_name,"-",branch_name)
-	if einvoice_seller_name == store_name and branch_name == "": # complete matched
+	#print(full_einvoice_seller_name,":",cur_store_name, "-", cur_branch_name," / ",store_name,"-",branch_name)
+	if full_einvoice_seller_name == store_name:
+		return True
+	elif einvoice_seller_name == store_name and branch_name == "": # complete matched
 		return True
 	elif branch_name == cur_branch_name and (cur_store_name == '' and test_store_name(store_name) ): # matched the shop without store name
 		return True
@@ -95,8 +98,8 @@ def match_seller(einvoice_seller_name, test_seller):
 if __name__ == '__main__':
 	#TEST
 	#all_sellers1 = list_sellers("Taipei_shops_with_einvoice.csv")
-	seller_name_list = ['燦坤-楊梅新成分公司','全家便利商店-高雄市第三○九分公司','來來超商-第1182分公司','台灣家樂福-北大分公司','美華泰-嘉義中山分公司','台糖-油品事業部嘉保加油站']
-	test_seller_list = ['燦坤實業(股)楊梅新成分公司','高雄市第309分公司','來來超商股份有限公司第１１８２分公司','家福-北大分公司','美華泰(股)公司嘉義中山分公司','台灣糖業（股）公司油品事業部嘉保加油站']
+	seller_name_list = ['交通部臺灣鐵路管理局餐旅服務總所臺中鐵路餐廳','全家便利商店-高雄市第三○九分公司','來來超商-第1182分公司','台灣家樂福-北大分公司','美華泰-嘉義中山分公司','台糖-油品事業部嘉保加油站']
+	test_seller_list = ['交通部臺灣鐵路管理局餐旅服務總所臺中鐵路餐廳','高雄市第309分公司','來來超商股份有限公司第１１８２分公司','家福-北大分公司','美華泰(股)公司嘉義中山分公司','台灣糖業（股）公司油品事業部嘉保加油站']
 	seller_list = []
 	for i in range(0,len(seller_name_list)):
 		print(i,":",seller_name_list[i])
