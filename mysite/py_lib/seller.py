@@ -84,9 +84,7 @@ def match_seller(einvoice_seller_name, test_seller):
 	store_name = test_seller.store_name
 	branch_name = test_seller.branch_name
 	#print(full_einvoice_seller_name,":",cur_store_name, "-", cur_branch_name," / ",store_name,"-",branch_name)
-	if full_einvoice_seller_name == store_name:
-		return True
-	elif einvoice_seller_name == store_name and branch_name == "": # complete matched
+	if full_einvoice_seller_name == store_name and branch_name == "": # complete matched
 		return True
 	elif branch_name == cur_branch_name and (cur_store_name == '' and test_store_name(store_name) ): # matched the shop without store name
 		return True

@@ -15,6 +15,7 @@ function getRandomColor() {
     return color;
 }
 function getSymbol(color, freq){
+    if(freq>50) freq = 50; // set max = 50
     size = (freq+10)*1.2; // set the size dending on the frequency of shopping times
     pTGSymbo = new TGOS.TGSymbol(); // 建立幾何物件
     pTGSymbo.symbolStyle = TGOS.TGSymbolStyle.TRIANGLE; // 設定標記的符號
