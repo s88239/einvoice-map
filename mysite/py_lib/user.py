@@ -108,21 +108,21 @@ class User(object):
 			latest_date = sorted(invoices_from_database, key=lambda x: x.inv_date, reverse=True)[0].inv_date
 			YMD = latest_date.split('/')
 
-			start_date = datetime.date(int(YMD[0])+1911, int(YMD[1]), int(YMD[2]))
-			for year in range(start_date.year, now.year+1):
-				if (year == start_date.year) and (year < now.year): 
-					for month in range(start_date.month, 13):
+			query_start_date = datetime.date(int(YMD[0])+1911, int(YMD[1]), int(YMD[2]))
+			for year in range(query_start_date.year, now.year+1):
+				if (year == query_start_date.year) and (year < now.year): 
+					for month in range(query_start_date.month, 13):
 						(start_date, end_date) = self.date_for_query(year, month)
 						invoice_list.extend(einvoice.get_einvoice(self, start_date, end_date, all_sellers))
-				elif (year > start_date.year) and (year < now.year):
+				elif (year > query_start_date.year) and (year < now.year):
 					for month in range(1,13):
 						(start_date, end_date) = self.date_for_query(year, month)
 						invoice_list.extend(einvoice.get_einvoice(self, start_date, end_date, all_sellers))
-				elif (year == now.year) and (year == start_date.year):
-					for month in range(start_date.month, now.month+1):
+				elif (year == now.year) and (year == query_start_date.year):
+					for month in range(query_start_date.month, now.month+1):
 						(start_date, end_date) = self.date_for_query(year, month)
 						invoice_list.extend(einvoice.get_einvoice(self, start_date, end_date, all_sellers))
-				elif (year == now.year) and (year > start_date.year):
+				elif (year == now.year) and (year > query_start_date.year):
 					for month in range(1, now.month+1):
 						(start_date, end_date) = self.date_for_query(year, month)
 						invoice_list.extend(einvoice.get_einvoice(self, start_date, end_date, all_sellers))
